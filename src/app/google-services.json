@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "962723727670",
+    "project_id": "restaurantmanagement-c201c",
+    "storage_bucket": "restaurantmanagement-c201c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962723727670:android:d7aafa154a070a460f4b97",
+        "android_client_info": {
+          "package_name": "com.softwareengineering.restaurant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJlpwM20fr4rDy7GtSXngVIT4rlm3A8h0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

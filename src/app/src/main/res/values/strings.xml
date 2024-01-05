@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Restaurant</string>
+    <string name="login">Log in</string>
+    <string name="login_u"><u>Log in</u></string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="click_to_login">Click to login</string>
+    <string name="click_to_register">Click to register</string>
+    <string name="logout">Logout</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forget_password">Forgot Password</string>
+    <string name="provide_email_reset_pass">Provide your account\'s email for which you want to reset your password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="back">Back</string>
+    <string name="login_as_administrator">Login as Administrator</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="username">Username</string>
+    <string name="sign_up_u"><u>Sign up</u></string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="re_enter_password">re-enter password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="by_creating_account_you_are_accepting">By creating account, you are accepting <u><![CDATA[terms & conditions]]></u></string>
+    <string name="terms_amp_conditions"><u><![CDATA[terms & conditions]]></u></string>
+    <!-- Facebook Authentication -->
+    <string name="facebook_app_id">333416469474965</string>
+    <string name="fb_login_protocol_scheme">fb333416469474965</string>
+    <string name="facebook_client_token">8a02350a1d3fdbf1bc12520e1bd5cabb</string>
+    <string name="enter">Enter</string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="staffs">Staffs</string>
+    <string name="customers">Customers</string>
+    <string name="menu">Menu</string>
+    <string name="tables">Tables</string>
+    <string name="reports">Reports</string>
+    <string name="sales">Sales</string>
+    <string name="account">Account</string>
+</resources>
