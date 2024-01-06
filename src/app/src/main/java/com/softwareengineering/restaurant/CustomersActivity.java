@@ -10,12 +10,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.softwareengineering.restaurant.databinding.ActivityCustomersBinding;
+
+import java.util.ArrayList;
+
 public class CustomersActivity extends AppCompatActivity {
 
+    private ActivityCustomersBinding binding;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
@@ -25,7 +31,8 @@ public class CustomersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customers);
+        binding = ActivityCustomersBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -48,6 +55,53 @@ public class CustomersActivity extends AppCompatActivity {
         });
 
         topMenuName.setText("Customers List");
+
+        // Set data for Customers list
+        // Need to get all customers with roles in firestore database
+        String[] customersName = {
+                "Alpha", "Beta", "Charlie", "Delta"
+        };
+
+        String[] customersEmail = {
+                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
+        };
+
+        String[] customersGender = {
+                "Male", "Female"
+        };
+
+        String[] customersPhone = {
+                "0123456789"
+        };
+
+        String[] customersUsername = {
+                "Customer"
+        };
+
+        // Initialize Customers list
+        ArrayList<Customers> customersArrayList = new ArrayList<>();
+
+        for (int i = 0; i < customersName.length; i++) {
+
+            Customers tempCustomer = new Customers(customersName[i], customersEmail[i], customersUsername[0], customersPhone[0], customersGender[i % 2]);
+            customersArrayList.add(tempCustomer);
+
+        }
+
+        CustomersAdapter customersAdapter = new CustomersAdapter(CustomersActivity.this, customersArrayList);
+
+        // TODO: Get all customers registered in database
+
+        binding.customersListView.setAdapter(customersAdapter);
+        binding.customersListView.setClickable(true);
+        binding.customersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CustomersActivity.this, CustomersDetails.class);
+                intent.putExtra("customers", customersArrayList.get(position));
+                startActivity(intent);
+            }
+        });
 
         staffs.setOnClickListener(new View.OnClickListener() {
             @Override

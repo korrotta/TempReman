@@ -31,8 +31,8 @@ public class StaffsAdapter extends ArrayAdapter<Staffs> {
         TextView nameTV = convertView.findViewById(R.id.adminStaffsName);
         TextView roleTV = convertView.findViewById(R.id.adminStaffsRole);
 
-        nameTV.setText(staffs.name);
-        roleTV.setText(staffs.role);
+        nameTV.setText(staffs.getName());
+        roleTV.setText(staffs.getRole());
 
         return convertView;
     }

@@ -54,7 +54,7 @@ public class StaffsActivity extends AppCompatActivity {
         setItemBackgroundColors(staffs);
 
         // Set data for Staffs list
-        // Need to get all staff with roles in firestore database
+        // TODO: Need to get all staff with roles in firestore database
         String[] staffsName = {
                 "Alpha", "Beta", "Charlie", "Delta"
         };
