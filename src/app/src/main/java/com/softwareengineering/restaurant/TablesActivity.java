@@ -14,12 +14,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class TablesActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private ArrayList<RelativeLayout> tablesLayoutList;
 
     @SuppressLint("SetTextI18n")
     @Override
