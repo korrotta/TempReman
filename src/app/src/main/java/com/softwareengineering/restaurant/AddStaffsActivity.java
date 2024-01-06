@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.softwareengineering.restaurant.databinding.ActivityAddStaffsBinding;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +39,8 @@ public class AddStaffsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Staffs newStaffs;
     private RadioGroup addStaffsGender;
-    private EditText nameET, emailET, phoneET, roleET, usernameET, passwordET;
+    private EditText nameET, emailET, phoneET, usernameET, passwordET;
+    private Spinner roleSpinner;
     private String name, email, phone, role, username, password, gender;
     private Button btnAddStaffDone;
 
@@ -52,7 +55,7 @@ public class AddStaffsActivity extends AppCompatActivity {
         nameET = findViewById(R.id.addStaffsName);
         emailET = findViewById(R.id.addStaffsEmail);
         phoneET = findViewById(R.id.addStaffsPhone);
-        roleET = findViewById(R.id.addStaffsRole);
+        roleSpinner = findViewById(R.id.addStaffsRole);
         usernameET = findViewById(R.id.addStaffsUsername);
         passwordET = findViewById(R.id.addStaffsPassword);
         btnAddStaffDone = findViewById(R.id.btn_add_staff_done);
@@ -71,6 +74,18 @@ public class AddStaffsActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize Spinner Staffs Role
+        ArrayList<String> spinnerData = new ArrayList<>();
+        spinnerData.add("Cashier");
+        spinnerData.add("Cook");
+        spinnerData.add("Janitor");
+        spinnerData.add("Waiter");
+
+        ArrayAdapter<String> spinnerAdapter = new
+                ArrayAdapter<>(this, R.layout.spinner_style,spinnerData);
+
+        roleSpinner.setAdapter(spinnerAdapter);
+
         btnAddStaffDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +103,19 @@ public class AddStaffsActivity extends AppCompatActivity {
                 name = String.valueOf(nameET.getText());
                 email = String.valueOf(emailET.getText());
                 phone = String.valueOf(phoneET.getText());
-                role = String.valueOf(roleET.getText());
+
+                roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        role = parent.getItemAtPosition(position).toString();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
                 username = String.valueOf(usernameET.getText());
                 password = String.valueOf(passwordET.getText());
 

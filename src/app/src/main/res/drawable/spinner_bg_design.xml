@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners android:radius="10dp" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/orange" />
+        </shape>
+    </item>
+    <item android:right="8dp">
+        <bitmap
+            android:gravity="end|center_vertical"
+            android:src="@drawable/expand_more"
+            android:tint="@color/orange"
+        />
+    </item>
+</layer-list>
