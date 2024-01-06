@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".StaffsDetails">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <include layout="@layout/admin_toolbar" />
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/default_user" />
+
+            <TextView
+                android:id="@+id/staffsDetailName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="Staffs' Name"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/staffsDetailRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="Staffs' Role"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/adminStaffsEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/edit" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="@string/edit"
+                        android:textColor="@color/blue_2"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/adminStaffsRemove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/remove" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="@string/remove"
+                        android:textColor="@color/dark_red"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/phone_number_u"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/staffsDetailPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginVertical="2dp"
+                android:fontFamily="@font/quicksand"
+                android:text="0123456789"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/email_u"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/staffsDetailEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginVertical="2dp"
+                android:fontFamily="@font/quicksand"
+                android:text="username@example.com"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/gender_u"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/staffsDetailGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginVertical="2dp"
+                android:fontFamily="@font/quicksand"
+                android:text="Gender"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/username_u"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/staffsDetailUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginVertical="2dp"
+                android:fontFamily="@font/quicksand"
+                android:text="Username"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

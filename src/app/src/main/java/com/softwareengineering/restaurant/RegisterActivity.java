@@ -31,12 +31,12 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText editTextName, editTextEmail, editTextPhone, editTextPassword, editTextRetypePassword;
-    RadioGroup radioGroupGender;
-    Button buttonReg;
-    FirebaseAuth mAuth;
-    TextView textViewSignIn;
-    CheckBox checkBoxTOS;
+    private EditText editTextName, editTextEmail, editTextPhone, editTextPassword, editTextRetypePassword;
+    private RadioGroup radioGroupGender;
+    private Button buttonReg;
+    private FirebaseAuth mAuth;
+    private TextView textViewSignIn;
+    private CheckBox checkBoxTOS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +61,18 @@ public class RegisterActivity extends AppCompatActivity {
                 name = String.valueOf(editTextName.getText());
                 email = String.valueOf(editTextEmail.getText());
                 phone = String.valueOf(editTextPhone.getText());
-                int selectedGenderId = radioGroupGender.getCheckedRadioButtonId();
-                RadioButton selectedRadioButton = findViewById(selectedGenderId);
                 password = String.valueOf(editTextPassword.getText());
                 retypePassword = String.valueOf(editTextRetypePassword.getText());
 
-                gender = selectedRadioButton.getText().toString();
+                int selectedGenderId = radioGroupGender.getCheckedRadioButtonId();
+                if (selectedGenderId != -1) {
+                    RadioButton selectedRadioButton = findViewById(selectedGenderId);
+                    gender = String.valueOf(selectedRadioButton.getText());
+                }
+                else {
+                    Toast.makeText(RegisterActivity.this, "Select gender", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (TextUtils.isEmpty(name)){
                     Toast.makeText(RegisterActivity.this, "Enter name", Toast.LENGTH_SHORT).show();
