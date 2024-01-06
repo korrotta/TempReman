@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class StaffsActivity extends AppCompatActivity {
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private ListView staffsListView;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -37,6 +39,7 @@ public class StaffsActivity extends AppCompatActivity {
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
+        staffsListView = findViewById(R.id.staffsListView);
 
         setItemBackgroundColors(staffs);
 
