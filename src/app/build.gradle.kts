@@ -65,9 +65,6 @@ dependencies {
     // Implement Facebook Authentication
     implementation ("com.facebook.android:facebook-login:latest.release")
 
-    // Import bottom navigation bar
-    implementation ("nl.joery.animatedbottombar:library:1.1.0")
-
     // Import Picasso
     implementation ("com.squareup.picasso:picasso:2.8")
 

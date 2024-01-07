@@ -6,28 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/bottomFrameLayout"
+    <TextView
+        android:text="@string/customers"
         android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_above="@id/bottom_bar"
-        android:layout_height="match_parent" />
-
-    <nl.joery.animatedbottombar.AnimatedBottomBar
-        android:id="@+id/bottom_bar"
-        android:background="@color/lavender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:abb_selectedTabType="icon"
-        app:abb_indicatorAppearance="round"
-        app:abb_indicatorMargin="16dp"
-        app:abb_indicatorHeight="4dp"
-        app:abb_tabs="@menu/bottom_nav_menu"
-        app:abb_selectedIndex="1"
-        android:layout_alignParentBottom="true"
-        app:abb_tabColor="@color/white"
-        app:abb_tabColorSelected="@color/purple_500"
-        app:abb_animationInterpolator="@android:anim/overshoot_interpolator"
-        app:abb_animationDuration="600" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
