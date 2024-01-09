@@ -157,9 +157,7 @@ public class AddStaffsActivity extends AppCompatActivity {
 
         userRef.set(userData)
                 .addOnSuccessListener(aVoid -> {
-                    Log.d("Staff added to Firestore", "UID: " + uid);
                     Intent intent = new Intent(AddStaffsActivity.this, StaffsActivity.class);
-                    Log.d ("ADDSTAFFSDONE", "SUCCESS");
                     intent.putExtra("newStaffs", newStaffs);
                     startActivity(intent);
                     finish();

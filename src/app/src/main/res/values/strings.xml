@@ -60,7 +60,6 @@
     <string name="reports">Reports</string>
     <string name="sales">Sales</string>
     <string name="account">Account</string>
-<<<<<<< HEAD
     <string name="employee">Employee</string>
     <string name="waiter">Waiter</string>
     <string name="add">Add</string>
@@ -71,9 +70,7 @@
     <string name="edit_account">Edit Account</string>
     <string name="customer">Customer</string>
     <string name="save">Save</string>
-=======
     <string name="payment">Payment</string>
     <string name="close_nav">Close Navigation Drawer</string>
     <string name="open_nav">Open Navigation Drawer</string>
->>>>>>> StaffsMainActivity
 </resources>

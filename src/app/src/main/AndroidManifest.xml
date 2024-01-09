@@ -15,7 +15,6 @@
         android:theme="@style/Theme.Material3.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-<<<<<<< HEAD
             android:name=".CustomersDetails"
             android:exported="false" />
         <activity
@@ -26,7 +25,8 @@
             android:exported="false" />
         <activity
             android:name=".StaffsDetails"
-=======
+            android:exported="false"/>
+        <activity
             android:name=".StaffsAccountActivity"
             android:exported="false" />
         <activity
@@ -43,7 +43,6 @@
             android:exported="false" />
         <activity
             android:name=".StaffsMenuActivity"
->>>>>>> StaffsMainActivity
             android:exported="false" />
         <activity
             android:name=".AccountActivity"
