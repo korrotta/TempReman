@@ -11,12 +11,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/admin_toolbar" />
 
-        <TextView
-            android:text="@string/customers"
-            android:gravity="center"
-            android:textSize="50sp"
+        <ListView
+            android:layout_marginTop="10dp"
+            android:id="@+id/customersListView"
+            android:divider="@color/white"
+            tools:listitem="@layout/admin_customers_list_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -28,7 +29,7 @@
         android:layout_gravity="start"
         android:background="@color/white">
 
-        <include layout="@layout/nav_drawer" />
+        <include layout="@layout/admin_nav_drawer" />
 
     </RelativeLayout>
 

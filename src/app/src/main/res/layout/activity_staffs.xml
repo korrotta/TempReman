@@ -11,11 +11,40 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/admin_toolbar" />
+        
+        <LinearLayout
+            android:id="@+id/adminStaffsAdd"
+            android:orientation="horizontal"
+            android:layout_gravity="end"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            
+            <ImageView
+                android:src="@drawable/add"
+                android:scaleType="centerCrop"
+                android:layout_width="23dp"
+                android:layout_height="23dp"/>
+
+            <TextView
+                android:text="@string/add"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:textColor="@color/orange"
+                android:textSize="15sp"
+                android:layout_marginEnd="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            
+        </LinearLayout>
 
         <ListView
             android:id="@+id/staffsListView"
             android:divider="@color/white"
+            tools:listitem="@layout/admin_staffs_list_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -27,7 +56,7 @@
         android:layout_gravity="start"
         android:background="@color/white">
 
-        <include layout="@layout/nav_drawer" />
+        <include layout="@layout/admin_nav_drawer" />
 
     </RelativeLayout>
 

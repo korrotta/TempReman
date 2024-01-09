@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/admin_toolbar" />
 
         <TextView
             android:text="@string/sales"
@@ -28,7 +28,7 @@
         android:layout_gravity="start"
         android:background="@color/white">
 
-        <include layout="@layout/nav_drawer" />
+        <include layout="@layout/admin_nav_drawer" />
 
     </RelativeLayout>
 

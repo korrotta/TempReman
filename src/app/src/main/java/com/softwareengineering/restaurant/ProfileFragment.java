@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
 
         if (TextUtils.isEmpty(userName)) {
             if (TextUtils.isEmpty(userPhotoUrl)) {
-                storageReference = FirebaseStorage.getInstance().getReference("userImg/default/defaultUser.png");
+                storageReference = FirebaseStorage.getInstance().getReference("userImg/default/default_user.png");
                 try {
                     File defaultAvatar = File.createTempFile("defaultAvatar", ".png");
                     storageReference.getFile(defaultAvatar)

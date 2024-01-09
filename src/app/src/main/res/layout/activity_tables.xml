@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/adminDrawerLayout"
     android:layout_width="match_parent"
@@ -11,14 +12,401 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/admin_toolbar" />
 
-        <TextView
-            android:text="@string/tables"
-            android:gravity="center"
-            android:textSize="50sp"
+        <LinearLayout
+            android:id="@+id/adminTablesEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/tablesEditImg"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/edit" />
+
+            <TextView
+                android:id="@+id/tablesEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/edit"
+                android:textColor="@color/blue_2"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/tablesLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp">
+
+                <ImageView
+                    android:id="@+id/table_1_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_1_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_1_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_1_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_1_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_1_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:id="@+id/table_2_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_2_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_2_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_2_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_2_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_2_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp">
+
+                <ImageView
+                    android:id="@+id/table_3_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_3_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_3_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_3_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_3_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_3_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="130dp">
+
+                <ImageView
+                    android:id="@+id/table_4_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_4_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="4"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_4_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_4_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_4_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_4_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_5"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="130dp">
+
+                <ImageView
+                    android:id="@+id/table_5_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_5_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="5"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_5_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_5_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_5_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_5_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_6"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="130dp"
+                android:layout_marginEnd="25dp">
+
+                <ImageView
+                    android:id="@+id/table_6_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_6_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="6"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_6_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_6_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_6_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_6_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_7"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="260dp">
+
+                <ImageView
+                    android:id="@+id/table_7_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_7_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="7"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_7_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_7_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_7_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_7_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_8"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="260dp">
+
+                <ImageView
+                    android:id="@+id/table_8_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_8_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="8"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_8_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_8_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_8_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_8_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_9"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="260dp"
+                android:layout_marginEnd="25dp">
+
+                <ImageView
+                    android:id="@+id/table_9_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_9_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="9"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_9_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_9_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_9_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_9_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_10"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="390dp">
+
+                <ImageView
+                    android:id="@+id/table_10_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_10_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="10"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_10_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_10_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_10_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_10_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_11"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="390dp">
+
+                <ImageView
+                    android:id="@+id/table_11_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_11_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="11"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_11_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_11_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_11_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_11_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/table_12"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="390dp"
+                android:layout_marginEnd="25dp">
+
+                <ImageView
+                    android:id="@+id/table_12_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/table_top_view" />
+
+                <TextView
+                    android:id="@+id/table_12_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="12"
+                    android:textColor="@color/white"
+                    android:textSize="35sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/table_12_img"
+                    app:layout_constraintEnd_toEndOf="@+id/table_12_img"
+                    app:layout_constraintStart_toStartOf="@+id/table_12_img"
+                    app:layout_constraintTop_toTopOf="@+id/table_12_img"
+                    app:layout_constraintVertical_bias="0.45" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -28,7 +416,7 @@
         android:layout_gravity="start"
         android:background="@color/white">
 
-        <include layout="@layout/nav_drawer" />
+        <include layout="@layout/admin_nav_drawer" />
 
     </RelativeLayout>
 

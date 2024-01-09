@@ -9,8 +9,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="lavender">#8692F7</color>
     <color name="light_red">#FF5353</color>
+    <color name="dark_red">#BB271A</color>
     <color name="light_orange">#FCEBD7</color>
     <color name="orange">#F9B145</color>
     <color name="grey">#A7A7A7</color>
     <color name="blue">#365899</color>
+    <color name="blue_2">#4979D1</color>
 </resources>

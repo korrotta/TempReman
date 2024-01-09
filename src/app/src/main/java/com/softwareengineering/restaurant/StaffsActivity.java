@@ -9,10 +9,19 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.softwareengineering.restaurant.databinding.ActivityStaffsBinding;
+
+import java.util.ArrayList;
 
 public class StaffsActivity extends AppCompatActivity {
 
@@ -20,12 +29,15 @@ public class StaffsActivity extends AppCompatActivity {
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private ActivityStaffsBinding binding;
+    private LinearLayout addStaffs;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs);
+        binding = ActivityStaffsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -37,8 +49,58 @@ public class StaffsActivity extends AppCompatActivity {
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
+        addStaffs = findViewById(R.id.adminStaffsAdd);
 
         setItemBackgroundColors(staffs);
+
+        // Set data for Staffs list
+        // TODO: Need to get all staff with roles in firestore database
+        String[] staffsName = {
+                "Alpha", "Beta", "Charlie", "Delta"
+        };
+
+        String[] staffsRole = {
+                "Waiter", "Cook", "Cashier", "Janitor"
+        };
+
+        String[] staffsEmail = {
+                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
+        };
+
+        String[] staffsGender = {
+                "Male", "Female"
+        };
+
+        String[] staffsPhone = {
+                "0123456789"
+        };
+
+        String[] staffsUsername = {
+                "Default"
+        };
+
+        // Initialize Staffs list
+        ArrayList<Staffs> staffsArrayList = new ArrayList<>();
+
+        for (int i = 0; i < staffsName.length; i++) {
+
+            Staffs tempStaff = new Staffs(staffsName[i], staffsEmail[i], staffsPhone[0], staffsGender[i % 2], staffsRole[i], staffsUsername[0]);
+            staffsArrayList.add(tempStaff);
+
+        }
+
+        StaffsAdapter staffsAdapter = new StaffsAdapter(StaffsActivity.this, staffsArrayList);
+
+        binding.staffsListView.setAdapter(staffsAdapter);
+        binding.staffsListView.setClickable(true);
+        binding.staffsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(StaffsActivity.this, StaffsDetails.class);
+                intent.putExtra("staffs", staffsArrayList.get(position));
+                startActivity(intent);
+            }
+        });
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +167,25 @@ public class StaffsActivity extends AppCompatActivity {
             }
         });
 
+        // Handle Add Staffs
+        addStaffs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffsActivity.this, AddStaffsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Handle new created staff account
+        Staffs newStaffs = getIntent().getParcelableExtra("newStaffs");
+        if (newStaffs != null) {
+            staffsArrayList.add(newStaffs);
+            staffsAdapter.notifyDataSetChanged();
+            binding.staffsListView.setAdapter(staffsAdapter);
+            binding.staffsListView.setClickable(true);
+        }
+
+        staffsAdapter.notifyDataSetChanged();
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
