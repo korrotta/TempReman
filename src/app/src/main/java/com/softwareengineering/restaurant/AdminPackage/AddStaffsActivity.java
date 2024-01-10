@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.Staffs;
+import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
 
 import java.util.HashMap;
