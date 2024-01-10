@@ -1,38 +1,41 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.ItemClasses;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class Customers implements Parcelable {
-    private String name, email, username, phone, gender;
+public class Staffs implements Parcelable {
 
-    public Customers(String name, String email, String username, String phone, String gender) {
+    private String name, email, phone, gender, role, username;
+
+    public Staffs(String name, String email, String phone, String gender, String role, String username) {
         this.name = name;
         this.email = email;
-        this.username = username;
         this.phone = phone;
         this.gender = gender;
+        this.role = role;
+        this.username = username;
     }
 
-    protected Customers(Parcel in) {
+    protected Staffs(Parcel in) {
         name = in.readString();
         email = in.readString();
-        username = in.readString();
         phone = in.readString();
         gender = in.readString();
+        role = in.readString();
+        username = in.readString();
     }
 
-    public static final Creator<Customers> CREATOR = new Creator<Customers>() {
+    public static final Creator<Staffs> CREATOR = new Creator<Staffs>() {
         @Override
-        public Customers createFromParcel(Parcel in) {
-            return new Customers(in);
+        public Staffs createFromParcel(Parcel in) {
+            return new Staffs(in);
         }
 
         @Override
-        public Customers[] newArray(int size) {
-            return new Customers[size];
+        public Staffs[] newArray(int size) {
+            return new Staffs[size];
         }
     };
 
@@ -52,14 +55,6 @@ public class Customers implements Parcelable {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -76,6 +71,22 @@ public class Customers implements Parcelable {
         this.gender = gender;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -85,8 +96,9 @@ public class Customers implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(email);
-        dest.writeString(username);
         dest.writeString(phone);
         dest.writeString(gender);
+        dest.writeString(role);
+        dest.writeString(username);
     }
 }

@@ -23,7 +23,7 @@ import com.softwareengineering.restaurant.AdminPackage.MenuActivity;
 import com.softwareengineering.restaurant.AdminPackage.ReportsActivity;
 import com.softwareengineering.restaurant.AdminPackage.SalesActivity;
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.Staffs;
+import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.StaffsAdapter;
 import com.softwareengineering.restaurant.AdminPackage.StaffsDetails;
 import com.softwareengineering.restaurant.AdminPackage.TablesActivity;
