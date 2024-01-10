@@ -19,7 +19,6 @@ import com.softwareengineering.restaurant.Customers;
 import com.softwareengineering.restaurant.CustomersAdapter;
 import com.softwareengineering.restaurant.CustomersDetails;
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersBinding;
 
 import java.util.ArrayList;

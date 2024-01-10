@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant.StaffPackage;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,17 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.softwareengineering.restaurant.AdminPackage.AccountActivity;
-import com.softwareengineering.restaurant.AdminPackage.AddStaffsActivity;
-import com.softwareengineering.restaurant.AdminPackage.CustomersActivity;
-import com.softwareengineering.restaurant.AdminPackage.MenuActivity;
-import com.softwareengineering.restaurant.AdminPackage.ReportsActivity;
-import com.softwareengineering.restaurant.AdminPackage.SalesActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.Staffs;
 import com.softwareengineering.restaurant.StaffsAdapter;
-import com.softwareengineering.restaurant.AdminPackage.StaffsDetails;
-import com.softwareengineering.restaurant.AdminPackage.TablesActivity;
 import com.softwareengineering.restaurant.databinding.ActivityStaffsBinding;
 
 import java.util.ArrayList;

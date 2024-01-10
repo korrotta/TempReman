@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
 import com.softwareengineering.restaurant.databinding.ActivityAdminMainBinding;
 
 public class AdminMainActivity extends AppCompatActivity {

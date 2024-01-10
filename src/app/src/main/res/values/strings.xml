@@ -73,4 +73,8 @@
     <string name="payment">Payment</string>
     <string name="close_nav">Close Navigation Drawer</string>
     <string name="open_nav">Open Navigation Drawer</string>
+    <string name="message">Message</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
