@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.softwareengineering.restaurant.Customers;
+import com.softwareengineering.restaurant.ItemClasses.Customers;
 import com.softwareengineering.restaurant.CustomersAdapter;
 import com.softwareengineering.restaurant.CustomersDetails;
 import com.softwareengineering.restaurant.R;

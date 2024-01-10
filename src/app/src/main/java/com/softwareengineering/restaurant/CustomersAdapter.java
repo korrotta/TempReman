@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.softwareengineering.restaurant.ItemClasses.Customers;
+
 import java.util.ArrayList;
 
 public class CustomersAdapter extends ArrayAdapter<Customers> {

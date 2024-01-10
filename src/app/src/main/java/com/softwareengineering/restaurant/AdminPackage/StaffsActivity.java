@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.Staffs;
+import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.StaffsAdapter;
 import com.softwareengineering.restaurant.databinding.ActivityStaffsBinding;
 

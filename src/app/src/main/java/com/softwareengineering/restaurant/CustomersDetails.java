@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.softwareengineering.restaurant.databinding.ActivityCustomersBinding;
+import com.softwareengineering.restaurant.ItemClasses.Customers;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersDetailsBinding;
 
 public class CustomersDetails extends AppCompatActivity {

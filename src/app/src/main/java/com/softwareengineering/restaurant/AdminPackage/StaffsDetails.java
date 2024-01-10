@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.Staffs;
+import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.databinding.ActivityStaffsDetailsBinding;
 
 public class StaffsDetails extends AppCompatActivity {
