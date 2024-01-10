@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/tablesActive"
+        android:id="@+id/tablesActiveImg"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:src="@drawable/table_top_view"
@@ -27,11 +27,11 @@
         android:textColor="@color/white"
         android:textSize="35sp"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/tablesActive"
-        app:layout_constraintEnd_toEndOf="@+id/tablesActive"
+        app:layout_constraintBottom_toBottomOf="@+id/tablesActiveImg"
+        app:layout_constraintEnd_toEndOf="@+id/tablesActiveImg"
         app:layout_constraintHorizontal_bias="0.488"
-        app:layout_constraintStart_toStartOf="@+id/tablesActive"
-        app:layout_constraintTop_toTopOf="@+id/tablesActive"
+        app:layout_constraintStart_toStartOf="@+id/tablesActiveImg"
+        app:layout_constraintTop_toTopOf="@+id/tablesActiveImg"
         app:layout_constraintVertical_bias="0.45" />
 
 

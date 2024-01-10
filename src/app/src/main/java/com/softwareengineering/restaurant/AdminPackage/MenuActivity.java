@@ -23,7 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
 
 import java.util.ArrayList;
 import java.util.List;

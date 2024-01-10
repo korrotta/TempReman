@@ -35,18 +35,16 @@ public class LoginActivity extends AppCompatActivity {
     TextView textView;
     TextView txtForgotPassword;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference usersRef = db.collection("users");
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if ((currentUser != null && currentUser.isEmailVerified())) {
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if ((currentUser != null && currentUser.isEmailVerified())) {
+            String uid = currentUser.getUid();
+            getUserRoleFromFirestore(uid);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserRoleFromFirestore(String uid) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(uid);
 
         userRef.get().addOnCompleteListener(task -> {

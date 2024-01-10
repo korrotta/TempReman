@@ -64,7 +64,7 @@
             android:name=".AdminPackage.CustomersActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffPackage.StaffsActivity"
+            android:name=".AdminPackage.StaffsActivity"
             android:exported="false" />
         <activity
             android:name=".AdminPackage.AdminMainActivity"
