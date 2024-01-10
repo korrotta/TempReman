@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class ReportsActivity extends AppCompatActivity {
+import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
+
+public class AccountActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
@@ -25,7 +28,7 @@ public class ReportsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reports);
+        setContentView(R.layout.activity_account);
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -38,7 +41,7 @@ public class ReportsActivity extends AppCompatActivity {
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
 
-        setItemBackgroundColors(reports);
+        setItemBackgroundColors(account);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,13 +50,13 @@ public class ReportsActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText("Reports");
+        topMenuName.setText("Account");
 
         staffs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(staffs);
-                redirectActivity(ReportsActivity.this, StaffsActivity.class);
+                redirectActivity(AccountActivity.this, StaffsActivity.class);
             }
         });
 
@@ -61,7 +64,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(ReportsActivity.this, CustomersActivity.class);
+                redirectActivity(AccountActivity.this, CustomersActivity.class);
             }
         });
 
@@ -69,7 +72,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(ReportsActivity.this, MenuActivity.class);
+                redirectActivity(AccountActivity.this, MenuActivity.class);
             }
         });
 
@@ -77,7 +80,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(ReportsActivity.this, TablesActivity.class);
+                redirectActivity(AccountActivity.this, TablesActivity.class);
             }
         });
 
@@ -85,7 +88,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                recreate();
+                redirectActivity(AccountActivity.this, ReportsActivity.class);
             }
         });
 
@@ -93,7 +96,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(sales);
-                redirectActivity(ReportsActivity.this, SalesActivity.class);
+                redirectActivity(AccountActivity.this, SalesActivity.class);
             }
         });
 
@@ -101,7 +104,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(ReportsActivity.this, AccountActivity.class);
+                recreate();
             }
         });
 

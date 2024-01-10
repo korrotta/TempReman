@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -10,22 +10,42 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class AccountActivity extends AppCompatActivity {
+import com.softwareengineering.restaurant.AdminPackage.AccountActivity;
+import com.softwareengineering.restaurant.AdminPackage.AddStaffsActivity;
+import com.softwareengineering.restaurant.AdminPackage.CustomersActivity;
+import com.softwareengineering.restaurant.AdminPackage.MenuActivity;
+import com.softwareengineering.restaurant.AdminPackage.ReportsActivity;
+import com.softwareengineering.restaurant.AdminPackage.SalesActivity;
+import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.Staffs;
+import com.softwareengineering.restaurant.StaffsAdapter;
+import com.softwareengineering.restaurant.AdminPackage.StaffsDetails;
+import com.softwareengineering.restaurant.AdminPackage.TablesActivity;
+import com.softwareengineering.restaurant.databinding.ActivityStaffsBinding;
+
+import java.util.ArrayList;
+
+public class StaffsActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private ActivityStaffsBinding binding;
+    private LinearLayout addStaffs;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
+        binding = ActivityStaffsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -37,8 +57,58 @@ public class AccountActivity extends AppCompatActivity {
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
+        addStaffs = findViewById(R.id.adminStaffsAdd);
 
-        setItemBackgroundColors(account);
+        setItemBackgroundColors(staffs);
+
+        // Set data for Staffs list
+        // TODO: Need to get all staff with roles in firestore database
+        String[] staffsName = {
+                "Alpha", "Beta", "Charlie", "Delta"
+        };
+
+        String[] staffsRole = {
+                "Waiter", "Cook", "Cashier", "Janitor"
+        };
+
+        String[] staffsEmail = {
+                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
+        };
+
+        String[] staffsGender = {
+                "Male", "Female"
+        };
+
+        String[] staffsPhone = {
+                "0123456789"
+        };
+
+        String[] staffsUsername = {
+                "Default"
+        };
+
+        // Initialize Staffs list
+        ArrayList<Staffs> staffsArrayList = new ArrayList<>();
+
+        for (int i = 0; i < staffsName.length; i++) {
+
+            Staffs tempStaff = new Staffs(staffsName[i], staffsEmail[i], staffsPhone[0], staffsGender[i % 2], staffsRole[i], staffsUsername[0]);
+            staffsArrayList.add(tempStaff);
+
+        }
+
+        StaffsAdapter staffsAdapter = new StaffsAdapter(StaffsActivity.this, staffsArrayList);
+
+        binding.staffsListView.setAdapter(staffsAdapter);
+        binding.staffsListView.setClickable(true);
+        binding.staffsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(StaffsActivity.this, StaffsDetails.class);
+                intent.putExtra("staffs", staffsArrayList.get(position));
+                startActivity(intent);
+            }
+        });
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,13 +117,13 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText("Account");
+        topMenuName.setText("Staffs List");
 
         staffs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(staffs);
-                redirectActivity(AccountActivity.this, StaffsActivity.class);
+                recreate();
             }
         });
 
@@ -61,7 +131,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(AccountActivity.this, CustomersActivity.class);
+                redirectActivity(StaffsActivity.this, CustomersActivity.class);
             }
         });
 
@@ -69,7 +139,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(AccountActivity.this, MenuActivity.class);
+                redirectActivity(StaffsActivity.this, MenuActivity.class);
             }
         });
 
@@ -77,7 +147,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(AccountActivity.this, TablesActivity.class);
+                redirectActivity(StaffsActivity.this, TablesActivity.class);
             }
         });
 
@@ -85,7 +155,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                redirectActivity(AccountActivity.this, ReportsActivity.class);
+                redirectActivity(StaffsActivity.this, ReportsActivity.class);
             }
         });
 
@@ -93,7 +163,7 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(sales);
-                redirectActivity(AccountActivity.this, SalesActivity.class);
+                redirectActivity(StaffsActivity.this, SalesActivity.class);
             }
         });
 
@@ -101,10 +171,29 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                recreate();
+                redirectActivity(StaffsActivity.this, AccountActivity.class);
             }
         });
 
+        // Handle Add Staffs
+        addStaffs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffsActivity.this, AddStaffsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Handle new created staff account
+        Staffs newStaffs = getIntent().getParcelableExtra("newStaffs");
+        if (newStaffs != null) {
+            staffsArrayList.add(newStaffs);
+            staffsAdapter.notifyDataSetChanged();
+            binding.staffsListView.setAdapter(staffsAdapter);
+            binding.staffsListView.setClickable(true);
+        }
+
+        staffsAdapter.notifyDataSetChanged();
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {

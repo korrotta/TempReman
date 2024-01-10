@@ -22,6 +22,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.softwareengineering.restaurant.AdminPackage.AdminMainActivity;
+import com.softwareengineering.restaurant.StaffPackage.StaffsMenuActivity;
 
 import java.util.Objects;
 

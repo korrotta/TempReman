@@ -1,17 +1,17 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.Staffs;
 import com.softwareengineering.restaurant.databinding.ActivityStaffsDetailsBinding;
 
 public class StaffsDetails extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.softwareengineering.restaurant.LoginActivity;
+import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
-public class StaffsCustomersActivity extends AppCompatActivity {
+public class StaffsMenuActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
@@ -28,7 +30,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs_customers);
+        setContentView(R.layout.activity_staffs_menu);
 
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.staffsDrawerLayout);
@@ -57,7 +59,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             userName.setText(R.string.name);
         }
 
-        setItemBackgroundColors(customers);
+        setItemBackgroundColors(menu);
 
         topMenuImg.setImageResource(R.drawable.topmenu);
 
@@ -68,13 +70,13 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText(R.string.customers);
+        topMenuName.setText(R.string.menu);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(StaffsCustomersActivity.this, StaffsMenuActivity.class);
+                recreate();
             }
         });
 
@@ -82,7 +84,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                recreate();
+                redirectActivity(StaffsMenuActivity.this, StaffsCustomersActivity.class);
             }
         });
 
@@ -90,7 +92,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(StaffsCustomersActivity.this, StaffsTablesActivity.class);
+                redirectActivity(StaffsMenuActivity.this, StaffsTablesActivity.class);
             }
         });
 
@@ -98,7 +100,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                redirectActivity(StaffsCustomersActivity.this, StaffsReportsActivity.class);
+                redirectActivity(StaffsMenuActivity.this, StaffsReportsActivity.class);
             }
         });
 
@@ -106,7 +108,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(payment);
-                redirectActivity(StaffsCustomersActivity.this, StaffsPaymentActivity.class);
+                redirectActivity(StaffsMenuActivity.this, StaffsPaymentActivity.class);
             }
         });
 
@@ -114,7 +116,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(StaffsCustomersActivity.this, StaffsAccountActivity.class);
+                redirectActivity(StaffsMenuActivity.this, StaffsAccountActivity.class);
             }
         });
 
@@ -122,7 +124,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                redirectActivity(StaffsCustomersActivity.this, LoginActivity.class);
+                redirectActivity(StaffsMenuActivity.this, LoginActivity.class);
             }
         });
 

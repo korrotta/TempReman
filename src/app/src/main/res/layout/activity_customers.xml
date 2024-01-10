@@ -4,7 +4,7 @@
     android:id="@+id/adminDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CustomersActivity">
+    tools:context=".AdminPackage.CustomersActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

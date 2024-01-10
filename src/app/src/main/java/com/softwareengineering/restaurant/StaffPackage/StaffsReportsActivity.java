@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -15,9 +15,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.softwareengineering.restaurant.LoginActivity;
+import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
-public class StaffsPaymentActivity extends AppCompatActivity {
+public class StaffsReportsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
@@ -57,7 +59,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             userName.setText(R.string.name);
         }
 
-        setItemBackgroundColors(payment);
+        setItemBackgroundColors(reports);
 
         topMenuImg.setImageResource(R.drawable.topmenu);
 
@@ -68,13 +70,13 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText(R.string.payment);
+        topMenuName.setText(R.string.reports);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(StaffsPaymentActivity.this, StaffsMenuActivity.class);
+                redirectActivity(StaffsReportsActivity.this, StaffsMenuActivity.class);
             }
         });
 
@@ -82,7 +84,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(StaffsPaymentActivity.this, StaffsCustomersActivity.class);
+                redirectActivity(StaffsReportsActivity.this, StaffsCustomersActivity.class);
             }
         });
 
@@ -90,7 +92,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(StaffsPaymentActivity.this, StaffsTablesActivity.class);
+                redirectActivity(StaffsReportsActivity.this, StaffsTablesActivity.class);
             }
         });
 
@@ -98,7 +100,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                redirectActivity(StaffsPaymentActivity.this, StaffsReportsActivity.class);
+                recreate();
             }
         });
 
@@ -106,7 +108,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(payment);
-                recreate();
+                redirectActivity(StaffsReportsActivity.this, StaffsPaymentActivity.class);
             }
         });
 
@@ -114,7 +116,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(StaffsPaymentActivity.this, StaffsAccountActivity.class);
+                redirectActivity(StaffsReportsActivity.this, StaffsAccountActivity.class);
             }
         });
 
@@ -122,7 +124,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                redirectActivity(StaffsPaymentActivity.this, LoginActivity.class);
+                redirectActivity(StaffsReportsActivity.this, LoginActivity.class);
             }
         });
 

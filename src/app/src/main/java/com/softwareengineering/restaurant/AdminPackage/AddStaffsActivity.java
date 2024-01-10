@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +24,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.softwareengineering.restaurant.databinding.ActivityAddStaffsBinding;
+import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.Staffs;
+import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 

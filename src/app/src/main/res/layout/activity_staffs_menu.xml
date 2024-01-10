@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
     android:id="@+id/staffsDrawerLayout"
-    tools:context=".StaffsMenuActivity">
+    tools:context=".StaffPackage.StaffsMenuActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
