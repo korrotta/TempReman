@@ -138,7 +138,6 @@ public class AddStaffsActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
             }
         });
 

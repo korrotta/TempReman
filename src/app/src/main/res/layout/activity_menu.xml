@@ -41,17 +41,19 @@
 
         </LinearLayout>
         <!--UI content, Grid View-->
-        <GridView
-            android:id="@+id/admin_MenuGridView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="2"
-            android:verticalSpacing="8dp"
-            android:horizontalSpacing="8dp"
-            android:padding="8dp"/>
-
-
-
+       <ScrollView
+           android:layout_width="wrap_content"
+           android:layout_height="match_parent"
+           android:fillViewport="true">
+           <GridView
+               android:id="@+id/admin_MenuGridView"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:numColumns="2"
+               android:verticalSpacing="8dp"
+               android:horizontalSpacing="8dp"
+               android:padding="8dp"/>
+       </ScrollView>
     </LinearLayout>
 
     <RelativeLayout
