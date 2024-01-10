@@ -1,5 +1,9 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -9,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -16,12 +21,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.StaffsAdapter;
 import com.softwareengineering.restaurant.databinding.ActivityStaffsBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StaffsActivity extends AppCompatActivity {
 
@@ -31,6 +40,9 @@ public class StaffsActivity extends AppCompatActivity {
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
     private ActivityStaffsBinding binding;
     private LinearLayout addStaffs;
+
+    private ArrayList<Staffs>staffsArrayList;
+    private StaffsAdapter staffsAdapter;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,41 +67,55 @@ public class StaffsActivity extends AppCompatActivity {
 
         // Set data for Staffs list
         // TODO: Need to get all staff with roles in firestore database
-        String[] staffsName = {
-                "Alpha", "Beta", "Charlie", "Delta"
-        };
+//        String[] staffsName = {
+//                "Alpha", "Beta", "Charlie", "Delta"
+//        };
+//
+//        String[] staffsRole = {
+//                "Waiter", "Cook", "Cashier", "Janitor"
+//        };
+//
+//        String[] staffsEmail = {
+//                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
+//        };
+//
+//        String[] staffsGender = {
+//                "Male", "Female"
+//        };
+//
+//        String[] staffsPhone = {
+//                "0123456789"
+//        };
+//
+//        String[] staffsUsername = {
+//                "Default"
+//        };
+//
+//        // Initialize Staffs list
+//        ArrayList<Staffs> staffsArrayList = new ArrayList<>();
+//
+//        for (int i = 0; i < staffsName.length; i++) {
+//
+//            Staffs tempStaff = new Staffs(staffsName[i], staffsEmail[i], staffsPhone[0], staffsGender[i % 2], staffsRole[i], staffsUsername[0]);
+//            staffsArrayList.add(tempStaff);
+//
+//        }
 
-        String[] staffsRole = {
-                "Waiter", "Cook", "Cashier", "Janitor"
-        };
+        staffsArrayList = new ArrayList<Staffs>();
+        staffsAdapter = new StaffsAdapter(StaffsActivity.this, staffsArrayList);
 
-        String[] staffsEmail = {
-                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
-        };
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("users").whereNotIn("role", Arrays.asList("admin", "customer", "deleted"))
+                        .get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()){
+                                for (QueryDocumentSnapshot doc: task.getResult()){
+                                    staffsArrayList.add(new Staffs(doc.getString("name"), doc.getString("email"), doc.getString("phone"),
+                                            doc.getString("gender"), doc.getString("role"),doc.getString("username")));
+                                }
+                                staffsAdapter.notifyDataSetChanged();
+                            }
+                });
 
-        String[] staffsGender = {
-                "Male", "Female"
-        };
-
-        String[] staffsPhone = {
-                "0123456789"
-        };
-
-        String[] staffsUsername = {
-                "Default"
-        };
-
-        // Initialize Staffs list
-        ArrayList<Staffs> staffsArrayList = new ArrayList<>();
-
-        for (int i = 0; i < staffsName.length; i++) {
-
-            Staffs tempStaff = new Staffs(staffsName[i], staffsEmail[i], staffsPhone[0], staffsGender[i % 2], staffsRole[i], staffsUsername[0]);
-            staffsArrayList.add(tempStaff);
-
-        }
-
-        StaffsAdapter staffsAdapter = new StaffsAdapter(StaffsActivity.this, staffsArrayList);
 
         binding.staffsListView.setAdapter(staffsAdapter);
         binding.staffsListView.setClickable(true);
@@ -97,7 +123,7 @@ public class StaffsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(StaffsActivity.this, StaffsDetails.class);
-                intent.putExtra("staffs", staffsArrayList.get(position));
+                intent.putExtra("data", staffsAdapter.getItem(position));
                 startActivity(intent);
             }
         });
@@ -220,5 +246,4 @@ public class StaffsActivity extends AppCompatActivity {
         super.onPause();
         closeDrawer(drawerLayout);
     }
-
 }
