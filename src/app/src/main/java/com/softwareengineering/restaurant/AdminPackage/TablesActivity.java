@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -14,18 +14,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class SalesActivity extends AppCompatActivity {
+import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
+
+import java.util.ArrayList;
+
+public class TablesActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private ArrayList<RelativeLayout> tablesLayoutList;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sales);
+        setContentView(R.layout.activity_staffs);
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -38,7 +44,7 @@ public class SalesActivity extends AppCompatActivity {
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
 
-        setItemBackgroundColors(sales);
+        setItemBackgroundColors(tables);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,13 +53,13 @@ public class SalesActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText("Sales");
+        topMenuName.setText("Tables");
 
         staffs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(staffs);
-                redirectActivity(SalesActivity.this, StaffsActivity.class);
+                redirectActivity(TablesActivity.this, StaffsActivity.class);
             }
         });
 
@@ -61,7 +67,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(SalesActivity.this, CustomersActivity.class);
+                redirectActivity(TablesActivity.this, CustomersActivity.class);
             }
         });
 
@@ -69,7 +75,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(SalesActivity.this, MenuActivity.class);
+                redirectActivity(TablesActivity.this, MenuActivity.class);
             }
         });
 
@@ -77,7 +83,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(SalesActivity.this, TablesActivity.class);
+                recreate();
             }
         });
 
@@ -85,7 +91,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                redirectActivity(SalesActivity.this, ReportsActivity.class);
+                redirectActivity(TablesActivity.this, ReportsActivity.class);
             }
         });
 
@@ -93,7 +99,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(sales);
-                recreate();
+                redirectActivity(TablesActivity.this, SalesActivity.class);
             }
         });
 
@@ -101,7 +107,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(SalesActivity.this, AccountActivity.class);
+                redirectActivity(TablesActivity.this, AccountActivity.class);
             }
         });
 

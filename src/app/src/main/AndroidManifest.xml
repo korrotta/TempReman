@@ -18,55 +18,55 @@
             android:name=".CustomersDetails"
             android:exported="false" />
         <activity
-            android:name=".EditStaffsActivity"
+            android:name=".AdminPackage.EditStaffsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddStaffsActivity"
+            android:name=".AdminPackage.AddStaffsActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsDetails"
+            android:name=".AdminPackage.StaffsDetails"
             android:exported="false"/>
         <activity
-            android:name=".StaffsAccountActivity"
+            android:name=".StaffPackage.StaffsAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsReportsActivity"
+            android:name=".StaffPackage.StaffsReportsActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsPaymentActivity"
+            android:name=".StaffPackage.StaffsPaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsCustomersActivity"
+            android:name=".StaffPackage.StaffsCustomersActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsTablesActivity"
+            android:name=".StaffPackage.StaffsTablesActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsMenuActivity"
+            android:name=".StaffPackage.StaffsMenuActivity"
             android:exported="false" />
         <activity
-            android:name=".AccountActivity"
+            android:name=".AdminPackage.AccountActivity"
             android:exported="false" />
         <activity
-            android:name=".SalesActivity"
+            android:name=".AdminPackage.SalesActivity"
             android:exported="false" />
         <activity
-            android:name=".ReportsActivity"
+            android:name=".AdminPackage.ReportsActivity"
             android:exported="false" />
         <activity
-            android:name=".TablesActivity"
+            android:name=".AdminPackage.TablesActivity"
             android:exported="false" />
         <activity
-            android:name=".MenuActivity"
+            android:name=".AdminPackage.MenuActivity"
             android:exported="false" />
         <activity
-            android:name=".CustomersActivity"
+            android:name=".AdminPackage.CustomersActivity"
             android:exported="false" />
         <activity
-            android:name=".StaffsActivity"
+            android:name=".StaffPackage.StaffsActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminMainActivity"
+            android:name=".AdminPackage.AdminMainActivity"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
 

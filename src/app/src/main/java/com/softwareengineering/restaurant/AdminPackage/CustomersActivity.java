@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -10,25 +10,34 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.softwareengineering.restaurant.Customers;
+import com.softwareengineering.restaurant.CustomersAdapter;
+import com.softwareengineering.restaurant.CustomersDetails;
+import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.StaffPackage.StaffsActivity;
+import com.softwareengineering.restaurant.databinding.ActivityCustomersBinding;
+
 import java.util.ArrayList;
 
-public class TablesActivity extends AppCompatActivity {
+public class CustomersActivity extends AppCompatActivity {
 
+    private ActivityCustomersBinding binding;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
-    private ArrayList<RelativeLayout> tablesLayoutList;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs);
+        binding = ActivityCustomersBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -41,7 +50,7 @@ public class TablesActivity extends AppCompatActivity {
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
 
-        setItemBackgroundColors(tables);
+        setItemBackgroundColors(customers);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,13 +59,60 @@ public class TablesActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText("Tables");
+        topMenuName.setText("Customers List");
+
+        // Set data for Customers list
+        // Need to get all customers with roles in firestore database
+        String[] customersName = {
+                "Alpha", "Beta", "Charlie", "Delta"
+        };
+
+        String[] customersEmail = {
+                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
+        };
+
+        String[] customersGender = {
+                "Male", "Female"
+        };
+
+        String[] customersPhone = {
+                "0123456789"
+        };
+
+        String[] customersUsername = {
+                "Customer"
+        };
+
+        // Initialize Customers list
+        ArrayList<Customers> customersArrayList = new ArrayList<>();
+
+        for (int i = 0; i < customersName.length; i++) {
+
+            Customers tempCustomer = new Customers(customersName[i], customersEmail[i], customersUsername[0], customersPhone[0], customersGender[i % 2]);
+            customersArrayList.add(tempCustomer);
+
+        }
+
+        CustomersAdapter customersAdapter = new CustomersAdapter(CustomersActivity.this, customersArrayList);
+
+        // TODO: Get all customers registered in database
+
+        binding.customersListView.setAdapter(customersAdapter);
+        binding.customersListView.setClickable(true);
+        binding.customersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CustomersActivity.this, CustomersDetails.class);
+                intent.putExtra("customers", customersArrayList.get(position));
+                startActivity(intent);
+            }
+        });
 
         staffs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(staffs);
-                redirectActivity(TablesActivity.this, StaffsActivity.class);
+                redirectActivity(CustomersActivity.this, StaffsActivity.class);
             }
         });
 
@@ -64,7 +120,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(TablesActivity.this, CustomersActivity.class);
+                recreate();
             }
         });
 
@@ -72,7 +128,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(TablesActivity.this, MenuActivity.class);
+                redirectActivity(CustomersActivity.this, MenuActivity.class);
             }
         });
 
@@ -80,7 +136,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                recreate();
+                redirectActivity(CustomersActivity.this, TablesActivity.class);
             }
         });
 
@@ -88,7 +144,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                redirectActivity(TablesActivity.this, ReportsActivity.class);
+                redirectActivity(CustomersActivity.this, ReportsActivity.class);
             }
         });
 
@@ -96,7 +152,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(sales);
-                redirectActivity(TablesActivity.this, SalesActivity.class);
+                redirectActivity(CustomersActivity.this, SalesActivity.class);
             }
         });
 
@@ -104,7 +160,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(TablesActivity.this, AccountActivity.class);
+                redirectActivity(CustomersActivity.this, AccountActivity.class);
             }
         });
 
