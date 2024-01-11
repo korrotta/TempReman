@@ -1,5 +1,6 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -16,8 +17,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.core.Repo;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 import com.softwareengineering.restaurant.ItemClasses.Reports;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ReportsAdapter;
@@ -34,6 +42,12 @@ public class ReportsActivity extends AppCompatActivity {
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+
+    private ArrayList<Reports> reportsArrayList;
+    ReportsAdapter reportsAdapter;
+
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,20 +69,31 @@ public class ReportsActivity extends AppCompatActivity {
 
         setItemBackgroundColors(reports);
 
-        // Initialize Reports Data
-        Reports reports1 = new Reports("Report A", "Employee", "Content", new Date("01/12/2023"), false);
-        Reports reports2 = new Reports("Report B", "Employee", "Content", new Date("02/12/2023"), false);
-        Reports reports3 = new Reports("Report C", "Employee", "Content", new Date("03/12/2023"), false);
 
-        ArrayList<Reports> reportsArrayList = new ArrayList<>();
-        reportsArrayList.add(reports1);
-        reportsArrayList.add(reports2);
-        reportsArrayList.add(reports3);
+        reportsArrayList = new ArrayList<>();
+        reportsAdapter = new ReportsAdapter(ReportsActivity.this, reportsArrayList);
 
-        // Sort Reports by Date
-        Collections.sort(reportsArrayList);
+        firestore.collection("reports").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        String staffID = doc.getString("staffID");
+                        String title = doc.getString("title");
+                        Date date = doc.getDate("date");
+                        String rpContent = doc.getId();
+                        boolean isRead = Boolean.TRUE.equals(doc.getBoolean("isRead"));
 
-        ReportsAdapter reportsAdapter = new ReportsAdapter(ReportsActivity.this, reportsArrayList);
+                        Reports rp = new Reports(title, staffID, rpContent, date, isRead);
+                        reportsArrayList.add(rp);
+                    }
+                    // Sort Reports by Date
+                    Collections.sort(reportsArrayList);
+                    reportsAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
         binding.adminReportsListView.setAdapter(reportsAdapter);
         binding.adminReportsListView.setClickable(true);
@@ -83,6 +108,11 @@ public class ReportsActivity extends AppCompatActivity {
             }
         });
 
+        menuBarClickEvent();
+
+    }
+
+    private void menuBarClickEvent() {
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +177,6 @@ public class ReportsActivity extends AppCompatActivity {
                 redirectActivity(ReportsActivity.this, AccountActivity.class);
             }
         });
-
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {

@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.softwareengineering.restaurant.ItemClasses.Customers;
+import com.softwareengineering.restaurant.R;
 
 import java.util.ArrayList;
 
