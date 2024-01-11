@@ -24,173 +24,34 @@
             android:paddingLeft="30dp" android:paddingTop="15dp">
         </TextView>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:layout_width="76dp"
-                    android:layout_height="127dp"
-                    android:orientation="vertical"
-                    android:elevation="2dp"
-                    android:background="@drawable/rounded_foodtypes">
+            <include layout="@layout/bar_food"></include>
+        </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content" android:layout_gravity="center"
-                        android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:src="@drawable/salad"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Salad" android:layout_gravity="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:layout_width="76dp"
-                    android:layout_height="127dp"
-                    android:orientation="vertical"
-                    android:elevation="2dp"
-                    android:background="@drawable/rounded_foodtypes">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content" android:layout_gravity="center"
-                        android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:src="@drawable/drink"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Drink" android:layout_gravity="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:layout_width="76dp"
-                    android:layout_height="127dp"
-                    android:orientation="vertical"
-                    android:elevation="2dp"
-                    android:background="@drawable/rounded_foodtypes">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content" android:layout_gravity="center"
-                        android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:src="@drawable/pizza"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pizza" android:layout_gravity="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:layout_width="76dp"
-                    android:layout_height="127dp"
-                    android:orientation="vertical"
-                    android:elevation="2dp"
-                    android:background="@drawable/rounded_foodtypes">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content" android:layout_gravity="center"
-                        android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:src="@drawable/dessert" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Dessert" android:layout_gravity="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:layout_width="76dp"
-                    android:layout_height="127dp"
-                    android:orientation="vertical"
-                    android:elevation="2dp"
-                    android:background="@drawable/rounded_foodtypes">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content" android:layout_gravity="center"
-                        android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:src="@drawable/pasta"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pasta" android:layout_gravity="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:paddingTop="10dp"
-                    android:layout_width="76dp"
-                    android:layout_height="127dp"
-                    android:orientation="vertical"
-                    android:elevation="2dp"
-                    android:background="@drawable/rounded_foodtypes">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content" android:layout_gravity="center"
-                        android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                        android:gravity="center">
-                        <ImageView
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:src="@drawable/burgers"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Burgers" android:layout_gravity="center"/>
-                </LinearLayout>
-            </LinearLayout>
-        </HorizontalScrollView>
-
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Menu" android:textStyle="bold"
+            android:textSize="18sp" android:fontFamily="@font/quicksand"
+            android:paddingLeft="30dp" android:paddingTop="20dp">
+        </TextView>
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/light_orange_2">
 
-        <include layout="@layout/customers_nav_drawer" />
 
-    </RelativeLayout>
+
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_gravity="start"-->
+<!--        android:background="@color/light_orange_2">-->
+
+<!--        <include layout="@layout/customers_nav_drawer" />-->
+
+<!--    </RelativeLayout>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
