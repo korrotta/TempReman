@@ -37,7 +37,7 @@
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         android:paddingHorizontal="10dp"
-        android:hint="Search menu" android:gravity="center"
+        android:hint="Search menu"
         android:drawableLeft="@drawable/search_icon"
         android:drawablePadding="10dp" />
 
