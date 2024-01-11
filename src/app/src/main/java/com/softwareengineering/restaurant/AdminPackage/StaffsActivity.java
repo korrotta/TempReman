@@ -104,18 +104,7 @@ public class StaffsActivity extends AppCompatActivity {
         staffsArrayList = new ArrayList<Staffs>();
         staffsAdapter = new StaffsAdapter(StaffsActivity.this, staffsArrayList);
 
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("users").whereNotIn("role", Arrays.asList("admin", "customer", "deleted"))
-                        .get().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()){
-                                for (QueryDocumentSnapshot doc: task.getResult()){
-                                    staffsArrayList.add(new Staffs(doc.getString("name"), doc.getString("email"), doc.getString("phone"),
-                                            doc.getString("gender"), doc.getString("role"),doc.getString("username")));
-                                }
-                                staffsAdapter.notifyDataSetChanged();
-                            }
-                });
-
+        rebindDataForAdapter();
 
         binding.staffsListView.setAdapter(staffsAdapter);
         binding.staffsListView.setClickable(true);
@@ -124,10 +113,31 @@ public class StaffsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(StaffsActivity.this, StaffsDetails.class);
                 intent.putExtra("data", staffsAdapter.getItem(position));
-                startActivity(intent);
+                someActivityResultLauncher.launch(intent);
             }
         });
 
+        menuItemClickEvent();
+
+        // Handle Add Staffs
+        addStaffs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffsActivity.this, AddStaffsActivity.class);
+                someActivityResultLauncher.launch(intent);
+            }
+        });
+
+//        // Handle new created staff account
+//        Staffs newStaffs = getIntent().getParcelableExtra("newStaffs");
+//        if (newStaffs != null) {
+//            staffsArrayList.add(newStaffs);
+//            staffsAdapter.notifyDataSetChanged();
+//        }
+//        staffsAdapter.notifyDataSetChanged();
+    }
+
+    private void menuItemClickEvent() {
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,26 +202,6 @@ public class StaffsActivity extends AppCompatActivity {
                 redirectActivity(StaffsActivity.this, AccountActivity.class);
             }
         });
-
-        // Handle Add Staffs
-        addStaffs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StaffsActivity.this, AddStaffsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Handle new created staff account
-        Staffs newStaffs = getIntent().getParcelableExtra("newStaffs");
-        if (newStaffs != null) {
-            staffsArrayList.add(newStaffs);
-            staffsAdapter.notifyDataSetChanged();
-            binding.staffsListView.setAdapter(staffsAdapter);
-            binding.staffsListView.setClickable(true);
-        }
-
-        staffsAdapter.notifyDataSetChanged();
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
@@ -241,9 +231,40 @@ public class StaffsActivity extends AppCompatActivity {
         activity.finish();
     }
 
+    private void rebindDataForAdapter(){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("users").whereNotIn("role", Arrays.asList("admin", "customer", "deleted"))
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        staffsArrayList.clear();
+                        for (QueryDocumentSnapshot doc: task.getResult()){
+                            staffsArrayList.add(new Staffs(doc.getString("name"), doc.getString("email"), doc.getString("phone"),
+                                    doc.getString("gender"), doc.getString("role"),doc.getString("username")));
+                        }
+                        staffsAdapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
         closeDrawer(drawerLayout);
     }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Log.d("Intent received", getIntent().toString());
+                    Intent resultIntent = result.getData();
+                    String returnData = resultIntent.getStringExtra("data");
+                    if (returnData.equals("rebind")) {
+                        rebindDataForAdapter();
+                        Log.d("Reach rebind", "YES");
+                    }
+                } else if (result.getResultCode() == RESULT_CANCELED) {
+                    //Do nothing
+                }
+            });
 }

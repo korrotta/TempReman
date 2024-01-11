@@ -19,15 +19,18 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.LogDescriptor;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ItemClasses.Staffs;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddStaffsActivity extends AppCompatActivity {
@@ -79,8 +82,7 @@ public class AddStaffsActivity extends AppCompatActivity {
                 if (selectedRadioButtonId != -1) {
                     RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
                     gender = String.valueOf(selectedRadioButton.getText());
-                }
-                else {
+                } else {
                     Toast.makeText(AddStaffsActivity.this, "Select Staff's Gender", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -120,7 +122,7 @@ public class AddStaffsActivity extends AppCompatActivity {
                     Toast.makeText(AddStaffsActivity.this, "Enter Staff's Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                //not existed
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -134,14 +136,20 @@ public class AddStaffsActivity extends AppCompatActivity {
                                         newStaffs = new Staffs(name, email, phone, gender, role, username);
                                     }
                                 } else {
-                                    Toast.makeText(AddStaffsActivity.this, "Add staff failed.", Toast.LENGTH_SHORT).show();
+                                    changeRoleForExisted(email);
                                 }
+                                //return result
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("data", "rebind"); // Thay "resultKey" và "resultValue" bằng dữ liệu bạn muốn trả về
+                                setResult(RESULT_OK, returnIntent);
+                                finish();
                             }
                         });
             }
-        });
 
+        });
     }
+
 
     private void addStaffToDatabase(String uid, String name, String email, String gender, String phone, String username, String role) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -156,11 +164,19 @@ public class AddStaffsActivity extends AppCompatActivity {
 
         userRef.set(userData)
                 .addOnSuccessListener(aVoid -> {
-                    Intent intent = new Intent(AddStaffsActivity.this, StaffsActivity.class);
-                    intent.putExtra("newStaffs", newStaffs);
-                    startActivity(intent);
-                    finish();
                 })
                 .addOnFailureListener(e -> Log.e("Error adding staff to Firestore", "Error ", e));
+    }
+
+    private void changeRoleForExisted(String email){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("users").whereEqualTo("email", email)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        String docID= "";
+                        for (QueryDocumentSnapshot doc: task.getResult()) { docID = doc.getId(); break; }
+                        firestore.collection("users").document(docID).update("role", "staff").addOnCompleteListener(task1 -> {});
+                    }
+                });
     }
 }
