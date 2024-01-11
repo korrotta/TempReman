@@ -181,8 +181,6 @@ public class StaffsActivity extends AppCompatActivity {
         if (newStaffs != null) {
             staffsArrayList.add(newStaffs);
             staffsAdapter.notifyDataSetChanged();
-            binding.staffsListView.setAdapter(staffsAdapter);
-            binding.staffsListView.setClickable(true);
         }
 
         staffsAdapter.notifyDataSetChanged();

@@ -13,11 +13,11 @@
 
         <include layout="@layout/toolbar" />
 
-        <TextView
-            android:text="@string/reports"
-            android:gravity="center"
-            android:textSize="50sp"
+        <ListView
+            android:id="@+id/adminReportsListView"
+            tools:listitem="@layout/admin_reports_list_item"
             android:layout_width="match_parent"
+            android:divider="@color/white"
             android:layout_height="match_parent" />
 
     </LinearLayout>

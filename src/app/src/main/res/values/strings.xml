@@ -77,4 +77,8 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="title">Title</string>
+    <string name="sender">Sender</string>
+    <string name="date">Date</string>
+    <string name="content">Content</string>
 </resources>
