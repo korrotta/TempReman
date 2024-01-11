@@ -1,4 +1,4 @@
-package com.softwareengineering.restaurant;
+package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.softwareengineering.restaurant.ItemClasses.Customers;
+import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersDetailsBinding;
 
 public class CustomersDetails extends AppCompatActivity {

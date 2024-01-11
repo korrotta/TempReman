@@ -19,7 +19,7 @@
             android:name=".AdminPackage.ReportsDetails"
             android:exported="false" />
         <activity
-            android:name=".CustomersDetails"
+            android:name=".AdminPackage.CustomersDetails"
             android:exported="false" />
         <activity
             android:name=".AdminPackage.EditStaffsActivity"

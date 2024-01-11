@@ -21,12 +21,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.TablesAdapter;
 import com.softwareengineering.restaurant.TablesModel;
@@ -46,6 +53,9 @@ public class TablesActivity extends AppCompatActivity {
     private ArrayList<TablesModel> tablesArrayList;
     private TablesAdapter tablesAdapter;
     private Dialog addTableDialog, removeTableDialog;
+
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseDatabase realtime = FirebaseDatabase.getInstance();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -79,6 +89,19 @@ public class TablesActivity extends AppCompatActivity {
                 "1", "2", "3", "4", "5", "6",
                 "7", "8", "9", "10", "11", "12"
         };
+
+        firestore.collection("table").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        if (!doc.getString("state").equals("deleted")){
+                           // showTable();
+                        }
+                    }
+                }
+            }
+        });
 
         int tablesImg = R.drawable.table_top_view;
 

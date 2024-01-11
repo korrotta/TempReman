@@ -86,7 +86,7 @@ public class StaffsDetails extends AppCompatActivity {
                 if (staffs != null) {
                     intent.putExtra("existedStaffs", staffs);
                 }
-                startActivity(intent);
+                someActivityResultLauncher.launch(intent);
             }
         });
 
@@ -114,5 +114,22 @@ public class StaffsDetails extends AppCompatActivity {
                 });
             }
         });
+
+        // OpenActivity for Result
+
     }
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Log.d("Intent received", getIntent().toString());
+                    Intent resultIntent = result.getData();
+                    Staffs returnData = resultIntent.getParcelableExtra("data");
+                    if (returnData!=null) {
+                        Log.d("New Data", "YES");
+                    }
+                } else if (result.getResultCode() == RESULT_CANCELED) {
+                    //Do nothing
+                }
+            });
 }

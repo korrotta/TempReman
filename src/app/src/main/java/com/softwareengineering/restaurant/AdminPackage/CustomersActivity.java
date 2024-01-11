@@ -15,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.softwareengineering.restaurant.ItemClasses.Customers;
-import com.softwareengineering.restaurant.CustomersAdapter;
-import com.softwareengineering.restaurant.CustomersDetails;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersBinding;
 
@@ -30,6 +30,9 @@ public class CustomersActivity extends AppCompatActivity {
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+
+    private ArrayList<Customers> customersArrayList;
+    private CustomersAdapter customersAdapter;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -62,42 +65,57 @@ public class CustomersActivity extends AppCompatActivity {
 
         // Set data for Customers list
         // Need to get all customers with roles in firestore database
-        String[] customersName = {
-                "Alpha", "Beta", "Charlie", "Delta"
-        };
-
-        String[] customersEmail = {
-                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
-        };
-
-        String[] customersGender = {
-                "Male", "Female"
-        };
-
-        String[] customersPhone = {
-                "0123456789"
-        };
-
-        String[] customersUsername = {
-                "Customer"
-        };
+//        String[] customersName = {
+//                "Alpha", "Beta", "Charlie", "Delta"
+//        };
+//
+//        String[] customersEmail = {
+//                "alpha@12345.com", "beta@12345.com", "charlie@12345.com", "delta@12345.com"
+//        };
+//
+//        String[] customersGender = {
+//                "Male", "Female"
+//        };
+//
+//        String[] customersPhone = {
+//                "0123456789"
+//        };
+//
+//        String[] customersUsername = {
+//                "Customer"
+//        };
 
         // Initialize Customers list
-        ArrayList<Customers> customersArrayList = new ArrayList<>();
-
-        for (int i = 0; i < customersName.length; i++) {
-
-            Customers tempCustomer = new Customers(customersName[i], customersEmail[i], customersUsername[0], customersPhone[0], customersGender[i % 2]);
-            customersArrayList.add(tempCustomer);
-
-        }
-
-        CustomersAdapter customersAdapter = new CustomersAdapter(CustomersActivity.this, customersArrayList);
+//        ArrayList<Customers> customersArrayList = new ArrayList<>();
+//
+//        for (int i = 0; i < customersName.length; i++) {
+//
+//            Customers tempCustomer = new Customers(customersName[i], customersEmail[i], customersUsername[0], customersPhone[0], customersGender[i % 2]);
+//            customersArrayList.add(tempCustomer);
+//
+//        }
+//
+//        CustomersAdapter customersAdapter = new CustomersAdapter(CustomersActivity.this, customersArrayList);
 
         // TODO: Get all customers registered in database
 
+        customersArrayList = new ArrayList<Customers>();
+
+        customersAdapter = new CustomersAdapter(this, customersArrayList);
+
         binding.customersListView.setAdapter(customersAdapter);
         binding.customersListView.setClickable(true);
+
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("users").whereEqualTo("role", "customer").get().addOnCompleteListener(task->{
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot doc: task.getResult()){
+                    addCustomerToList(customersArrayList, doc);
+                }
+                customersAdapter.notifyDataSetChanged();
+            }
+        });
+//        getCustomerFromFirestore();
         binding.customersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -196,6 +214,13 @@ public class CustomersActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         closeDrawer(drawerLayout);
+    }
+
+    private void addCustomerToList(ArrayList<Customers> list, QueryDocumentSnapshot c){
+        list.add(new Customers(
+                c.getString("name"), c.getString("email"), c.getString("username"),
+                c.getString("phone"), c.getString("gender")
+        ));
     }
 
 }

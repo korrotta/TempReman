@@ -3,6 +3,7 @@ package com.softwareengineering.restaurant.AdminPackage;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ItemClasses.Staffs;
 
@@ -23,7 +25,7 @@ public class EditStaffsActivity extends AppCompatActivity {
     private RadioButton editStaffsMale, editStaffsFemale;
     private EditText nameET, emailET, phoneET, roleET, usernameET;
     private Button btnEditStaffDone;
-
+    Staffs existingStaff;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +48,7 @@ public class EditStaffsActivity extends AppCompatActivity {
         topMenuName.setText(R.string.edit_account);
 
         // Get info from Details
-        Staffs existingStaff = (Staffs) getIntent().getParcelableExtra("existedStaffs");
+        existingStaff = (Staffs) getIntent().getParcelableExtra("existedStaffs");
         if (existingStaff != null) {
             nameET.setText(existingStaff.getName());
             emailET.setText(existingStaff.getEmail());
@@ -69,9 +71,16 @@ public class EditStaffsActivity extends AppCompatActivity {
         btnEditStaffDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent returnIntent = new Intent();
                 finish();
             }
         });
+    }
 
+
+    //Firebase data changing
+    private void firebaseStaffDataChange(Staffs staff) {
+        String email = staff.getEmail();
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     }
 }
