@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Material3.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".AdminPackage.ReportsDetails"
+            android:exported="false" />
+        <activity
             android:name=".CustomersDetails"
             android:exported="false" />
         <activity
@@ -26,7 +29,7 @@
             android:exported="false" />
         <activity
             android:name=".AdminPackage.StaffsDetails"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".StaffPackage.StaffsAccountActivity"
             android:exported="false" />

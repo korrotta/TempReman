@@ -9,15 +9,27 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.softwareengineering.restaurant.ItemClasses.Reports;
 import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.ReportsAdapter;
+import com.softwareengineering.restaurant.databinding.ActivityReportsBinding;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 public class ReportsActivity extends AppCompatActivity {
 
+    private ActivityReportsBinding binding;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
@@ -27,7 +39,8 @@ public class ReportsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reports);
+        binding = ActivityReportsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         drawerLayout = findViewById(R.id.adminDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -41,6 +54,34 @@ public class ReportsActivity extends AppCompatActivity {
         account = findViewById(R.id.accountDrawer);
 
         setItemBackgroundColors(reports);
+
+        // Initialize Reports Data
+        Reports reports1 = new Reports("Report A", "Employee", "Content", new Date("01/12/2023"), false);
+        Reports reports2 = new Reports("Report B", "Employee", "Content", new Date("02/12/2023"), false);
+        Reports reports3 = new Reports("Report C", "Employee", "Content", new Date("03/12/2023"), false);
+
+        ArrayList<Reports> reportsArrayList = new ArrayList<>();
+        reportsArrayList.add(reports1);
+        reportsArrayList.add(reports2);
+        reportsArrayList.add(reports3);
+
+        // Sort Reports by Date
+        Collections.sort(reportsArrayList);
+
+        ReportsAdapter reportsAdapter = new ReportsAdapter(ReportsActivity.this, reportsArrayList);
+
+        binding.adminReportsListView.setAdapter(reportsAdapter);
+        binding.adminReportsListView.setClickable(true);
+        binding.adminReportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ReportsActivity.this, ReportsDetails.class);
+                intent.putExtra("reports", reportsArrayList.get(position));
+                startActivity(intent);
+                reportsArrayList.get(position).setRead(true);
+                reportsAdapter.notifyDataSetChanged();
+            }
+        });
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
