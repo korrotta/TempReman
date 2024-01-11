@@ -18,11 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.AdminPackage.AdminMainActivity;
+import com.softwareengineering.restaurant.CustomerPackage.CustomersMenuActivity;
 import com.softwareengineering.restaurant.StaffPackage.StaffsMenuActivity;
 
 import java.util.Objects;
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     // Login as Customer
                     else if (Objects.equals(userRole, "customer")) {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, CustomersMenuActivity.class);
                         startActivity(intent);
                         finish();
                     }

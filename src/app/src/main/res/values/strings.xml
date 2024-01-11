@@ -81,4 +81,6 @@
     <string name="sender">Sender</string>
     <string name="date">Date</string>
     <string name="content">Content</string>
+    <string name="reviews">Reviews</string>
+    <string name="review">Review</string>
 </resources>
