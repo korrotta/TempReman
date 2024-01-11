@@ -1,18 +1,30 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.databinding.ActivityStaffsDetailsBinding;
+
+import java.util.ArrayList;
 
 public class StaffsDetails extends AppCompatActivity {
 
@@ -36,6 +48,8 @@ public class StaffsDetails extends AppCompatActivity {
         topMenuImg.setColorFilter(ContextCompat.getColor(this, R.color.white));
         topMenuName.setText(R.string.staffs);
 
+
+
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +58,9 @@ public class StaffsDetails extends AppCompatActivity {
         });
 
         // Handle new created staff account
-        Staffs staffs = getIntent().getParcelableExtra("staffs");
+
+        Staffs staffs = getIntent().getParcelableExtra("data");
+        Log.d("Marker", staffs.getEmail());
 
         if (staffs != null) {
             String name = staffs.getName();
@@ -78,7 +94,24 @@ public class StaffsDetails extends AppCompatActivity {
         removeStaffs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                firestore.collection("users").whereEqualTo("email", staffs.getEmail()).get().addOnCompleteListener(task ->{
+                    if (task.isSuccessful()) {
+                        ArrayList<Staffs> st = new ArrayList<Staffs>();
+                        for (QueryDocumentSnapshot doc: task.getResult()){
+                            firestore.collection("users").document(doc.getId()).update("role", "customer").addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Log.d("Success re-declared", doc.getId());
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra("data", "rebind"); // Thay "resultKey" và "resultValue" bằng dữ liệu bạn muốn trả về
+                                    setResult(RESULT_OK, returnIntent);
+                                    finish();
+                                }
+                            });
+                        }
 
+                    }
+                });
             }
         });
     }
