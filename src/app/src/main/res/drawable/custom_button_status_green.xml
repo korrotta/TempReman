@@ -1,0 +1,6 @@
+<!-- res/drawable/custom_button_background_green.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="8dp"/>
+    <solid android:color="#67BF61"/> <!-- Mã màu xanh lá cây -->
+</shape>

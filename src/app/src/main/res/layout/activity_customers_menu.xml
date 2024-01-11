@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:text="Food types" android:textStyle="bold"
             android:textSize="18sp" android:fontFamily="@font/quicksand"
-            android:paddingLeft="30dp" android:paddingTop="15dp">
+            android:paddingLeft="30dp" android:paddingTop="15dp"
+            android:layout_marginBottom="10dp">
         </TextView>
 
         <LinearLayout
@@ -35,23 +36,31 @@
             android:layout_height="wrap_content"
             android:text="Menu" android:textStyle="bold"
             android:textSize="18sp" android:fontFamily="@font/quicksand"
-            android:paddingLeft="30dp" android:paddingTop="20dp">
+            android:paddingLeft="30dp" android:paddingTop="20dp"
+            android:paddingBottom="10dp">
         </TextView>
+
+        <GridView
+            android:id="@+id/list_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:isScrollContainer="false"
+            android:nestedScrollingEnabled="false"
+            android:layout_margin="16dp"
+            android:numColumns="2"
+            android:scrollbars="none" />
 
     </LinearLayout>
 
 
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/light_orange_2">
 
+        <include layout="@layout/customers_nav_drawer" />
 
-
-<!--    <RelativeLayout-->
-<!--        android:layout_width="200dp"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        android:background="@color/light_orange_2">-->
-
-<!--        <include layout="@layout/customers_nav_drawer" />-->
-
-<!--    </RelativeLayout>-->
+    </RelativeLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>
