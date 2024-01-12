@@ -9,11 +9,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.softwareengineering.restaurant.ItemClasses.Food;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class FoodAdapter extends BaseAdapter {
     private Context context;
@@ -59,25 +65,33 @@ public class FoodAdapter extends BaseAdapter {
         TextView nameTextView = itemView.findViewById(R.id.name_food);
         TextView statusTextView = itemView.findViewById(R.id.status);
         TextView priceTextView = itemView.findViewById(R.id.price);
+        // Format giá tiền với dấu chấm sau mỗi 3 chữ số
+        String formattedPrice = formatPrice(food.getPrice());
+        priceTextView.setText(formattedPrice);
+
 
         // Kích thước cố định (ví dụ: 200x200 pixels)
         int targetWidth = 200;
         int targetHeight = 200;
 
-        Picasso.get()
+        int radius = 10;
+
+        RequestOptions requestOptions = new RequestOptions()
+                .transforms(new CenterCrop(), new RoundedCorners(radius))
+                .override(targetWidth, targetHeight);
+
+        Glide.with(context)
                 .load(food.getImageUrl())
-                .resize(targetWidth, targetHeight)
-                .centerCrop()
+                .apply(requestOptions)
                 .into(imageView);
 
-        // Set scaleType của ImageView để ảnh sát vào khung mà không cắt bớt
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         // Giả sử isStatusTrue là biến boolean kiểm tra điều kiện
         boolean isStatusTrue = food.getStatus();
         statusTextView.setText(isStatusTrue ? "Sale" : "Stop sale");
 
-        Button statusButton = itemView.findViewById(R.id.status);
+        TextView statusButton = itemView.findViewById(R.id.status);
 
         if (isStatusTrue) {
             // Nếu là true, đặt màu nền xanh lá cây
@@ -88,8 +102,7 @@ public class FoodAdapter extends BaseAdapter {
         }
 
         nameTextView.setText(food.getName());
-        //statusTextView.setText(String.valueOf(food.getStatus()));
-        priceTextView.setText(String.valueOf(food.getPrice()));
+        statusButton.setText(isStatusTrue ? "Sale" : "Stop sale");
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,5 +111,11 @@ public class FoodAdapter extends BaseAdapter {
                 // Ví dụ: Mở một activity khác để hiển thị chi tiết món ăn
             }
         });
+    }
+
+    private String formatPrice(double price) {
+        // Sử dụng NumberFormat để định dạng số theo định dạng tiền tệ
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+        return numberFormat.format(price);
     }
 }

@@ -148,7 +148,7 @@ public class CustomersMenuActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference foodCollection = db.collection("food");
 
-        foodCollection.whereEqualTo("type", "Pizza")
+        foodCollection.whereEqualTo("type", "Burger")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

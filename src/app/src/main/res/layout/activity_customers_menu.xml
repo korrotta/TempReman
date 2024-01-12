@@ -36,8 +36,7 @@
             android:layout_height="wrap_content"
             android:text="Menu" android:textStyle="bold"
             android:textSize="18sp" android:fontFamily="@font/quicksand"
-            android:paddingLeft="30dp" android:paddingTop="20dp"
-            android:paddingBottom="10dp">
+            android:paddingLeft="30dp" android:paddingTop="20dp">
         </TextView>
 
         <GridView
