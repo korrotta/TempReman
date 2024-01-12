@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -20,13 +19,12 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.core.Repo;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.softwareengineering.restaurant.ItemClasses.Reports;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ReportsAdapter;
 import com.softwareengineering.restaurant.databinding.ActivityReportsBinding;
@@ -41,11 +39,12 @@ public class ReportsActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
-    private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private RelativeLayout staffs, customers, menu, tables, reports, sales, logout;
 
     private ArrayList<Reports> reportsArrayList;
     ReportsAdapter reportsAdapter;
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -65,7 +64,7 @@ public class ReportsActivity extends AppCompatActivity {
         tables = findViewById(R.id.tablesDrawer);
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
-        account = findViewById(R.id.accountDrawer);
+        logout = findViewById(R.id.adminLogoutDrawer);
 
         setItemBackgroundColors(reports);
 
@@ -170,11 +169,11 @@ public class ReportsActivity extends AppCompatActivity {
             }
         });
 
-        account.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setItemBackgroundColors(account);
-                redirectActivity(ReportsActivity.this, AccountActivity.class);
+                mAuth.signOut();
+                redirectActivity(ReportsActivity.this, LoginActivity.class);
             }
         });
     }
@@ -186,7 +185,7 @@ public class ReportsActivity extends AppCompatActivity {
         tables.setBackgroundColor(selectedItem == tables ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         reports.setBackgroundColor(selectedItem == reports ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         sales.setBackgroundColor(selectedItem == sales ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
-        account.setBackgroundColor(selectedItem == account ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
+        logout.setBackgroundColor(selectedItem == logout ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
     }
 
     public static void openDrawer (DrawerLayout drawerLayout) {

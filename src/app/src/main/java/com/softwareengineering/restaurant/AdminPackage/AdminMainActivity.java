@@ -7,12 +7,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.databinding.ActivityAdminMainBinding;
 
 public class AdminMainActivity extends AppCompatActivity {
 
     ActivityAdminMainBinding binding;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +24,17 @@ public class AdminMainActivity extends AppCompatActivity {
         binding = ActivityAdminMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        mAuth = FirebaseAuth.getInstance();
+
         int[] itemImage = {
                 R.drawable.staffs, R.drawable.customers, R.drawable.menu, R.drawable.tables,
-                R.drawable.reports, R.drawable.sales, R.drawable.account
+                R.drawable.reports, R.drawable.sales, R.drawable.sign_out
         };
 
         String[] itemName = {
                 "Staffs", "Customers", "Menu", "Tables",
-                "Reports", "Sales", "Account"
+                "Reports", "Sales", "Log out"
         };
-
 
         AdminGridAdapter adminGridAdapter = new AdminGridAdapter(AdminMainActivity.this, itemImage, itemName);
         binding.adminMainActGridView.setAdapter(adminGridAdapter);
@@ -72,7 +77,8 @@ public class AdminMainActivity extends AppCompatActivity {
                 break;
             }
             case 6: {
-                toStartActivity = AccountActivity.class;
+                mAuth.signOut();
+                toStartActivity = LoginActivity.class;
                 break;
             }
         }

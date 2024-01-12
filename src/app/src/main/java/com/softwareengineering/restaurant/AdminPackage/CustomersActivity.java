@@ -15,9 +15,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.login.Login;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.softwareengineering.restaurant.ItemClasses.Customers;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersBinding;
 
@@ -29,7 +32,8 @@ public class CustomersActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
-    private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private RelativeLayout staffs, customers, menu, tables, reports, sales, logout;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     private ArrayList<Customers> customersArrayList;
     private CustomersAdapter customersAdapter;
@@ -50,7 +54,7 @@ public class CustomersActivity extends AppCompatActivity {
         tables = findViewById(R.id.tablesDrawer);
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
-        account = findViewById(R.id.accountDrawer);
+        logout = findViewById(R.id.adminLogoutDrawer);
 
         setItemBackgroundColors(customers);
 
@@ -173,11 +177,11 @@ public class CustomersActivity extends AppCompatActivity {
             }
         });
 
-        account.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setItemBackgroundColors(account);
-                redirectActivity(CustomersActivity.this, AccountActivity.class);
+                mAuth.signOut();
+                redirectActivity(CustomersActivity.this, LoginActivity.class);
             }
         });
 
@@ -190,7 +194,7 @@ public class CustomersActivity extends AppCompatActivity {
         tables.setBackgroundColor(selectedItem == tables ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         reports.setBackgroundColor(selectedItem == reports ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         sales.setBackgroundColor(selectedItem == sales ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
-        account.setBackgroundColor(selectedItem == account ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
+        logout.setBackgroundColor(selectedItem == logout ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
     }
 
     public static void openDrawer (DrawerLayout drawerLayout) {

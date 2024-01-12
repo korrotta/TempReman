@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,11 +19,14 @@
 
             <include layout="@layout/toolbar" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/staffsDetailImage"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/default_user" />
+                android:src="@drawable/default_user"
+                app:civ_border_color="@color/black"
+                app:civ_border_width="1dp" />
 
             <TextView
                 android:id="@+id/staffsDetailName"

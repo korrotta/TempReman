@@ -6,6 +6,7 @@
     android:background="@drawable/layout_bg_design"
     android:backgroundTint="@color/light_orange_2"
     android:gravity="center"
+    android:layout_gravity="center"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
