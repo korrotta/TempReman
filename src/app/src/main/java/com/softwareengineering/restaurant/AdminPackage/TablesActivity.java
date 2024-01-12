@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
@@ -29,7 +31,10 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,6 +45,9 @@ import com.softwareengineering.restaurant.TablesModel;
 import com.softwareengineering.restaurant.databinding.ActivityTablesBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 public class TablesActivity extends AppCompatActivity {
 
@@ -55,7 +63,7 @@ public class TablesActivity extends AppCompatActivity {
     private Dialog addTableDialog, removeTableDialog;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    private FirebaseDatabase realtime = FirebaseDatabase.getInstance();
+    private DatabaseReference realtime = FirebaseDatabase.getInstance("https://restaurantmanagement-c201c-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -82,38 +90,22 @@ public class TablesActivity extends AppCompatActivity {
         if (tablesArrayList != null) {
             tablesAdapter.notifyDataSetChanged();
         }
-
-        // Set data for Tables
-        // TODO: SETUP TABLE DATA WITH DATABASE
-        String[] tablesId = {
-                "1", "2", "3", "4", "5", "6",
-                "7", "8", "9", "10", "11", "12"
-        };
-
-        firestore.collection("table").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc: task.getResult()){
-                        if (!doc.getString("state").equals("deleted")){
-                           // showTable();
-                        }
-                    }
-                }
-            }
-        });
-
-        int tablesImg = R.drawable.table_top_view;
-
         // Initialize Tables list
         tablesArrayList = new ArrayList<>();
-
-        for (int i = 0; i < tablesId.length; i++) {
-            TablesModel tempTable = new TablesModel(tablesId[i], tablesImg);
-            tablesArrayList.add(tempTable);
-        }
-
+        // Set data for Tables
+        int tablesImg = R.drawable.table_top_view;
+//        String[] tablesId = {
+//                "1", "2", "3", "4", "5", "6",
+//                "7", "8", "9", "10", "11", "12"
+//        };
         tablesAdapter = new TablesAdapter(TablesActivity.this, tablesArrayList);
+
+        setViewForTableList(tablesImg);
+
+//        for (int i = 0; i < tablesId.length; i++) {
+//            TablesModel tempTable = new TablesModel(tablesId[i], tablesImg);
+//            tablesArrayList.add(tempTable);
+//        }
 
         binding.adminTableLayoutGridView.setAdapter(tablesAdapter);
         binding.adminTableLayoutGridView.setClickable(true);
@@ -138,6 +130,7 @@ public class TablesActivity extends AppCompatActivity {
                     for (int i = 0; i < tablesArrayList.size(); i++) {
                         if (tablesAdapter.getItem(i).getImage() == R.drawable.table_top_view_add
                                 || tablesAdapter.getItem(i).getImage() == R.drawable.table_top_view_delete) {
+
                             tablesArrayList.remove(i);
                             tablesAdapter.notifyDataSetChanged();
                         }
@@ -149,24 +142,29 @@ public class TablesActivity extends AppCompatActivity {
                             openTableDetails(position);
                         }
                     });
-                } else {
+                }
+
+                //Inside edit mode
+                else {
+                    tablesArrayList.clear();
+
+                    TablesModel emptyTable = new TablesModel(null, R.drawable.table_top_view_add);
+                    TablesModel removeTable = new TablesModel(null, R.drawable.table_top_view_delete);
+
+                    //Show list of table with final adding button
+                    showTableListWithLastEmpty(emptyTable, tablesImg);
+
                     // In Add mode
                     binding.tablesEditImg.setImageResource(R.drawable.save);
                     binding.tablesEditText.setText(R.string.save);
-                    tablesAdapter.notifyDataSetChanged();
-
-                    // Empty Table
-                    TablesModel emptyTable = new TablesModel(null, R.drawable.table_top_view_add);
-                    tablesArrayList.add(emptyTable);
-                    tablesAdapter.notifyDataSetChanged();
 
                     // Remove Table
-                    TablesModel removeTable = new TablesModel(null, R.drawable.table_top_view_delete);
-
                     // Change item click behavior for adding/removing tables
                     binding.adminTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            //Case : Add a table
                             if (tablesAdapter.getItem(position).getImage() == emptyTable.getImage()) {
                                 // Add Table
                                 TablesModel activeTable = new TablesModel(String.valueOf(position + 1), R.drawable.table_top_view);
@@ -174,21 +172,27 @@ public class TablesActivity extends AppCompatActivity {
                                 addTableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                     @Override
                                     public void onDismiss(DialogInterface dialog) {
-                                        tablesArrayList.set(position, activeTable);
-                                        if (tablesArrayList.size() < MAX_TABLE) {
-                                            tablesArrayList.add(emptyTable);
-                                        }
-                                        tablesAdapter.notifyDataSetChanged();
+                                        showTableListWithLastEmpty(emptyTable, tablesImg);
                                     }
                                 });
-                            } else if (tablesAdapter.getItem(position).getImage() == removeTable.getImage()) {
+                            }
+
+                            //Case : Chose to remove a table
+                            else if (tablesAdapter.getItem(position).getImage() == removeTable.getImage()) {
                                 // Remove Table
                                 removeTable(position);
                             }
+
+                            //Case: Chose a table to delete
                             else {
                                 // Change Table about to be deleted
                                 tablesAdapter.getItem(position).setImage(R.drawable.table_top_view_delete);
-                                tablesAdapter.getItem(position).setId("");
+
+                                //Todo: Somehow do not setId to blank but still able to hide it
+                                //Todo: Main reason: Need itemId to track in Realtime Database and Firestore
+                                //Todo: Add on dismiss for removing like adding table, so always inside edit mode.
+                                //tablesAdapter.getItem(position).setId("");
+
                                 tablesAdapter.notifyDataSetChanged();
                             }
                         }
@@ -266,10 +270,56 @@ public class TablesActivity extends AppCompatActivity {
 
     }
 
-    private void removeTable(int selectedPosition) {
+    private void showTableListWithLastEmpty(TablesModel emptyTable, int tablesImg) {
+        tablesArrayList.clear();
+        firestore.collection("table").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        if (!doc.getString("state").equals("deleted")){
+
+                            // show all table in firestore;
+                            TablesModel tm = new TablesModel(doc.getLong("tableId").toString(), tablesImg);
+                            tablesArrayList.add(tm);
+                            // show emptyTable handle adding function:
+                        }
+                    }
+
+                    if (tablesArrayList.size() == 0) return;
+                    Collections.sort(tablesArrayList, Comparator.comparing((TablesModel::getId)));
+                    tablesArrayList.add(emptyTable);
+                    tablesAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void setViewForTableList(int tablesImg) {
+        firestore.collection("table").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        if (!doc.getString("state").equals("deleted")){
+                           // showTable();
+                            TablesModel tm = new TablesModel(doc.getLong("tableId").toString(), tablesImg);
+                            tablesArrayList.add(tm);
+                        }
+                    }
+                    Collections.sort(tablesArrayList, Comparator.comparing(TablesModel::getId));
+                    tablesAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void removeTable(int selectedId) {
         removeTableDialog = new Dialog(this);
         removeTableDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         removeTableDialog.setContentView(R.layout.dialog_remove_table);
+
+        String id = tablesAdapter.getItem(selectedId).getId();
 
         Window window = removeTableDialog.getWindow();
         if (window == null) {
@@ -299,7 +349,9 @@ public class TablesActivity extends AppCompatActivity {
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TablesActivity.this, "Removed Table No. " + (selectedPosition + 1), Toast.LENGTH_SHORT).show();
+
+                firestore.collection("table").document(id).update("state", "deleted");
+                realtime.child("tableList").child(id).setValue("deleted");
                 removeTableDialog.dismiss();
             }
         });
@@ -341,13 +393,81 @@ public class TablesActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TablesActivity.this, "Added Table No. " + (selectedPosition + 1), Toast.LENGTH_SHORT).show();
+                String id = String.valueOf(tableId.getText());
+                realtime.child("tableList").child("max").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        Long max = 0L;
+                        max = getMaxTableRecently(task, max);
+
+                        //plus 1 as about to create new one
+                        max++;
+
+                        //if wanna reset old table that'd been deleted
+                        if (Integer.parseInt(id) < max){
+                            realtime.child("tableList").child(id).setValue("idle");
+                            firestore.collection("table").document(id).update("state", "idle");
+                        }
+                        else {
+                            addTableAtMaxPos(max);
+                        }
+                        //Now we have max number of table in the database recently
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Failed" ,e.toString());
+                    }
+                });
                 addTableDialog.dismiss();
             }
         });
 
         addTableDialog.show();
 
+    }
+
+    private void addTableAtMaxPos(Long max) {
+        //adding new for real
+        Long finalMax = max;
+        firestore.collection("table").document(max.toString()).set(
+                new HashMap<String, Object>() {{
+                    put("bookedDate", null);
+                    put("customerID", null);
+                    put("foodList", null);
+                    put("number", 0);
+                    put("quantityList", null);
+                    put("state", "idle");
+                    put("tableId", finalMax);
+                }}
+        ).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    realtime.child("tableList").child(finalMax.toString()).setValue("idle");
+                    realtime.child("tableList").child("max").setValue(finalMax);
+                } else {
+                    Log.e("Exception", task.getException().toString());
+                }
+            }
+        });
+    }
+
+    @Nullable
+    private static Long getMaxTableRecently(@NonNull Task<DataSnapshot> task, Long max) {
+        if (!task.isSuccessful()) {
+            Log.e("taskFailed", task.getException().toString());
+        }
+        else {
+            try {
+                DataSnapshot maxRecent = task.getResult();
+                max = (Long) maxRecent.getValue();
+                Log.d("max", String.valueOf(max));
+            } catch (Exception e) {
+                Log.d("max", "onComplete: " + e.toString());
+            }
+        }
+        return max;
     }
 
     private void openTableDetails(int position) {
