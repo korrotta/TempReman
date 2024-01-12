@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class CustomersAccountActivity extends AppCompatActivity {
     private ImageView topMenuImg, userAvatar;
     private TextView userName;
     private RelativeLayout menu, tables, review, account, logout;
+    private Button btn_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class CustomersAccountActivity extends AppCompatActivity {
         logout = findViewById(R.id.customersLogoutDrawer);
         userAvatar = findViewById(R.id.customersNavAvatar);
         userName = findViewById(R.id.customersNavName);
+        btn_edit = findViewById(R.id.btn_edit);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -107,6 +110,13 @@ public class CustomersAccountActivity extends AppCompatActivity {
             }
         });
 
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomersAccountActivity.this, CustomersAccountEditActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
