@@ -72,4 +72,7 @@ dependencies {
     // Import Picasso
     implementation ("com.squareup.picasso:picasso:2.8")
 
+    // Import Circle Image View
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
 }

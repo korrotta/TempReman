@@ -239,7 +239,7 @@ public class StaffsActivity extends AppCompatActivity {
                         staffsArrayList.clear();
                         for (QueryDocumentSnapshot doc: task.getResult()){
                             staffsArrayList.add(new Staffs(doc.getString("name"), doc.getString("email"), doc.getString("phone"),
-                                    doc.getString("gender"), doc.getString("role"),doc.getString("username")));
+                                    doc.getString("gender"), doc.getString("role")));
                         }
                         staffsAdapter.notifyDataSetChanged();
                     }
