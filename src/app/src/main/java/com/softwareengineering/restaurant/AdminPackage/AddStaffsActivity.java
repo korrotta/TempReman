@@ -40,8 +40,8 @@ public class AddStaffsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Staffs newStaffs;
     private RadioGroup addStaffsGender;
-    private EditText nameET, emailET, phoneET, roleET, usernameET, passwordET;
-    private String name, email, phone, role, username, password, gender;
+    private EditText nameET, emailET, phoneET, roleET, passwordET;
+    private String name, email, phone, role, password, gender;
     private Button btnAddStaffDone;
 
     @Override
@@ -56,7 +56,6 @@ public class AddStaffsActivity extends AppCompatActivity {
         emailET = findViewById(R.id.addStaffsEmail);
         phoneET = findViewById(R.id.addStaffsPhone);
         roleET = findViewById(R.id.addStaffsRole);
-        usernameET = findViewById(R.id.addStaffsUsername);
         passwordET = findViewById(R.id.addStaffsPassword);
         btnAddStaffDone = findViewById(R.id.btn_add_staff_done);
 
@@ -91,7 +90,6 @@ public class AddStaffsActivity extends AppCompatActivity {
                 email = String.valueOf(emailET.getText());
                 phone = String.valueOf(phoneET.getText());
                 role = String.valueOf(roleET.getText());
-                username = String.valueOf(usernameET.getText());
                 password = String.valueOf(passwordET.getText());
 
                 if (TextUtils.isEmpty(name)) {
@@ -114,10 +112,6 @@ public class AddStaffsActivity extends AppCompatActivity {
                     Toast.makeText(AddStaffsActivity.this, "Select Staff's Role", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (TextUtils.isEmpty(username)) {
-                    Toast.makeText(AddStaffsActivity.this, "Enter Staff's Username", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (TextUtils.isEmpty(password)) {
                     Toast.makeText(AddStaffsActivity.this, "Enter Staff's Password", Toast.LENGTH_SHORT).show();
                     return;
@@ -132,8 +126,8 @@ public class AddStaffsActivity extends AppCompatActivity {
                                     if (currentUser != null) {
                                         currentUser.sendEmailVerification();
                                         Toast.makeText(AddStaffsActivity.this, "Confirmation link has been sent to staff's registered email", Toast.LENGTH_SHORT).show();
-                                        addStaffToDatabase(currentUser.getUid(), name, email, gender, phone, username, role);
-                                        newStaffs = new Staffs(name, email, phone, gender, role, username);
+                                        addStaffToDatabase(currentUser.getUid(), name, email, gender, phone, role);
+                                        newStaffs = new Staffs(name, email, phone, gender, role);
                                     }
                                 } else {
                                     changeRoleForExisted(email);
@@ -151,7 +145,7 @@ public class AddStaffsActivity extends AppCompatActivity {
     }
 
 
-    private void addStaffToDatabase(String uid, String name, String email, String gender, String phone, String username, String role) {
+    private void addStaffToDatabase(String uid, String name, String email, String gender, String phone, String role) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(uid);
         Map<String, Object> userData = new HashMap<>();
@@ -159,7 +153,6 @@ public class AddStaffsActivity extends AppCompatActivity {
         userData.put("gender", gender);
         userData.put("name", name);
         userData.put("phone", phone);
-        userData.put("username", username);
         userData.put("role", role);
 
         userRef.set(userData)

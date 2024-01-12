@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="126dp">
 
-    <ImageView
-        android:scaleType="centerCrop"
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/staffsNavAvatar"
         android:layout_marginTop="15dp"
         android:src="@drawable/default_user"

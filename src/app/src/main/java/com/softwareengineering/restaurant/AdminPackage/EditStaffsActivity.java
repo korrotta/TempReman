@@ -23,7 +23,7 @@ public class EditStaffsActivity extends AppCompatActivity {
     private ImageView topMenuImg;
     private TextView topMenuName;
     private RadioButton editStaffsMale, editStaffsFemale;
-    private EditText nameET, emailET, phoneET, roleET, usernameET;
+    private EditText nameET, emailET, phoneET, roleET;
     private Button btnEditStaffDone;
     Staffs existingStaff;
     @Override
@@ -37,7 +37,6 @@ public class EditStaffsActivity extends AppCompatActivity {
         emailET = findViewById(R.id.editStaffsEmail);
         phoneET = findViewById(R.id.editStaffsPhone);
         roleET = findViewById(R.id.editStaffsRole);
-        usernameET = findViewById(R.id.editStaffsUsername);
         btnEditStaffDone = findViewById(R.id.btn_edit_staff_done);
 
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -54,7 +53,6 @@ public class EditStaffsActivity extends AppCompatActivity {
             emailET.setText(existingStaff.getEmail());
             phoneET.setText(existingStaff.getPhone());
             roleET.setText(existingStaff.getRole());
-            usernameET.setText(existingStaff.getUsername());
 
             if (Objects.equals(existingStaff.getGender(), "Male")) {
                 editStaffsMale.setChecked(true);

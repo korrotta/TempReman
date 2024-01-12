@@ -7,7 +7,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -15,22 +17,29 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StaffsReportsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
-    private ImageView topMenuImg, userAvatar;
+    private ImageView topMenuImg;
+    private CircleImageView userAvatar;
     private TextView topMenuName, userName;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs_payment);
+        setContentView(R.layout.activity_staffs_reports);
 
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.staffsDrawerLayout);
@@ -46,18 +55,15 @@ public class StaffsReportsActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
 
+        // Get currentUser
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
-        String avatarPhotoUrl = String.valueOf(currentUser.getPhotoUrl());
-
+        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
+        // Avatar Image
         Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
 
-        if (currentUser.getDisplayName() != null) {
-            userName.setText(currentUser.getDisplayName());
-        }
-        else {
-            userName.setText(R.string.name);
-        }
+        // Get user info from firestore
+        getUserInfoFirestore(currentUser.getUid());
 
         setItemBackgroundColors(reports);
 
@@ -125,6 +131,30 @@ public class StaffsReportsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 redirectActivity(StaffsReportsActivity.this, LoginActivity.class);
+            }
+        });
+
+    }
+
+    private void getUserInfoFirestore(String uid) {
+        DocumentReference userRef = firestore.collection("users").document(uid);
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Get user info
+                    String name;
+                    name = document.getString("name");
+
+                    // Set user info
+                    userName.setText(name);
+
+                } else {
+                    // User document not found
+                    Log.d("Auth Firestore Database", "No such document");
+                }
+            } else {
+                Log.d("Auth Firestore Database", "get failed with ", task.getException());
             }
         });
 

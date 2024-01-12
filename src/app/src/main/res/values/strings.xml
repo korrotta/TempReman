@@ -83,4 +83,6 @@
     <string name="content">Content</string>
     <string name="reviews">Reviews</string>
     <string name="review">Review</string>
+    <string name="email_address">Email Address</string>
+    <string name="save_changes">Save Changes</string>
 </resources>
