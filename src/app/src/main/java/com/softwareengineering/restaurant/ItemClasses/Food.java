@@ -13,6 +13,10 @@ public class Food {
     private String type;
     private long price;
 
+    private String description;
+    private String ingredient;
+
+
     // Constructor mặc định
 //    public Food() {
 //        // Cần có constructor mặc định rỗng cho Firestore
@@ -38,6 +42,22 @@ public class Food {
             return null;
         }
         return FirebaseStorage.getInstance().getReferenceFromUrl(imageReference);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getIngredient() {
+        return ingredient;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setIngredient(String ingredient) {
+        this.ingredient = ingredient;
     }
 
     public String getRawRef(){

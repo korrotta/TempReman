@@ -1,5 +1,6 @@
 package com.softwareengineering.restaurant.CustomerPackage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -8,23 +9,36 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
 public class CustomersAccountActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    private final String TAG = "CAA Error";
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = mAuth.getCurrentUser();
+    private final String Uid = currentUser.getUid();
+
+
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg, userAvatar;
-    private TextView userName;
+    private TextView userNameView, userEmail;
+    private EditText userNameET, phoneET, genderET;
+
     private RelativeLayout menu, tables, review, account, logout;
 
     @Override
@@ -41,20 +55,36 @@ public class CustomersAccountActivity extends AppCompatActivity {
         account = findViewById(R.id.customersAccountDrawer);
         logout = findViewById(R.id.customersLogoutDrawer);
         userAvatar = findViewById(R.id.customersNavAvatar);
-        userName = findViewById(R.id.customersNavName);
+        userNameView = findViewById(R.id.customersNavName);
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        userEmail = findViewById(R.id.customer_emailView);
+
+        userNameET = findViewById(R.id.customer_name);
+        phoneET = findViewById(R.id.customer_phone);
+        genderET = findViewById(R.id.customer_gender);
+
+
         assert currentUser != null;
         String avatarPhotoUrl = String.valueOf(currentUser.getPhotoUrl());
 
         Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
 
-        if (currentUser.getDisplayName() != null) {
-            userName.setText(currentUser.getDisplayName());
-        }
-        else {
-            userName.setText(R.string.name);
-        }
+        //Set name for user:
+        FirebaseFirestore.getInstance().collection("users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    userNameView.setText(task.getResult().getString("name"));
+                    userNameET.setText(task.getResult().getString("name"));
+                    phoneET.setText(task.getResult().getString("phone"));
+                    userEmail.setText(task.getResult().getString("email"));
+                    genderET.setText(task.getResult().getString("gender"));
+                }
+                else {
+                    Log.e(TAG, "onComplete: " + task.getException());
+                }
+            }
+        });
 
         setItemBackgroundColors(menu);
 
