@@ -23,7 +23,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
-    private ImageView topMenuImg, userAvatar;
+    private ImageView topMenuImg, userAvatar, add;
     private TextView topMenuName, userName;
     private RelativeLayout menu, tables, review, account, logout;
 
@@ -42,6 +42,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
         account = findViewById(R.id.customersAccountDrawer);
         logout = findViewById(R.id.customersLogoutDrawer);
         userAvatar = findViewById(R.id.customersNavAvatar);
+        add = findViewById(R.id.add);
         userName = findViewById(R.id.customersNavName);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -68,7 +69,16 @@ public class CustomersReviewActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText(R.string.tables);
+        topMenuName.setText("Review");
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomersReviewActivity.this, AddReviewActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

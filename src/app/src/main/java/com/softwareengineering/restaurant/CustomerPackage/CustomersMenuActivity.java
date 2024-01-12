@@ -4,18 +4,31 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.softwareengineering.restaurant.ItemClasses.Food;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.StaffPackage.StaffsAccountActivity;
@@ -26,6 +39,10 @@ import com.softwareengineering.restaurant.StaffPackage.StaffsReportsActivity;
 import com.softwareengineering.restaurant.StaffPackage.StaffsTablesActivity;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class CustomersMenuActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -33,6 +50,11 @@ public class CustomersMenuActivity extends AppCompatActivity {
     private ImageView topMenuImg, userAvatar;
     private TextView topMenuName, userName;
     private RelativeLayout menu, tables, review, account, logout;
+    private GridLayout list_menu;
+    private List<Food> foodList = new ArrayList<>();
+
+    private LinearLayout salad;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +72,9 @@ public class CustomersMenuActivity extends AppCompatActivity {
         logout = findViewById(R.id.customersLogoutDrawer);
         userAvatar = findViewById(R.id.customersNavAvatar);
         userName = findViewById(R.id.customersNavName);
+
+        getFoodListFromFirestore();
+
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -118,6 +143,39 @@ public class CustomersMenuActivity extends AppCompatActivity {
         });
 
     }
+
+    private void getFoodListFromFirestore() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference foodCollection = db.collection("food");
+
+        foodCollection.whereEqualTo("type", "Burger")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            Food foodItem = document.toObject(Food.class);
+                            foodList.add(foodItem);
+                        }
+                        setupGridLayout(); // Gọi hàm setupGridLayout sau khi lấy danh sách
+                    } else {
+                        Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
+    private void setupGridLayout() {
+        GridView gridView = findViewById(R.id.list_menu);
+        FoodAdapter foodAdapter = new FoodAdapter(this, foodList);
+        gridView.setAdapter(foodAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+    }
+
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
         menu.setBackgroundColor(selectedItem == menu ? ContextCompat.getColor(this, R.color.light_orange_3) : ContextCompat.getColor(this, R.color.light_orange_2));
