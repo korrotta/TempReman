@@ -89,15 +89,21 @@ public class CustomersReviewActivity extends AppCompatActivity {
 
         topMenuName.setText("Review");
 
+        menuBarItemsClick();
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomersReviewActivity.this, AddReviewActivity.class);
                 startActivity(intent);
-
             }
         });
 
+
+
+    }
+
+    private void menuBarItemsClick() {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +143,6 @@ public class CustomersReviewActivity extends AppCompatActivity {
                 redirectActivity(CustomersReviewActivity.this, LoginActivity.class);
             }
         });
-
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {

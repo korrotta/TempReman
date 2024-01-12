@@ -40,5 +40,9 @@ public class Food {
         return FirebaseStorage.getInstance().getReferenceFromUrl(imageReference);
     }
 
+    public String getRawRef(){
+        return imageReference;
+    }
+
     public void setState(boolean state){ this.state = state; }
 }
