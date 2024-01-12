@@ -22,7 +22,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content" android:layout_gravity="center"
                     android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id = "@+id/saladFilter">
                     <ImageView
                         android:layout_width="38dp"
                         android:layout_height="38dp"
@@ -47,8 +48,10 @@
                 <LinearLayout
                     android:layout_width="wrap_content" android:layout_gravity="center"
                     android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id="@+id/drinkFilter">
                     <ImageView
+
                         android:layout_width="38dp"
                         android:layout_height="38dp"
                         android:src="@drawable/drink"/>
@@ -72,8 +75,10 @@
                 <LinearLayout
                     android:layout_width="wrap_content" android:layout_gravity="center"
                     android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id = "@+id/pizzaFilter">
                     <ImageView
+
                         android:layout_width="38dp"
                         android:layout_height="38dp"
                         android:src="@drawable/pizza"/>
@@ -97,7 +102,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content" android:layout_gravity="center"
                     android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id = "@+id/dessertFilter">
 
                     <ImageView
                         android:layout_width="38dp"
@@ -123,7 +129,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content" android:layout_gravity="center"
                     android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id = "@+id/pastaFilter">
                     <ImageView
                         android:layout_width="38dp"
                         android:layout_height="38dp"
@@ -148,7 +155,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content" android:layout_gravity="center"
                     android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:id = "@+id/burgerFilter">
                     <ImageView
                         android:layout_width="38dp"
                         android:layout_height="38dp"

@@ -1,5 +1,10 @@
 package com.softwareengineering.restaurant.ItemClasses;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.firebase.Firebase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class Food {
     private String name;
     private String imageReference;
@@ -28,6 +33,12 @@ public class Food {
     public boolean getStatus() {return state;}
     public long getPrice() {return price;}
     public String getType() {return type;}
+    public StorageReference getImageReference() {
+        if (imageReference == null){
+            return null;
+        }
+        return FirebaseStorage.getInstance().getReferenceFromUrl(imageReference);
+    }
 
     public void setState(boolean state){ this.state = state; }
 }
