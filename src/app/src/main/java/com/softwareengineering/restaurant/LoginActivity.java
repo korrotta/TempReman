@@ -27,7 +27,7 @@ import com.softwareengineering.restaurant.StaffPackage.StaffsMenuActivity;
 
 import java.util.Objects;
 
-public class LoginActivity extends AppCompatActivity {
+public class  LoginActivity extends AppCompatActivity {
 
     EditText editTextEmail, editTextPassword;
     Button buttonLogin;
