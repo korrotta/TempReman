@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TablesActivity extends AppCompatActivity {
 
@@ -57,10 +58,10 @@ public class TablesActivity extends AppCompatActivity {
     private TextView topMenuName;
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
     private ActivityTablesBinding binding;
-    private LinearLayout editTable;
-    private ArrayList<TablesModel> tablesArrayList;
+    private ArrayList<TablesModel> tablesArrayList, deletedTablesArrayList;
     private TablesAdapter tablesAdapter;
     private Dialog addTableDialog, removeTableDialog;
+    private boolean selectedDelete = false;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private DatabaseReference realtime = FirebaseDatabase.getInstance("https://restaurantmanagement-c201c-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
@@ -82,7 +83,6 @@ public class TablesActivity extends AppCompatActivity {
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
         account = findViewById(R.id.accountDrawer);
-        editTable = findViewById(R.id.adminTablesEdit);
 
         setItemBackgroundColors(tables);
 
@@ -90,8 +90,13 @@ public class TablesActivity extends AppCompatActivity {
         if (tablesArrayList != null) {
             tablesAdapter.notifyDataSetChanged();
         }
+
         // Initialize Tables list
         tablesArrayList = new ArrayList<>();
+
+        // Initialize Deleted Tables in case of restore
+        deletedTablesArrayList = new ArrayList<>();
+
         // Set data for Tables
         int tablesImg = R.drawable.table_top_view;
 //        String[] tablesId = {
@@ -100,8 +105,6 @@ public class TablesActivity extends AppCompatActivity {
 //        };
         tablesAdapter = new TablesAdapter(TablesActivity.this, tablesArrayList);
 
-        setViewForTableList(tablesImg);
-
 //        for (int i = 0; i < tablesId.length; i++) {
 //            TablesModel tempTable = new TablesModel(tablesId[i], tablesImg);
 //            tablesArrayList.add(tempTable);
@@ -109,97 +112,76 @@ public class TablesActivity extends AppCompatActivity {
 
         binding.adminTableLayoutGridView.setAdapter(tablesAdapter);
         binding.adminTableLayoutGridView.setClickable(true);
+        //Show list of table with final adding button
+
+        TablesModel emptyTable = new TablesModel(null, R.drawable.table_top_view_add);
+        TablesModel removeTable = new TablesModel(null, R.drawable.table_top_view_delete);
+        final TablesModel[] deletedTable = {new TablesModel(null, R.drawable.table_top_view)};
+
+        tablesArrayList.clear();
+        tablesAdapter.notifyDataSetChanged();
+        showTableListWithLastEmpty(emptyTable, tablesImg);
+
         binding.adminTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openTableDetails(position);
-            }
-        });
+                // Remove Table
+                // Change item click behavior for adding/removing tables
 
-        // Handle Edit Tables
-        editTable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.tablesEditText.getText().toString().equals("Save")) {
-                    // In View mode
-                    binding.tablesEditImg.setImageResource(R.drawable.edit);
-                    binding.tablesEditText.setText(R.string.edit);
-                    tablesAdapter.notifyDataSetChanged();
-
-                    // Clear Empty Table and Remove Table
-                    for (int i = 0; i < tablesArrayList.size(); i++) {
-                        if (tablesAdapter.getItem(i).getImage() == R.drawable.table_top_view_add
-                                || tablesAdapter.getItem(i).getImage() == R.drawable.table_top_view_delete) {
-
-                            tablesArrayList.remove(i);
-                            tablesAdapter.notifyDataSetChanged();
-                        }
-                    }
-                    // Re-enable item click for viewing details
-                    binding.adminTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                //Case : Add a table
+                if (tablesAdapter.getItem(position).getImage() == emptyTable.getImage()) {
+                    // Add Table
+                    addTable(position);
+                    addTableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            openTableDetails(position);
+                        public void onDismiss(DialogInterface dialog) {
+                            showTableListWithLastEmpty(emptyTable, tablesImg);
                         }
                     });
                 }
 
-                //Inside edit mode
-                else {
-                    tablesArrayList.clear();
-
-                    TablesModel emptyTable = new TablesModel(null, R.drawable.table_top_view_add);
-                    TablesModel removeTable = new TablesModel(null, R.drawable.table_top_view_delete);
-
-                    //Show list of table with final adding button
-                    showTableListWithLastEmpty(emptyTable, tablesImg);
-
-                    // In Add mode
-                    binding.tablesEditImg.setImageResource(R.drawable.save);
-                    binding.tablesEditText.setText(R.string.save);
-
+                //Case : Chose to remove a table
+                else if (tablesAdapter.getItem(position).getImage() == removeTable.getImage()) {
                     // Remove Table
-                    // Change item click behavior for adding/removing tables
-                    binding.adminTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    removeTable(position);
+
+                    removeTableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            //Case : Add a table
-                            if (tablesAdapter.getItem(position).getImage() == emptyTable.getImage()) {
-                                // Add Table
-                                TablesModel activeTable = new TablesModel(String.valueOf(position + 1), R.drawable.table_top_view);
-                                addTable(position);
-                                addTableDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                    @Override
-                                    public void onDismiss(DialogInterface dialog) {
-                                        showTableListWithLastEmpty(emptyTable, tablesImg);
-                                    }
-                                });
-                            }
-
-                            //Case : Chose to remove a table
-                            else if (tablesAdapter.getItem(position).getImage() == removeTable.getImage()) {
-                                // Remove Table
-                                removeTable(position);
-                            }
-
-                            //Case: Chose a table to delete
-                            else {
-                                // Change Table about to be deleted
-                                tablesAdapter.getItem(position).setImage(R.drawable.table_top_view_delete);
-
-                                //Todo: Somehow do not setId to blank but still able to hide it
-                                //Todo: Main reason: Need itemId to track in Realtime Database and Firestore
-                                //Todo: Add on dismiss for removing like adding table, so always inside edit mode.
-                                //tablesAdapter.getItem(position).setId("");
-
-                                tablesAdapter.notifyDataSetChanged();
-                            }
+                        public void onDismiss(DialogInterface dialog) {
+                            tablesAdapter.remove(tablesAdapter.getItem(position));
+                            tablesAdapter.notifyDataSetChanged();
+                            showTableListWithLastEmpty(emptyTable, tablesImg);
                         }
                     });
                 }
 
+                //Case: Chose a table to delete (single delete)
+                else {
+                    // TODO: REMEMBER TO CLEAR OR REMOVE DELETEDTABLEARRAY WHEN RESTORED DELETED TABLE
+                    if (selectedDelete) {
+                        // Change current table to delete and the previous selected back to normal
+                        for (int i = 0; i < tablesArrayList.size(); i++) {
+                            if (tablesAdapter.getItem(i).getImage() == R.drawable.table_top_view_delete) {
+                                tablesAdapter.getItem(i).setImage(R.drawable.table_top_view);
+                                tablesAdapter.getItem(i).setId(String.valueOf(i + 1));
+                            }
+                        }
+                        tablesAdapter.getItem(position).setImage(R.drawable.table_top_view_delete);
+                        tablesAdapter.getItem(position).setId("");
+                        tablesAdapter.notifyDataSetChanged();
+                    } else {
+                        // Change Table about to be deleted
+                        selectedDelete = true;
+                        tablesAdapter.getItem(position).setImage(R.drawable.table_top_view_delete);
+                        tablesAdapter.getItem(position).setId("");
 
+                        // Store deletedTable
+                        deletedTable[0] = tablesAdapter.getItem(position);
+                        deletedTablesArrayList.add(deletedTable[0]);
+
+                        tablesAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         });
 
@@ -319,7 +301,12 @@ public class TablesActivity extends AppCompatActivity {
         removeTableDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         removeTableDialog.setContentView(R.layout.dialog_remove_table);
 
-        String id = tablesAdapter.getItem(selectedId).getId();
+        String id = "0";
+        for (int i = 0; i < deletedTablesArrayList.size(); i++) {
+            if (Objects.equals(deletedTablesArrayList.get(i).getId(), String.valueOf(selectedId))) {
+                id = deletedTablesArrayList.get(i).getId();
+            }
+        }
 
         Window window = removeTableDialog.getWindow();
         if (window == null) {
@@ -346,12 +333,12 @@ public class TablesActivity extends AppCompatActivity {
             }
         });
 
+        String finalId = id;
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                firestore.collection("table").document(id).update("state", "deleted");
-                realtime.child("tableList").child(id).setValue("deleted");
+                firestore.collection("table").document(finalId).update("state", "deleted");
+                realtime.child("tableList").child(finalId).setValue("deleted");
                 removeTableDialog.dismiss();
             }
         });
@@ -468,13 +455,6 @@ public class TablesActivity extends AppCompatActivity {
             }
         }
         return max;
-    }
-
-    private void openTableDetails(int position) {
-        Toast.makeText(TablesActivity.this, "You choose Table: " + (position + 1), Toast.LENGTH_SHORT).show();
-                /*Intent intent = new Intent(TablesActivity.this, TablesDetails.class);
-                intent.putExtra("tables", tablesArrayList.get(position));
-                startActivity(intent);*/
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
