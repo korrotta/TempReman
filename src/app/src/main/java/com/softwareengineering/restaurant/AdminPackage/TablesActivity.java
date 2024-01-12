@@ -59,6 +59,9 @@ public class TablesActivity extends AppCompatActivity {
     private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
     private ActivityTablesBinding binding;
     private ArrayList<TablesModel> tablesArrayList, deletedTablesArrayList;
+
+    private String chosenID;
+
     private TablesAdapter tablesAdapter;
     private Dialog addTableDialog, removeTableDialog;
     private boolean selectedDelete = false;
@@ -166,12 +169,17 @@ public class TablesActivity extends AppCompatActivity {
                                 tablesAdapter.getItem(i).setId(String.valueOf(i + 1));
                             }
                         }
+                        //add id to global variable
+                        chosenID = tablesAdapter.getItem(position).getId();
+
                         tablesAdapter.getItem(position).setImage(R.drawable.table_top_view_delete);
                         tablesAdapter.getItem(position).setId("");
                         tablesAdapter.notifyDataSetChanged();
                     } else {
                         // Change Table about to be deleted
                         selectedDelete = true;
+
+                        chosenID = tablesAdapter.getItem(position).getId();
                         tablesAdapter.getItem(position).setImage(R.drawable.table_top_view_delete);
                         tablesAdapter.getItem(position).setId("");
 
@@ -301,12 +309,6 @@ public class TablesActivity extends AppCompatActivity {
         removeTableDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         removeTableDialog.setContentView(R.layout.dialog_remove_table);
 
-        String id = "0";
-        for (int i = 0; i < deletedTablesArrayList.size(); i++) {
-            if (Objects.equals(deletedTablesArrayList.get(i).getId(), String.valueOf(selectedId))) {
-                id = deletedTablesArrayList.get(i).getId();
-            }
-        }
 
         Window window = removeTableDialog.getWindow();
         if (window == null) {
@@ -333,7 +335,8 @@ public class TablesActivity extends AppCompatActivity {
             }
         });
 
-        String finalId = id;
+        String finalId = chosenID;
+        Log.d("The chosen id: ", chosenID.toString());
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
