@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.CustomerPackage;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,8 @@ import java.util.List;
 
 public class ReviewAdapter extends ArrayAdapter<Review> {
 
-    public ReviewAdapter(Context context, int resource, List<Review> reviews) {
-        super(context, resource, reviews);
+    public ReviewAdapter(Context context, List<Review> reviews) {
+        super(context, R.layout.customers_list_item_review, reviews);
     }
 
     @Override
@@ -35,7 +36,8 @@ public class ReviewAdapter extends ArrayAdapter<Review> {
 
         userAvatar.setImageResource(review.getUserAvatar());
         cusName.setText(review.getCusName());
-        date.setText(review.getDate());
+        Log.d("date", review.getDate().toString());
+        date.setText(review.getDate().toString());
         reviewText.setText(review.getReviewText());
         rate.setText(review.getRate());
 

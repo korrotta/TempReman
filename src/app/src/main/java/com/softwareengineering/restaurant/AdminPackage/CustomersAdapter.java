@@ -31,11 +31,8 @@ public class CustomersAdapter extends ArrayAdapter<Customers> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.admin_customers_list_item, parent, false);
         }
-
         TextView nameTV = convertView.findViewById(R.id.adminCustomersName);
-
         nameTV.setText(customers.getName());
-
         return convertView;
     }
 }
