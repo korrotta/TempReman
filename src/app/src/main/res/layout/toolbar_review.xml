@@ -14,11 +14,9 @@
         android:layout_height="24dp"
         android:src="@drawable/topmenu" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/topMenuName"
@@ -33,31 +31,32 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" android:layout_alignParentEnd="true">
+
             <ImageView
                 android:id="@+id/add"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@drawable/plus"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:background="@drawable/plus">
 
             </ImageView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Add review"
-                android:textColor="@color/white"
-                android:layout_gravity="center">
-            </TextView>
+                android:textColor="@color/white"></TextView>
         </LinearLayout>
-
-    </LinearLayout>
-
+    </RelativeLayout>
 
 
 </LinearLayout>

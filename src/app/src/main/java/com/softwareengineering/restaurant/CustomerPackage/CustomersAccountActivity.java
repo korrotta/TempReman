@@ -24,18 +24,17 @@ public class CustomersAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg, userAvatar;
-    private TextView topMenuName, userName;
+    private TextView userName;
     private RelativeLayout menu, tables, review, account, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customers_review);
+        setContentView(R.layout.activity_customers_account);
 
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.customersDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
-        topMenuName = findViewById(R.id.topMenuName);
         menu = findViewById(R.id.customersMenuDrawer);
         tables = findViewById(R.id.customersTablesDrawer);
         review = findViewById(R.id.customersReviewDrawer);
@@ -67,8 +66,6 @@ public class CustomersAccountActivity extends AppCompatActivity {
                 openDrawer(drawerLayout);
             }
         });
-
-        topMenuName.setText(R.string.tables);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
