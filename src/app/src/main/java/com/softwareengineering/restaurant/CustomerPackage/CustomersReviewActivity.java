@@ -10,14 +10,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.softwareengineering.restaurant.ItemClasses.Review;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomersReviewActivity extends AppCompatActivity {
 
@@ -25,6 +30,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg, userAvatar, add;
     private TextView topMenuName, userName;
+    private ListView list_review;
     private RelativeLayout menu, tables, review, account, logout;
 
     @Override
@@ -44,6 +50,18 @@ public class CustomersReviewActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.customersNavAvatar);
         add = findViewById(R.id.add);
         userName = findViewById(R.id.customersNavName);
+        list_review = findViewById(R.id.list_review);
+
+        // Dữ liệu giả cho đánh giá (thay thế nó bằng dữ liệu đánh giá thực tế của bạn)
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(new Review(R.drawable.default_user, "Nguyễn Văn Mạnh", "Thursday, Aug 21", "Thức ăn tuyệt vời và tươi mới.", "5"));
+        // Thêm nhiều đánh giá khác nếu cần...
+
+        // Tạo adapter tùy chỉnh
+        ReviewAdapter reviewAdapter = new ReviewAdapter(this, R.layout.customers_list_item_review, reviews);
+
+        // Thiết lập adapter cho ListView
+        list_review.setAdapter(reviewAdapter);
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
