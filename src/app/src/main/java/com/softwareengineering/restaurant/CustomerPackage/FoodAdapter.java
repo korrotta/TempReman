@@ -134,7 +134,7 @@ public class FoodAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailFoodActivity.class);
                 intent.putExtra("foodName", food.getName());
-                intent.putExtra("foodImageUrl", food.getImageUrl());
+                intent.putExtra("foodImageRef", food.getRawRef());
                 intent.putExtra("foodStatus", food.getStatus());
                 intent.putExtra("foodPrice", String.valueOf(food.getPrice()));
                 intent.putExtra("foodType", String.valueOf(food.getType()));
