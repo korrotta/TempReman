@@ -46,6 +46,13 @@ public class DetailFoodActivity extends AppCompatActivity {
             double foodPrice = Double.parseDouble(foodPriceString);
             String foodType = intent.getStringExtra("foodType");
 
+            if (foodStatus) {
+                // Nếu là true, đặt màu nền xanh lá cây
+                status.setBackgroundResource(R.drawable.custom_button_status_green);
+            } else {
+                // Nếu là false, đặt màu nền đỏ
+                status.setBackgroundResource(R.drawable.custom_button_status_red);
+            }
             name.setText(foodName);
             status.setText(foodStatus ? "Sale" : "Stop sale");
             price.setText(formatPrice(foodPrice));
