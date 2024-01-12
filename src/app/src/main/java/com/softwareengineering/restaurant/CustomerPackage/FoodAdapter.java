@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.CustomerPackage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,8 +108,13 @@ public class FoodAdapter extends BaseAdapter {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Xử lý sự kiện khi item được nhấn
-                // Ví dụ: Mở một activity khác để hiển thị chi tiết món ăn
+                Intent intent = new Intent(context, DetailFoodActivity.class);
+                intent.putExtra("foodName", food.getName());
+                intent.putExtra("foodImageUrl", food.getImageUrl());
+                intent.putExtra("foodStatus", food.getStatus());
+                intent.putExtra("foodPrice", String.valueOf(food.getPrice()));
+                intent.putExtra("foodType", String.valueOf(food.getType()));
+                context.startActivity(intent);
             }
         });
     }

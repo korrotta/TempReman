@@ -27,4 +27,5 @@ public class Food {
     public String getName() {return name;}
     public boolean getStatus() {return state;}
     public long getPrice() {return price;}
+    public String getType() {return type;}
 }
