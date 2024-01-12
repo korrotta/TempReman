@@ -9,9 +9,9 @@ public class Food {
     private long price;
 
     // Constructor mặc định
-    public Food() {
-        // Cần có constructor mặc định rỗng cho Firestore
-    }
+//    public Food() {
+//        // Cần có constructor mặc định rỗng cho Firestore
+//    }
 
     public Food(String imageReference, String imageUrl, String name, long price, boolean isOnSale, String type){
         this.imageReference = imageReference;
@@ -28,4 +28,6 @@ public class Food {
     public boolean getStatus() {return state;}
     public long getPrice() {return price;}
     public String getType() {return type;}
+
+    public void setState(boolean state){ this.state = state; }
 }

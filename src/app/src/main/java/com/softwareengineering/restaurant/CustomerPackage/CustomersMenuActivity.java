@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -23,11 +24,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.ItemClasses.Food;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
@@ -52,7 +56,8 @@ public class CustomersMenuActivity extends AppCompatActivity {
     private RelativeLayout menu, tables, review, account, logout;
     private GridLayout list_menu;
     private List<Food> foodList = new ArrayList<>();
-
+    private FoodAdapter foodAdapter;
+    private GridView gridView;
     private LinearLayout salad;
 
 
@@ -72,9 +77,11 @@ public class CustomersMenuActivity extends AppCompatActivity {
         logout = findViewById(R.id.customersLogoutDrawer);
         userAvatar = findViewById(R.id.customersNavAvatar);
         userName = findViewById(R.id.customersNavName);
+        gridView = findViewById(R.id.list_menu);
 
+        foodAdapter = new FoodAdapter(this, foodList);
+        gridView.setAdapter(foodAdapter);
         getFoodListFromFirestore();
-
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -148,19 +155,40 @@ public class CustomersMenuActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference foodCollection = db.collection("food");
 
-        foodCollection.whereEqualTo("type", "Burger")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                            Food foodItem = document.toObject(Food.class);
-                            foodList.add(foodItem);
-                        }
-                        setupGridLayout(); // Gọi hàm setupGridLayout sau khi lấy danh sách
-                    } else {
-                        Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
+        foodCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        if (doc.getBoolean("state") == null) Log.d("null_Long", doc.getId().toString());
+                        Food food = new Food(
+                                doc.getString("imageRef"),
+                                doc.getString("imageURL"),
+                                doc.getString("name"),
+                                doc.getLong("price"),
+                                Boolean.TRUE.equals(doc.getBoolean("state")),
+                                doc.getString("type")
+                        );
+                        foodList.add(food);
                     }
-                });
+                    foodAdapter.notifyDataSetChanged();
+                }
+                else {
+                    Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+//        foodCollection.whereEqualTo("type","burger").get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+//                            Food foodItem = document.toObject(Food.class);
+//                            foodItem.setState(Boolean.TRUE.equals(document.getBoolean("state")));
+//                            foodList.add(foodItem);
+//                        }
+//
+//                    }
+//                });
     }
 
     private void setupGridLayout() {
