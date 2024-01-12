@@ -52,30 +52,35 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
+            android:id="@+id/rate1"
             android:background="@drawable/star">
         </ImageView>
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
+            android:id="@+id/rate2"
             android:background="@drawable/star">
         </ImageView>
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
+            android:id="@+id/rate3"
             android:background="@drawable/star">
         </ImageView>
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
+            android:id="@+id/rate4"
             android:background="@drawable/star">
         </ImageView>
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
+            android:id="@+id/rate5"
             android:background="@drawable/star">
         </ImageView>
     </LinearLayout>
@@ -98,6 +103,7 @@
             android:layout_width="360dp"
             android:layout_height="230dp"
             android:hint="Enter your opinion here."
+            android:id = "@+id/reviewContent"
             android:background="@drawable/rounded_review"
             android:gravity="top"
             android:paddingLeft="10dp" android:paddingTop="10dp">
@@ -106,7 +112,7 @@
 
     <Button
         android:layout_marginTop="50dp"
-        android:id="@+id/btn_add_staff_done"
+        android:id="@+id/btn_submit"
         android:text="Submit"
         android:backgroundTint="@color/orange"
         android:fontFamily="@font/roboto"
