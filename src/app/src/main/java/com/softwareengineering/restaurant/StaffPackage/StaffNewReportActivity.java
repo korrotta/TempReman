@@ -28,7 +28,7 @@ import com.softwareengineering.restaurant.R;
 
 public class StaffNewReportActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private TextView topMenuName, title, date, content;
+    private TextView topMenuName, title, content;
     private ImageView topMenuImg;
     private DrawerLayout drawerLayout;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
@@ -67,8 +67,8 @@ public class StaffNewReportActivity extends AppCompatActivity {
             }
         });
 
-        confirm = (Button) findViewById(R.id.btn_cancel);
-        save = (Button)findViewById(R.id.btn_save);
+        confirm = (Button) findViewById(R.id.btn_confirm);
+        save = (Button) findViewById(R.id.btn_save);
 
         topMenuName.setText("Write a report");
 

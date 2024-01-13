@@ -43,23 +43,6 @@
                 android:layout_width="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
-                android:text="SENDER"
-                android:textColor="#888888"
-                android:textSize="18sp" android:fontFamily="@font/roboto">
-            </TextView>
-            <EditText
-                android:id="@+id/sender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="Nguyễn Thanh Huệ"
-                android:layout_marginLeft="20dp">
-            </EditText>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content"
                 android:text="CONTENT"
                 android:textColor="#888888"
                 android:textSize="18sp" android:fontFamily="@font/roboto">
@@ -69,8 +52,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:layout_marginLeft="20dp">
-            </EditText>
+                android:layout_marginLeft="20dp"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:lines="10"/>
 
         </LinearLayout>
 
@@ -83,7 +68,7 @@
             android:layout_gravity="center"
             android:gravity="center">
             <Button
-                android:id="@+id/btn_cancel"
+                android:id="@+id/btn_confirm"
                 android:layout_width="150dp"
                 android:layout_height="55dp"
                 android:layout_marginTop="5dp"
@@ -92,7 +77,7 @@
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/roboto"
                 android:layout_gravity="center"
-                android:text="CANCEL"
+                android:text="CONFIRM"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
