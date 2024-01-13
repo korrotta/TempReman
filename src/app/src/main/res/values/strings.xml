@@ -104,4 +104,7 @@
     <string name="staffs_toolbar">Staffs Toolbar</string>
     <string name="freesprite_restaurant">FreeSprite Restaurant</string>
     <string name="_1">1</string>
+    <string name="available">Available</string>
+    <string name="booked">Booked</string>
+    <string name="in_use">In use</string>
 </resources>

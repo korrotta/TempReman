@@ -9,15 +9,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.StaffPackage.StaffsTablesActivity;
+import com.softwareengineering.restaurant.TablesAdapter;
+import com.softwareengineering.restaurant.TablesModel;
+import com.softwareengineering.restaurant.databinding.ActivityCustomersTablesBinding;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 public class CustomersTablesActivity extends AppCompatActivity {
 
@@ -26,11 +35,15 @@ public class CustomersTablesActivity extends AppCompatActivity {
     private ImageView topMenuImg, userAvatar;
     private TextView topMenuName, userName;
     private RelativeLayout menu, tables, review, account, logout;
+    private ActivityCustomersTablesBinding binding;
+    private ArrayList<TablesModel> tablesModelArrayList;
+    private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customers_tables);
+        binding = ActivityCustomersTablesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.customersDrawerLayout);
@@ -44,31 +57,32 @@ public class CustomersTablesActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.customersNavAvatar);
         userName = findViewById(R.id.customersNavName);
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        String avatarPhotoUrl = String.valueOf(currentUser.getPhotoUrl());
+        initCurrentUser();
+        initToolBar();
+        initNavBar();
 
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        // Initialize Tables Layout
+        TablesModel tables = new TablesModel("1", R.drawable.table_top_view);
+        tablesModelArrayList = new ArrayList<>();
+        tablesModelArrayList.add(tables);
+        tablesModelArrayAdapter = new TablesAdapter(this, tablesModelArrayList);
+        tablesModelArrayAdapter.notifyDataSetChanged();
+        binding.customersTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
+        // showTable Function with state
 
-        if (currentUser.getDisplayName() != null) {
-            userName.setText(currentUser.getDisplayName());
-        }
-        else {
-            userName.setText(R.string.name);
-        }
-
-        setItemBackgroundColors(menu);
-
-        topMenuImg.setImageResource(R.drawable.topmenu);
-
-        topMenuImg.setOnClickListener(new View.OnClickListener() {
+        // Set Click Listener For Table Layout
+        binding.customersTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                openDrawer(drawerLayout);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(CustomersTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(CustomersTablesActivity.this, TablesDetails.class);
             }
         });
 
-        topMenuName.setText(R.string.tables);
+    }
+
+    private void initNavBar() {
+        setItemBackgroundColors(menu);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +123,34 @@ public class CustomersTablesActivity extends AppCompatActivity {
                 redirectActivity(CustomersTablesActivity.this, LoginActivity.class);
             }
         });
+    }
 
+    private void initToolBar() {
+        topMenuImg.setImageResource(R.drawable.topmenu);
+
+        topMenuImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer(drawerLayout);
+            }
+        });
+
+        topMenuName.setText(R.string.tables);
+    }
+
+    private void initCurrentUser() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        assert currentUser != null;
+        String avatarPhotoUrl = String.valueOf(currentUser.getPhotoUrl());
+
+        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+
+        if (currentUser.getDisplayName() != null) {
+            userName.setText(currentUser.getDisplayName());
+        }
+        else {
+            userName.setText(R.string.name);
+        }
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {

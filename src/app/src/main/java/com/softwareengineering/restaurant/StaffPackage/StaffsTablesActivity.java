@@ -11,9 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,12 +25,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.TablesAdapter;
+import com.softwareengineering.restaurant.TablesModel;
+import com.softwareengineering.restaurant.databinding.ActivityStaffsTablesBinding;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StaffsTablesActivity extends AppCompatActivity {
 
+    private ActivityStaffsTablesBinding binding;
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
@@ -35,11 +44,14 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private TextView topMenuName, userName;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private ArrayList<TablesModel> tablesModelArrayList;
+    private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs_tables);
+        binding = ActivityStaffsTablesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.staffsDrawerLayout);
@@ -55,28 +67,32 @@ public class StaffsTablesActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
 
-        // Get currentUser
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
-        // Avatar Image
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        initCurrentUser();
+        initToolBar();
+        initNavBar();
 
-        // Get user info from firestore
-        getUserInfoFirestore(currentUser.getUid());
+        // Initialize Tables Layout
+        TablesModel tables = new TablesModel("1", R.drawable.table_top_view);
+        tablesModelArrayList = new ArrayList<>();
+        tablesModelArrayList.add(tables);
+        tablesModelArrayAdapter = new TablesAdapter(this, tablesModelArrayList);
+        tablesModelArrayAdapter.notifyDataSetChanged();
+        binding.staffsTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
+        // showTable Function with state
 
-        setItemBackgroundColors(tables);
-
-        topMenuImg.setImageResource(R.drawable.topmenu);
-
-        topMenuImg.setOnClickListener(new View.OnClickListener() {
+        // Set Click Listener For Table Layout
+        binding.staffsTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                openDrawer(drawerLayout);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(StaffsTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(StaffsTablesActivity.this, TablesDetails.class);
             }
         });
 
-        topMenuName.setText(R.string.tables);
+    }
+
+    private void initNavBar() {
+        setItemBackgroundColors(tables);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +149,31 @@ public class StaffsTablesActivity extends AppCompatActivity {
                 redirectActivity(StaffsTablesActivity.this, LoginActivity.class);
             }
         });
+    }
 
+    private void initToolBar() {
+        topMenuImg.setImageResource(R.drawable.topmenu);
+
+        topMenuImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer(drawerLayout);
+            }
+        });
+
+        topMenuName.setText(R.string.tables);
+    }
+
+    private void initCurrentUser() {
+        // Get currentUser
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        assert currentUser != null;
+        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
+        // Avatar Image
+        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+
+        // Get user info from firestore
+        getUserInfoFirestore(currentUser.getUid());
     }
 
     private void getUserInfoFirestore(String uid) {
