@@ -1,0 +1,9 @@
+<!-- res/drawable/rounded_edittext_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/light_orange_2" /> <!-- Màu nền của EditText (trắng) -->
+    <stroke
+        android:width="0dp">
+    </stroke>
+    <corners android:radius="20dp" /> <!-- Độ cong của góc -->
+</shape>
