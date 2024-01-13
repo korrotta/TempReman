@@ -1,5 +1,6 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -8,23 +9,33 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
 public class StaffNewReportActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private TextView topMenuName, title, sender, date, content;
+    private TextView topMenuName, title, date, content;
     private ImageView topMenuImg;
     private DrawerLayout drawerLayout;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
+    private Button confirm, save;
 
+    private String g1_sender;
+    private String g1_currentReportId = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +55,7 @@ public class StaffNewReportActivity extends AppCompatActivity {
         logout = findViewById(R.id.staffsLogoutDrawer);
         topMenuName = findViewById(R.id.topMenuName);
         title = findViewById(R.id.title);
-        sender = findViewById(R.id.sender);
+      
         content = findViewById(R.id.content);
 
         topMenuImg.setImageResource(R.drawable.back);
@@ -56,8 +67,57 @@ public class StaffNewReportActivity extends AppCompatActivity {
             }
         });
 
+        confirm = (Button) findViewById(R.id.btn_cancel);
+        save = (Button)findViewById(R.id.btn_save);
+
         topMenuName.setText("Write a report");
 
+        menuBarItemClick();
+
+        confirm.setOnClickListener(confirmButtonClickEvent);
+
+    }
+    //TODO: Remove isRead in Reports parcel, add id as a String
+    View.OnClickListener confirmButtonClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO: Avoid empty title
+            if (title == null || title.equals("")){
+                return;
+            }
+
+            //Obviously level 1 callback
+            Log.d("Sender_check", g1_sender);
+
+            if (content.getText() == null || content.getText().equals("")) {
+                return;
+            }
+
+            //Upload to firebase storage
+            uploadReportFile();
+
+            finish();
+        }
+    };
+
+    private void uploadReportFile(){
+        FirebaseStorage.getInstance().getReference().child("reports/"+mAuth.getCurrentUser().getUid() + "/" );
+    }
+
+    private void fetchName(){
+        FirebaseFirestore.getInstance().collection("users").document(mAuth.getCurrentUser().getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        g1_sender = task.getResult().getString("name");
+                    }
+                });
+    }
+
+    private void fetchCurrentReportId(){
+        FirebaseFirestore.getInstance().collection("reports");
+    }
+    private void menuBarItemClick() {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,11 +39,14 @@ import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class DetailFoodActivity extends AppCompatActivity {
     ImageView btn_back, image;
     TextView name, status, price, type, des, ingredients;
 
+    String g1_role = "";
+    String foodImageRef = "";
     private Context context = DetailFoodActivity.this;
 
     @Override
@@ -57,16 +63,18 @@ public class DetailFoodActivity extends AppCompatActivity {
         ingredients = findViewById(R.id.ingredients);
 
         btn_back = findViewById(R.id.btn_back);
-        status = findViewById(R.id.status);
+        status = findViewById(R.id.s_statusBar);
 
         btn_back.setOnClickListener(view -> onBackPressed());
+        status.setOnClickListener(changeStatusClickEvent);
 
         Intent intent = getIntent();
 
+        fetchUserRole();
 
         if (intent != null) {
             String foodName = intent.getStringExtra("foodName");
-            String foodImageRef = intent.getStringExtra("foodImageRef");
+            foodImageRef = intent.getStringExtra("foodImageRef");
             boolean foodStatus = intent.getBooleanExtra("foodStatus", false);  // default value is false
             String foodPriceString = intent.getStringExtra("foodPrice");
             double foodPrice = Double.parseDouble(foodPriceString);
@@ -90,6 +98,43 @@ public class DetailFoodActivity extends AppCompatActivity {
         }
     }
 
+    View.OnClickListener changeStatusClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (Objects.equals(g1_role, "")) return;
+            if (Objects.equals(g1_role, "customer")) return;
+            if (Objects.equals(g1_role, "admin")) return;
+
+            //update UI for status changed, only when user role is staff
+            status.setBackgroundResource(status.getText().equals("Sale")? R.drawable.custom_button_status_red:  R.drawable.custom_button_status_green);
+            status.setText(status.getText().equals("Sale")? "Stop sale":"Sale");
+
+            //firestore update
+            FirebaseFirestore.getInstance().collection("food").whereEqualTo("imageRef", foodImageRef).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (DocumentSnapshot doc: task.getResult().getDocuments()){
+                                FirebaseFirestore.getInstance().collection("food").document(doc.getId()).update("state", (status.getText().equals("Sale")? Boolean.TRUE: Boolean.FALSE));
+                            }
+                        }
+                    });
+
+        }
+    };
+
+    private void fetchUserRole(){
+        FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            g1_role = task.getResult().getString("role");
+                        }
+                    }
+                });
+    }
     private String formatPrice(double price) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         return numberFormat.format(price) + " VND";
