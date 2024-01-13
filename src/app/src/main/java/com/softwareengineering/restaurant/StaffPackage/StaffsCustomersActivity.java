@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,9 +21,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.softwareengineering.restaurant.ItemClasses.StaffCustomerItem;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,6 +40,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
     private CircleImageView userAvatar;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,15 @@ public class StaffsCustomersActivity extends AppCompatActivity {
         logout = findViewById(R.id.staffsLogoutDrawer);
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
+        listView = findViewById(R.id.staff_customersList);
+
+        // Dữ liệu mẫu cho ListView
+        List<StaffCustomerItem> customerItems = new ArrayList<>();
+        customerItems.add(new StaffCustomerItem(R.drawable.default_user, "Khách hàng 1"));
+        customerItems.add(new StaffCustomerItem(R.drawable.default_user, "Khách hàng 2"));
+        // Thêm thêm mục nếu cần...
+        StaffCustomersAdapter adapter = new StaffCustomersAdapter(this, R.layout.staff_list_item_customer, customerItems);
+        listView.setAdapter(adapter);
 
         // Get currentUser
         FirebaseUser currentUser = mAuth.getCurrentUser();

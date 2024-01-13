@@ -11,7 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +26,8 @@ import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StaffsPaymentActivity extends AppCompatActivity {
@@ -35,6 +39,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
     private TextView topMenuName, userName;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,33 @@ public class StaffsPaymentActivity extends AppCompatActivity {
         logout = findViewById(R.id.staffsLogoutDrawer);
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
+        listView = findViewById(R.id.staff_customersTableList);
+
+        // Thay đổi ArrayList này thành danh sách khách hàng thực tế
+        ArrayList<String> customerNamesList = new ArrayList<>();
+        ArrayList<String> tableNumbersList = new ArrayList<>();
+
+        // Thêm dữ liệu mẫu
+        customerNamesList.add("Customer 1");
+        tableNumbersList.add("1");
+
+        CustomListAdapter adapter = new CustomListAdapter(this, customerNamesList, tableNumbersList);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCustomerName = customerNamesList.get(position);
+                String selectedTableNumber = tableNumbersList.get(position);
+
+                Intent intent = new Intent(StaffsPaymentActivity.this, CustomerPaymentActivity.class);
+
+                intent.putExtra("CUSTOMER_NAME", selectedCustomerName);
+                intent.putExtra("TABLE_NUMBER", selectedTableNumber);
+
+                startActivity(intent);
+            }
+        });
 
         // Get currentUser
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -76,7 +108,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText(R.string.payment);
+        topMenuName.setText("Customers");
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

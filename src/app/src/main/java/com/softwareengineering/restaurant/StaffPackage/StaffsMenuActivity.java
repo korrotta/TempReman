@@ -1,5 +1,6 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -11,19 +12,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.softwareengineering.restaurant.CustomerPackage.FoodAdapter;
+import com.softwareengineering.restaurant.ItemClasses.Food;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,6 +50,18 @@ public class StaffsMenuActivity extends AppCompatActivity {
     private TextView topMenuName, userName;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+    private List<Food> foodList = new ArrayList<>();
+    private FoodAdapter foodAdapter;
+    private List<Food> foodListHolder = new ArrayList<>();
+    private GridView gridView;
+
+    private LinearLayout saladButton;
+    private LinearLayout pizzaButton;
+    private LinearLayout drinkButton;
+    private LinearLayout dessertButton;
+    private LinearLayout pastaButton;
+    private LinearLayout burgerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +81,24 @@ public class StaffsMenuActivity extends AppCompatActivity {
         logout = findViewById(R.id.staffsLogoutDrawer);
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
+        gridView = findViewById(R.id.list_menu);
+
+        //Filter button setup here:
+        saladButton = findViewById(R.id.saladFilter);
+        drinkButton = findViewById(R.id.drinkFilter);
+        dessertButton = findViewById(R.id.dessertFilter);
+        pizzaButton = findViewById(R.id.pizzaFilter);
+        pastaButton = findViewById(R.id.pastaFilter);
+        burgerButton = findViewById(R.id.burgerFilter);
+
+        //TODO: HANDLE ON CLICK OF ALL ABOVE LINEAR LAYOUT: SET BACKGROUND TO STRONGER COLOR OR SOMETHING TO EMPHASIS (?)
+
+        //always showing by foodListHolder
+        foodAdapter = new FoodAdapter(this, foodList);
+        gridView.setAdapter(foodAdapter);
+
+        //Fetching data to foodList;
+        fetchFoodList();
 
         // Get currentUser
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -135,6 +179,13 @@ public class StaffsMenuActivity extends AppCompatActivity {
             }
         });
 
+        //filter click
+        saladButton.setOnClickListener(saladClickEvent);
+        drinkButton.setOnClickListener(drinkClickEvent);
+        dessertButton.setOnClickListener(dessertClickEvent);
+        burgerButton.setOnClickListener(burgerClickEvent);
+        pizzaButton.setOnClickListener(pizzaClickEvent);
+        pastaButton.setOnClickListener(pastaClickEvent);
     }
 
     private void getUserInfoFirestore(String uid) {
@@ -161,6 +212,36 @@ public class StaffsMenuActivity extends AppCompatActivity {
 
     }
 
+    private void fetchFoodList() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference foodCollection = db.collection("food");
+
+        foodCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        if (doc.getBoolean("state") == null) Log.d("null_Long", doc.getId().toString());
+                        Food food = new Food(
+                                doc.getString("imageRef"),
+                                doc.getString("imageURL"),
+                                doc.getString("name"),
+                                doc.getLong("price"),
+                                Boolean.TRUE.equals(doc.getBoolean("state")),
+                                doc.getString("type")
+                        );
+                        foodList.add(food);
+                    }
+                    //changed UI
+                    foodAdapter.notifyDataSetChanged();
+                    foodListHolder.addAll(foodList);
+                }
+                else {
+                    Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
         customers.setBackgroundColor(selectedItem == customers ? ContextCompat.getColor(this, R.color.light_orange_3) : ContextCompat.getColor(this, R.color.light_orange_2));
         menu.setBackgroundColor(selectedItem == menu ? ContextCompat.getColor(this, R.color.light_orange_3) : ContextCompat.getColor(this, R.color.light_orange_2));
@@ -191,5 +272,65 @@ public class StaffsMenuActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         closeDrawer(drawerLayout);
+    }
+
+    View.OnClickListener saladClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Salad");
+        }
+    };
+
+    View.OnClickListener drinkClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Drink");
+        }
+    };
+    View.OnClickListener dessertClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Dessert");
+        }
+    };
+
+    View.OnClickListener pastaClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Pasta");
+        }
+    };
+
+    View.OnClickListener burgerClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Burger");
+        }
+    };
+
+    View.OnClickListener pizzaClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Pizza");
+        }
+    };
+
+    private final String TAG = "UserChecker";
+    //Filter handler:
+    private void filterClickedShowing(String filterValue){
+
+        //Known that foodList is fetched successfully
+        ArrayList<Food> foodFilter = foodListHolder.stream()
+                .filter(x -> x.getType().equals(filterValue))
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        foodAdapter.updateData(foodFilter);
+        foodAdapter.notifyDataSetChanged();
+    }
+
+    private void addToHolder(){
+        for (int i = 0; i < foodAdapter.getCount(); i++){
+            foodListHolder.add((Food) foodAdapter.getItem(i));
+        }
     }
 }
