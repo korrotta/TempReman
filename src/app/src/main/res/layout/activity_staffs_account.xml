@@ -34,7 +34,6 @@
                     android:layout_height="24dp"
                     android:src="@drawable/topmenu" />
 
-
             </FrameLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
