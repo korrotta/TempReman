@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddFoodActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <include layout="@layout/toolbar" />
+
+            <TextView
+                android:layout_width="290dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/name"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/adminAddFoodNameET"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:fontFamily="@font/quicksand"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="290dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/type"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/adminAddFoodTypeSpinner"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:fontFamily="@font/quicksand"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:ignore="HardcodedText" />
+
+            <LinearLayout
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:gravity="start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="@string/cost"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/adminAddFoodCostET"
+                        android:layout_width="130dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/round_corner_box_bg_design"
+                        android:fontFamily="@font/quicksand"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="@string/selling_price"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/adminAddFoodSellPriceET"
+                        android:layout_width="130dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/round_corner_box_bg_design"
+                        android:fontFamily="@font/quicksand"
+                        android:padding="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/ingredients"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/adminAddFoodIngredientsET"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:fontFamily="@font/quicksand"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/description"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/adminAddFoodDescET"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:fontFamily="@font/quicksand"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/image"
+                android:textAllCaps="true"
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/adminAddFoodImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_add" />
+
+            <Button
+                android:id="@+id/adminAddFoodDoneButton"
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/orange"
+                android:fontFamily="@font/roboto"
+                android:text="@string/done"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

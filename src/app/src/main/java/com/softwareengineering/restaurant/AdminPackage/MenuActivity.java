@@ -10,34 +10,35 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.softwareengineering.restaurant.AddFoodActivity;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
-    private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
-
+    private RelativeLayout staffs, customers, menu, tables, reports, sales, logout;
+    private LinearLayout addFood;
     private Grid_MenuAdapter menuAdapter;
     private GridView menuGridView;
-
-
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,7 +56,8 @@ public class MenuActivity extends AppCompatActivity {
         tables = findViewById(R.id.tablesDrawer);
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
-        account = findViewById(R.id.accountDrawer);
+        logout = findViewById(R.id.adminLogoutDrawer);
+        addFood = findViewById(R.id.addFood);
 
         //foodMenu list view
         menuGridView = findViewById(R.id.admin_MenuGridView);
@@ -66,6 +68,17 @@ public class MenuActivity extends AppCompatActivity {
 
 
         menuBarItemClickHandler(); //Only one handler for all click-event
+        addFoodToMenu(); // Handle adding food to menu
+    }
+
+    private void addFoodToMenu() {
+        addFood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, AddFoodActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
@@ -75,7 +88,7 @@ public class MenuActivity extends AppCompatActivity {
         tables.setBackgroundColor(selectedItem == tables ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         reports.setBackgroundColor(selectedItem == reports ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         sales.setBackgroundColor(selectedItem == sales ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
-        account.setBackgroundColor(selectedItem == account ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
+        logout.setBackgroundColor(selectedItem == logout ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
     }
 
     public static void openDrawer (DrawerLayout drawerLayout) {
@@ -101,7 +114,7 @@ public class MenuActivity extends AppCompatActivity {
         closeDrawer(drawerLayout);
     }
 
-    //Pyramid of void fking annoying
+    // Handle menuBar
     private void menuBarItemClickHandler(){
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,11 +173,11 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        account.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setItemBackgroundColors(account);
-                redirectActivity(MenuActivity.this, AccountActivity.class);
+                mAuth.signOut();
+                redirectActivity(MenuActivity.this, LoginActivity.class);
             }
         });
 

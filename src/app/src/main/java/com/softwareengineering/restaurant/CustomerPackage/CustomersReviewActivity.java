@@ -1,21 +1,33 @@
 package com.softwareengineering.restaurant.CustomerPackage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.ItemClasses.Review;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
@@ -24,7 +36,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+
 public class CustomersReviewActivity extends AppCompatActivity {
+
+    private final String TAG = "CRA_ErrorTest";
+    private List<Review> reviewList;
+    private ReviewAdapter reviewAdapter;
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
@@ -38,6 +57,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customers_review);
 
+
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.customersDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
@@ -50,19 +70,24 @@ public class CustomersReviewActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.customersNavAvatar);
         add = findViewById(R.id.add);
         userName = findViewById(R.id.customersNavName);
-        list_review = findViewById(R.id.list_review);
+        list_review = findViewById(R.id.customer_reviewList);
 
-        // Dữ liệu giả cho đánh giá (thay thế nó bằng dữ liệu đánh giá thực tế của bạn)
-        List<Review> reviews = new ArrayList<>();
-        reviews.add(new Review(R.drawable.default_user, "Nguyễn Văn Mạnh", "Thursday, Aug 21", "Thức ăn tuyệt vời và tươi mới.", "5"));
-        // Thêm nhiều đánh giá khác nếu cần...
-
-        // Tạo adapter tùy chỉnh
-        ReviewAdapter reviewAdapter = new ReviewAdapter(this, R.layout.customers_list_item_review, reviews);
-
-        // Thiết lập adapter cho ListView
+        //View set
+        reviewList = new ArrayList<Review>();
+        reviewAdapter = new ReviewAdapter(this, reviewList);
         list_review.setAdapter(reviewAdapter);
         reviewAdapter.notifyDataSetChanged();
+
+        firestore.collection("reviews").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value!= null && !value.isEmpty()){
+                    reviewList.clear();
+                    fetchReviewList();
+                }
+            }
+        });
+
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
@@ -97,13 +122,34 @@ public class CustomersReviewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(CustomersReviewActivity.this, AddReviewActivity.class);
                 startActivity(intent);
+                reviewList.clear();
+                fetchReviewList();
             }
         });
 
-
-
     }
 
+    private void fetchReviewList(){
+        firestore.collection("reviews").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        Review r = new Review(
+                                R.drawable.default_user,
+                                doc.getString("name"),
+                                doc.getDate("datetime"),
+                                doc.getString("content"),
+                                doc.getLong("rate").toString()
+                        );
+                        Log.d(TAG, "onComplete: "+ r.getDate());
+                        reviewList.add(r);
+                    }
+                    reviewAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
     private void menuBarItemsClick() {
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

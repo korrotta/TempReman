@@ -7,15 +7,14 @@ import androidx.annotation.NonNull;
 
 public class Staffs implements Parcelable {
 
-    private String name, email, phone, gender, role, username;
+    private String name, email, phone, gender, role;
 
-    public Staffs(String name, String email, String phone, String gender, String role, String username) {
+    public Staffs(String name, String email, String phone, String gender, String role) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.gender = gender;
         this.role = role;
-        this.username = username;
     }
 
     protected Staffs(Parcel in) {
@@ -24,7 +23,6 @@ public class Staffs implements Parcelable {
         phone = in.readString();
         gender = in.readString();
         role = in.readString();
-        username = in.readString();
     }
 
     public static final Creator<Staffs> CREATOR = new Creator<Staffs>() {
@@ -79,14 +77,6 @@ public class Staffs implements Parcelable {
         this.role = role;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -99,6 +89,5 @@ public class Staffs implements Parcelable {
         dest.writeString(phone);
         dest.writeString(gender);
         dest.writeString(role);
-        dest.writeString(username);
     }
 }

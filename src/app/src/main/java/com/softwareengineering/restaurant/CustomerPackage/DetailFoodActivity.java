@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -50,14 +52,18 @@ public class DetailFoodActivity extends AppCompatActivity {
         image = findViewById(R.id.image_food);
         type = findViewById(R.id.type_food);
         price = findViewById(R.id.price);
-//        des = findViewById(des);
-//        ingredients = findViewById(ingredients);
+
+        des = findViewById(R.id.des);
+        ingredients = findViewById(R.id.ingredients);
+
         btn_back = findViewById(R.id.btn_back);
         status = findViewById(R.id.status);
 
         btn_back.setOnClickListener(view -> onBackPressed());
 
         Intent intent = getIntent();
+
+
         if (intent != null) {
             String foodName = intent.getStringExtra("foodName");
             String foodImageRef = intent.getStringExtra("foodImageRef");
@@ -78,7 +84,9 @@ public class DetailFoodActivity extends AppCompatActivity {
             price.setText(formatPrice(foodPrice));
             type.setText(foodType);
 
+            getDescAndIngredient(foodImageRef);
             setImageFromReference(FirebaseStorage.getInstance().getReferenceFromUrl(foodImageRef), foodName, image);
+
         }
     }
 
@@ -152,6 +160,21 @@ public class DetailFoodActivity extends AppCompatActivity {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                 Log.d("Image link", taskSnapshot.getTask().getResult().toString());
+            }
+        });
+    }
+
+    private void getDescAndIngredient(String foodImgRef){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("food").whereEqualTo("imageRef", foodImgRef).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        des.setText(doc.getString("description"));
+                        ingredients.setText(doc.getString("ingredients"));
+                    }
+                }
             }
         });
     }

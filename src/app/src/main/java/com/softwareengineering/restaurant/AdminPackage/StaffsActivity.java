@@ -1,7 +1,5 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ItemClasses.Staffs;
 import com.softwareengineering.restaurant.StaffsAdapter;
@@ -37,10 +36,11 @@ public class StaffsActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
-    private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private RelativeLayout staffs, customers, menu, tables, reports, sales, logout;
     private ActivityStaffsBinding binding;
     private LinearLayout addStaffs;
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private ArrayList<Staffs>staffsArrayList;
     private StaffsAdapter staffsAdapter;
 
@@ -60,7 +60,7 @@ public class StaffsActivity extends AppCompatActivity {
         tables = findViewById(R.id.tablesDrawer);
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
-        account = findViewById(R.id.accountDrawer);
+        logout = findViewById(R.id.adminLogoutDrawer);
         addStaffs = findViewById(R.id.adminStaffsAdd);
 
         setItemBackgroundColors(staffs);
@@ -195,11 +195,11 @@ public class StaffsActivity extends AppCompatActivity {
             }
         });
 
-        account.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setItemBackgroundColors(account);
-                redirectActivity(StaffsActivity.this, AccountActivity.class);
+                mAuth.signOut();
+                redirectActivity(StaffsActivity.this, LoginActivity.class);
             }
         });
     }
@@ -211,7 +211,7 @@ public class StaffsActivity extends AppCompatActivity {
         tables.setBackgroundColor(selectedItem == tables ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         reports.setBackgroundColor(selectedItem == reports ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         sales.setBackgroundColor(selectedItem == sales ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
-        account.setBackgroundColor(selectedItem == account ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
+        logout.setBackgroundColor(selectedItem == logout ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
     }
 
     public static void openDrawer (DrawerLayout drawerLayout) {
@@ -239,7 +239,7 @@ public class StaffsActivity extends AppCompatActivity {
                         staffsArrayList.clear();
                         for (QueryDocumentSnapshot doc: task.getResult()){
                             staffsArrayList.add(new Staffs(doc.getString("name"), doc.getString("email"), doc.getString("phone"),
-                                    doc.getString("gender"), doc.getString("role"),doc.getString("username")));
+                                    doc.getString("gender"), doc.getString("role")));
                         }
                         staffsAdapter.notifyDataSetChanged();
                     }

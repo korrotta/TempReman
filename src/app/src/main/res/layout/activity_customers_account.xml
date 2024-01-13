@@ -11,8 +11,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_orange">
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,7 +35,6 @@
             </FrameLayout>
 
             <ImageView
-                android:id="@+id/image_user"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center|bottom"
@@ -47,169 +45,149 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_account"
-                android:orientation="vertical"
-                android:layout_marginRight="25dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp">
-                    ">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Name" android:textStyle="bold"
-                        android:textSize="14sp">
-                    </TextView>
-                    <EditText
-                        android:id="@+id/name"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/rounded_review"
-                        android:text="Nguyễn Thanh Huệ" android:paddingLeft="10dp">
-                    </EditText>
-                </LinearLayout>
+                android:background="@drawable/rounded_review">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp">
-                    ">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Email Address" android:textStyle="bold"
-                        android:textSize="14sp">
-                    </TextView>
-                    <EditText
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/rounded_review"
-                        android:text="Nguyễn Thanh Huệ" android:paddingLeft="10dp">
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp">
-                    ">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phone Number" android:textStyle="bold"
-                        android:textSize="14sp">
-                    </TextView>
-                    <EditText
-                        android:id="@+id/phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/rounded_review"
-                        android:text="0123" android:paddingLeft="10dp">
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp">
-                    ">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Gender" android:textStyle="bold"
-                        android:textSize="14sp">
-                    </TextView>
-                    <EditText
-                        android:id="@+id/gender"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/rounded_review"
-                        android:text="Nữ" android:paddingLeft="10dp">
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp">
-                    ">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Username" android:textStyle="bold"
-                        android:textSize="14sp">
-                    </TextView>
-                    <EditText
-                        android:id="@+id/user"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/rounded_review"
-                        android:text="Nguyễn Thanh Huệ" android:paddingLeft="10dp">
-                    </EditText>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp">
-                    ">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Password" android:textStyle="bold"
-                        android:textSize="14sp">
-                    </TextView>
-                    <EditText
-                        android:id="@+id/pass"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:background="@drawable/rounded_review"
-                        android:text="Nguyễn Thanh Huệ" android:paddingLeft="10dp">
-                    </EditText>
-                </LinearLayout>
-
-                <Button
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="35dp"
-                    android:id="@+id/btn_edit"
-                    android:text="Edit Details"
-                    android:backgroundTint="@color/orange"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="20sp"  android:textStyle="bold"
-                    android:layout_width="290dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+                ">
+                <TextView
+                    android:id="@+id/customer_nameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name" android:textStyle="bold"
+                    android:textSize="14sp">
+                </TextView>
+                <EditText
+                    android:id="@+id/customer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_review"
+                    android:hint="" android:paddingLeft="10dp">
+                </EditText>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+                ">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email Address" android:textStyle="bold"
+                    android:textSize="14sp">
+                </TextView>
+                <TextView
+                    android:textAlignment="center"
+                    android:id="@+id/customer_emailView"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_review"
+                    android:hint="" android:paddingLeft="10dp">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+                ">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number" android:textStyle="bold"
+                    android:textSize="14sp">
+                </TextView>
+                <EditText
+                    android:id="@+id/customer_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_review"
+                    android:hint="" android:paddingLeft="10dp">
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+                ">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gender" android:textStyle="bold"
+                    android:textSize="14sp">
+                </TextView>
+                <EditText
+                    android:id="@+id/customer_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_review"
+                    android:hint="Nữ" android:paddingLeft="10dp">
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+                ">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Username" android:textStyle="bold"
+                    android:textSize="14sp">
+                </TextView>
+                <EditText
+                    android:id="@+id/customer_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/rounded_review"
+                    android:hint="Nguyễn Thanh Huệ" android:paddingLeft="10dp">
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp">
+                ">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password" android:textStyle="bold"
+                    android:textSize="14sp">
+                </TextView>
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
+
+
+
 
     <RelativeLayout
         android:layout_width="200dp"

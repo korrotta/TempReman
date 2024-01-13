@@ -17,10 +17,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,12 +31,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.TablesAdapter;
 import com.softwareengineering.restaurant.TablesModel;
@@ -48,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class TablesActivity extends AppCompatActivity {
 
@@ -56,7 +55,7 @@ public class TablesActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
-    private RelativeLayout staffs, customers, menu, tables, reports, sales, account;
+    private RelativeLayout staffs, customers, menu, tables, reports, sales, logout;
     private ActivityTablesBinding binding;
     private ArrayList<TablesModel> tablesArrayList, deletedTablesArrayList;
 
@@ -66,6 +65,7 @@ public class TablesActivity extends AppCompatActivity {
     private Dialog addTableDialog, removeTableDialog;
     private boolean selectedDelete = false;
 
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private DatabaseReference realtime = FirebaseDatabase.getInstance("https://restaurantmanagement-c201c-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
 
@@ -85,7 +85,7 @@ public class TablesActivity extends AppCompatActivity {
         tables = findViewById(R.id.tablesDrawer);
         reports = findViewById(R.id.reportsDrawer);
         sales = findViewById(R.id.salesDrawer);
-        account = findViewById(R.id.accountDrawer);
+        logout = findViewById(R.id.adminLogoutDrawer);
 
         setItemBackgroundColors(tables);
 
@@ -250,11 +250,11 @@ public class TablesActivity extends AppCompatActivity {
             }
         });
 
-        account.setOnClickListener(new View.OnClickListener() {
+        logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setItemBackgroundColors(account);
-                redirectActivity(TablesActivity.this, AccountActivity.class);
+                mAuth.signOut();
+                redirectActivity(TablesActivity.this, LoginActivity.class);
             }
         });
 
@@ -467,7 +467,7 @@ public class TablesActivity extends AppCompatActivity {
         tables.setBackgroundColor(selectedItem == tables ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         reports.setBackgroundColor(selectedItem == reports ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
         sales.setBackgroundColor(selectedItem == sales ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
-        account.setBackgroundColor(selectedItem == account ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
+        logout.setBackgroundColor(selectedItem == logout ? ContextCompat.getColor(this, R.color.light_orange) : ContextCompat.getColor(this, R.color.white));
     }
 
     public static void openDrawer(DrawerLayout drawerLayout) {

@@ -17,7 +17,8 @@
         <include layout="@layout/toolbar_review"/>
 
         <ListView
-            android:id="@+id/list_review"
+
+            android:id="@+id/customer_reviewList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"

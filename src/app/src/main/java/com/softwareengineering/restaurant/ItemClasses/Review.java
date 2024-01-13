@@ -1,17 +1,21 @@
 package com.softwareengineering.restaurant.ItemClasses;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class Review {
     private int userAvatar;
     private String cusName;
-    private String date;
-    private String reviewText;
+    private Date date;
+    private String uid;
+    private String reviewContent;
     private String rate;
 
-    public Review(int userAvatar, String cusName, String date, String reviewText, String rate) {
+    public Review(int userAvatar, String cusName, Date date, String reviewText, String rate) {
         this.userAvatar = userAvatar;
         this.cusName = cusName;
         this.date = date;
-        this.reviewText = reviewText;
+        this.reviewContent = reviewText;
         this.rate = rate;
     }
 
@@ -23,12 +27,12 @@ public class Review {
         return cusName;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
     public String getReviewText() {
-        return reviewText;
+        return reviewContent;
     }
 
     public String getRate() {

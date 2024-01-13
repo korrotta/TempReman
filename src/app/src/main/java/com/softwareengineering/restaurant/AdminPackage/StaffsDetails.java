@@ -68,14 +68,12 @@ public class StaffsDetails extends AppCompatActivity {
             String phone = staffs.getPhone();
             String gender = staffs.getGender();
             String role = staffs.getRole();
-            String username = staffs.getUsername();
 
             binding.staffsDetailName.setText(name);
             binding.staffsDetailEmail.setText(email);
             binding.staffsDetailGender.setText(gender);
             binding.staffsDetailPhone.setText(phone);
             binding.staffsDetailRole.setText(role);
-            binding.staffsDetailUsername.setText(username);
         }
 
         // Handle Edit Existing Staff
