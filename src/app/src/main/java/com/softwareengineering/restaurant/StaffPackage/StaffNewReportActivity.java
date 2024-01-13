@@ -7,56 +7,34 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.softwareengineering.restaurant.AdminPackage.AddStaffsActivity;
-import com.softwareengineering.restaurant.AdminPackage.StaffsActivity;
-import com.softwareengineering.restaurant.ItemClasses.Reports;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.ReportsAdapter;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class StaffsReportsActivity extends AppCompatActivity {
-
+public class StaffNewReportActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private DrawerLayout drawerLayout;
+    private TextView topMenuName, title, sender, date, content;
     private ImageView topMenuImg;
-    private CircleImageView userAvatar;
-    private TextView topMenuName, userName;
+    private DrawerLayout drawerLayout;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
-    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    private ListView listView;
-    private LinearLayout addReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs_reports);
+        setContentView(R.layout.activity_staff_new_report);
 
         mAuth = FirebaseAuth.getInstance();
-        drawerLayout = findViewById(R.id.staffsDrawerLayout);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
         topMenuImg = findViewById(R.id.topMenuImg);
-        topMenuName = findViewById(R.id.topMenuName);
+        drawerLayout = findViewById(R.id.staffsDrawerLayout);
         customers = findViewById(R.id.staffsCustomersDrawer);
         menu = findViewById(R.id.staffsMenuDrawer);
         tables = findViewById(R.id.staffsTablesDrawer);
@@ -64,33 +42,10 @@ public class StaffsReportsActivity extends AppCompatActivity {
         payment = findViewById(R.id.staffsPaymentDrawer);
         account = findViewById(R.id.staffsAccountDrawer);
         logout = findViewById(R.id.staffsLogoutDrawer);
-        userAvatar = findViewById(R.id.staffsNavAvatar);
-        userName = findViewById(R.id.staffsNavName);
-        listView = findViewById(R.id.listView);
-        addReport = findViewById(R.id.reportAdd);
-
-
-        ArrayList<Reports> reportsList = new ArrayList<>();
-
-        reportsList.add(new Reports("Báo cáo 1", "Người gửi 1", "Nội dung 1", new Date(), false));
-        reportsList.add(new Reports("Báo cáo 2", "Người gửi 2", "Nội dung 2", new Date(), true));
-
-        ReportsAdapter adapter = new ReportsAdapter(StaffsReportsActivity.this, reportsList);
-        listView.setAdapter(adapter);
-
-        listView.setAdapter(adapter);
-
-        // Get currentUser
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
-        // Avatar Image
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
-
-        // Get user info from firestore
-        getUserInfoFirestore(currentUser.getUid());
-
-        setItemBackgroundColors(reports);
+        topMenuName = findViewById(R.id.topMenuName);
+        title = findViewById(R.id.title);
+        sender = findViewById(R.id.sender);
+        content = findViewById(R.id.content);
 
         topMenuImg.setImageResource(R.drawable.topmenu);
 
@@ -101,13 +56,13 @@ public class StaffsReportsActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText(R.string.reports);
+        topMenuName.setText("Write a report");
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(StaffsReportsActivity.this, StaffsMenuActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsMenuActivity.class);
             }
         });
 
@@ -115,7 +70,7 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(StaffsReportsActivity.this, StaffsCustomersActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsCustomersActivity.class);
             }
         });
 
@@ -123,7 +78,7 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(StaffsReportsActivity.this, StaffsTablesActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsTablesActivity.class);
             }
         });
 
@@ -139,7 +94,7 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(payment);
-                redirectActivity(StaffsReportsActivity.this, StaffsPaymentActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsPaymentActivity.class);
             }
         });
 
@@ -147,7 +102,7 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(StaffsReportsActivity.this, StaffsAccountActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsAccountActivity.class);
             }
         });
 
@@ -155,41 +110,9 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                redirectActivity(StaffsReportsActivity.this, LoginActivity.class);
+                redirectActivity(StaffNewReportActivity.this, LoginActivity.class);
             }
         });
-
-        addReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StaffsReportsActivity.this, StaffNewReportActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void getUserInfoFirestore(String uid) {
-        DocumentReference userRef = firestore.collection("users").document(uid);
-        userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Get user info
-                    String name;
-                    name = document.getString("name");
-
-                    // Set user info
-                    userName.setText(name);
-
-                } else {
-                    // User document not found
-                    Log.d("Auth Firestore Database", "No such document");
-                }
-            } else {
-                Log.d("Auth Firestore Database", "get failed with ", task.getException());
-            }
-        });
-
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
