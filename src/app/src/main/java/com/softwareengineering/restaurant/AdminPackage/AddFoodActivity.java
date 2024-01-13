@@ -198,6 +198,7 @@ public class AddFoodActivity extends AppCompatActivity {
                                     put("price", Long.valueOf(cost.getText().toString()));
                                     put("state", Boolean.TRUE);
                                     put("type", g1_typeChosen);
+                                    put("description", description.getText().toString());
                                 }});
                         finish();
                     }
