@@ -229,7 +229,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 

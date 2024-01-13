@@ -149,7 +149,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 

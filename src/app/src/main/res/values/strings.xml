@@ -107,4 +107,5 @@
     <string name="available">Available</string>
     <string name="booked">Booked</string>
     <string name="in_use">In use</string>
+    <string name="other">Other</string>
 </resources>

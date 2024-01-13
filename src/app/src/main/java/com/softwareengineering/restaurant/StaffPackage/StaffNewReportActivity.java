@@ -47,12 +47,12 @@ public class StaffNewReportActivity extends AppCompatActivity {
         sender = findViewById(R.id.sender);
         content = findViewById(R.id.content);
 
-        topMenuImg.setImageResource(R.drawable.topmenu);
+        topMenuImg.setImageResource(R.drawable.back);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDrawer(drawerLayout);
+                finish();
             }
         });
 

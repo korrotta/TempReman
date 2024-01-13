@@ -1,180 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:scrollbars="none"
-    android:layout_height="wrap_content" android:layout_marginEnd="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="10dp"
+    android:scrollbars="none">
 
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:layout_marginStart="5dp"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="130dp"
-            android:layout_marginStart="5dp"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:paddingTop="10dp"
-                android:layout_width="76dp"
-                android:layout_height="125dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical"
-                android:elevation="2dp"
-                android:background="@drawable/rounded_foodtypes">
-
-                <LinearLayout
-                    android:layout_width="wrap_content" android:layout_gravity="center"
-                    android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center"
-                    android:id = "@+id/saladFilter">
-                    <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/salad"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/salad"
-                    android:layout_gravity="center" />
-            </LinearLayout>
+            android:id="@+id/saladFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
 
             <LinearLayout
-                android:paddingTop="10dp"
-                android:layout_width="76dp"
-                android:layout_height="125dp"
-                android:orientation="vertical"
-                android:layout_marginEnd="10dp"
-                android:elevation="2dp"
-                android:background="@drawable/rounded_foodtypes">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="wrap_content" android:layout_gravity="center"
-                    android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center"
-                    android:id="@+id/drinkFilter">
-                    <ImageView
-
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/drink"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/drink" android:layout_gravity="center"/>
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/salad" />
             </LinearLayout>
 
-            <LinearLayout
-                android:paddingTop="10dp"
-                android:layout_width="76dp"
-                android:layout_height="125dp"
-                android:orientation="vertical"
-                android:layout_marginEnd="10dp"
-                android:elevation="2dp"
-                android:background="@drawable/rounded_foodtypes">
-
-                <LinearLayout
-                    android:layout_width="wrap_content" android:layout_gravity="center"
-                    android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center"
-                    android:id = "@+id/pizzaFilter">
-                    <ImageView
-
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/pizza"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/pizza" android:layout_gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:paddingTop="10dp"
-                android:layout_width="76dp"
-                android:layout_height="125dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="vertical"
-                android:elevation="2dp"
-                android:background="@drawable/rounded_foodtypes">
-
-                <LinearLayout
-                    android:layout_width="wrap_content" android:layout_gravity="center"
-                    android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center"
-                    android:id = "@+id/dessertFilter">
-
-                    <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/dessert" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/dessert" android:layout_gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:paddingTop="10dp"
-                android:layout_width="76dp"
-                android:layout_height="125dp"
-                android:orientation="vertical"
-                android:layout_marginEnd="10dp"
-                android:elevation="2dp"
-                android:background="@drawable/rounded_foodtypes">
-
-                <LinearLayout
-                    android:layout_width="wrap_content" android:layout_gravity="center"
-                    android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center"
-                    android:id = "@+id/pastaFilter">
-                    <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/pasta"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/pasta" android:layout_gravity="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:paddingTop="10dp"
-                android:layout_width="76dp"
-                android:layout_height="125dp"
-                android:orientation="vertical"
-                android:layout_marginEnd="10dp"
-                android:elevation="2dp"
-                android:background="@drawable/rounded_foodtypes">
-
-                <LinearLayout
-                    android:layout_width="wrap_content" android:layout_gravity="center"
-                    android:layout_height="wrap_content" android:background="@drawable/circle_background"
-                    android:gravity="center"
-                    android:id = "@+id/burgerFilter">
-                    <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/burgers"/>
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_medium"
-                    android:text="@string/burgers" android:layout_gravity="center"/>
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/salad" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/drinkFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
+
+                <ImageView
+
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/drink" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/drink" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pizzaFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
+
+                <ImageView
+
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/pizza" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/pizza" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dessertFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/dessert" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/dessert" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pastaFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/pasta" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/pasta" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/burgerFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/burgers" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/burgers" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/otherFilter"
+            android:layout_width="76dp"
+            android:layout_height="125dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_foodtypes"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/other" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="@string/other" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </HorizontalScrollView>

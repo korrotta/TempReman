@@ -151,7 +151,7 @@ public class StaffsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(staffs);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 

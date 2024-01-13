@@ -98,7 +98,7 @@ public class SalesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(sales);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 

@@ -3,6 +3,8 @@ package com.softwareengineering.restaurant.CustomerPackage;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +29,8 @@ import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -48,18 +52,13 @@ public class CustomersMenuActivity extends AppCompatActivity {
     private ImageView topMenuImg, userAvatar;
     private TextView topMenuName, userName;
     private RelativeLayout menu, tables, review, account, logout;
-    private GridLayout list_menu;
     private List<Food> foodList = new ArrayList<>();
     private FoodAdapter foodAdapter;
     private List<Food> foodListHolder = new ArrayList<>();
     private GridView gridView;
+    private FirebaseFirestore firestore;
 
-    private LinearLayout saladButton;
-    private LinearLayout pizzaButton;
-    private LinearLayout drinkButton;
-    private LinearLayout dessertButton;
-    private LinearLayout pastaButton;
-    private LinearLayout burgerButton;
+    private LinearLayout saladButton, pizzaButton, drinkButton, dessertButton, pastaButton, burgerButton, otherButton;
 
 
     @Override
@@ -68,6 +67,7 @@ public class CustomersMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customers_menu);
 
         mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
         drawerLayout = findViewById(R.id.customersDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
         topMenuName = findViewById(R.id.topMenuName);
@@ -87,8 +87,7 @@ public class CustomersMenuActivity extends AppCompatActivity {
         pizzaButton = findViewById(R.id.pizzaFilter);
         pastaButton = findViewById(R.id.pastaFilter);
         burgerButton = findViewById(R.id.burgerFilter);
-
-        //TODO: HANDLE ON CLICK OF ALL ABOVE LINEAR LAYOUT: SET BACKGROUND TO STRONGER COLOR OR SOMETHING TO EMPHASIS (?)
+        otherButton = findViewById(R.id.otherFilter);
 
         //always showing by foodListHolder
         foodAdapter = new FoodAdapter(this, foodList);
@@ -110,20 +109,8 @@ public class CustomersMenuActivity extends AppCompatActivity {
         });
 
 
-        //User data interface
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        String avatarPhotoUrl = String.valueOf(currentUser.getPhotoUrl());
-
-
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
-
-        if (currentUser.getDisplayName() != null) {
-            userName.setText(currentUser.getDisplayName());
-        }
-        else {
-            userName.setText(R.string.name);
-        }
+        // Initialize Current User
+        initCurrentUser();
 
         setItemBackgroundColors(menu);
 
@@ -137,7 +124,19 @@ public class CustomersMenuActivity extends AppCompatActivity {
         burgerButton.setOnClickListener(burgerClickEvent);
         pizzaButton.setOnClickListener(pizzaClickEvent);
         pastaButton.setOnClickListener(pastaClickEvent);
+        otherButton.setOnClickListener(otherClickEvent);
 
+    }
+
+    private void initCurrentUser() {
+        // Get currentUser
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        assert currentUser != null;
+        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
+        // Avatar Image
+        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        // Get user info from firestore
+        getUserInfoFirestore(currentUser.getUid());
     }
 
     private void menuBarItemClick() {
@@ -191,6 +190,30 @@ public class CustomersMenuActivity extends AppCompatActivity {
                 redirectActivity(CustomersMenuActivity.this, LoginActivity.class);
             }
         });
+    }
+
+    private void getUserInfoFirestore(String uid) {
+        DocumentReference userRef = firestore.collection("users").document(uid);
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Get user info
+                    String name;
+                    name = document.getString("name");
+
+                    // Set user info
+                    userName.setText(name);
+
+                } else {
+                    // User document not found
+                    Log.d("Auth Firestore Database", "No such document");
+                }
+            } else {
+                Log.d("Auth Firestore Database", "get failed with ", task.getException());
+            }
+        });
+
     }
 
     private void fetchFoodList() {
@@ -258,6 +281,7 @@ public class CustomersMenuActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             filterClickedShowing("Salad");
+            changeToggleColor(saladButton);
         }
     };
 
@@ -265,12 +289,15 @@ public class CustomersMenuActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             filterClickedShowing("Drink");
+            changeToggleColor(drinkButton);
         }
     };
+
     View.OnClickListener dessertClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             filterClickedShowing("Dessert");
+            changeToggleColor(dessertButton);
         }
     };
 
@@ -278,6 +305,7 @@ public class CustomersMenuActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             filterClickedShowing("Pasta");
+            changeToggleColor(pastaButton);
         }
     };
 
@@ -285,6 +313,7 @@ public class CustomersMenuActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             filterClickedShowing("Burger");
+            changeToggleColor(burgerButton);
         }
     };
 
@@ -292,8 +321,30 @@ public class CustomersMenuActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             filterClickedShowing("Pizza");
+            changeToggleColor(pizzaButton);
         }
     };
+
+    View.OnClickListener otherClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Other");
+            changeToggleColor(otherButton);
+        }
+    };
+
+    private void changeToggleColor(LinearLayout selectedFilter) {
+        int selectedColor = getResources().getColor(R.color.grey);
+        int deselectedColor = getResources().getColor(R.color.white);
+
+        saladButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == saladButton ? selectedColor : deselectedColor));
+        drinkButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == drinkButton ? selectedColor : deselectedColor));
+        pizzaButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == pizzaButton ? selectedColor : deselectedColor));
+        dessertButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == dessertButton ? selectedColor : deselectedColor));
+        pastaButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == pastaButton ? selectedColor : deselectedColor));
+        burgerButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == burgerButton ? selectedColor : deselectedColor));
+        otherButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == otherButton ? selectedColor : deselectedColor));
+    }
 
     private final String TAG = "UserChecker";
     //Filter handler:
