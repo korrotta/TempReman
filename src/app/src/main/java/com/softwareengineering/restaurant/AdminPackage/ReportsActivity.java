@@ -157,7 +157,7 @@ public class ReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 

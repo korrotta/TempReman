@@ -92,4 +92,20 @@
     <string name="description">Description</string>
     <string name="add_new_dish">Add New Dish</string>
     <string name="image">Image</string>
+    <string name="salad">Salad</string>
+    <string name="drink">Drink</string>
+    <string name="pizza">Pizza</string>
+    <string name="dessert">Dessert</string>
+    <string name="pasta">Pasta</string>
+    <string name="burgers">Burgers</string>
+    <string name="food_types">Food types</string>
+    <string name="sale">Sale</string>
+    <string name="bill">Bill</string>
+    <string name="staffs_toolbar">Staffs Toolbar</string>
+    <string name="freesprite_restaurant">FreeSprite Restaurant</string>
+    <string name="_1">1</string>
+    <string name="available">Available</string>
+    <string name="booked">Booked</string>
+    <string name="in_use">In use</string>
+    <string name="other">Other</string>
 </resources>

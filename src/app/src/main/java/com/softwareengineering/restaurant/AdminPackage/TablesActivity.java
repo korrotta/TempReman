@@ -51,7 +51,6 @@ import java.util.HashMap;
 
 public class TablesActivity extends AppCompatActivity {
 
-    final int MAX_TABLE = 18;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName;
@@ -230,7 +229,7 @@ public class TablesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 

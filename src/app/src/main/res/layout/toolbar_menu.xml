@@ -18,10 +18,10 @@
         android:id="@+id/topMenuName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
         android:layout_weight="1"
-        android:fontFamily="@font/quicksand"
-        android:text="Menu" android:layout_gravity="center"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="@string/menu"
+        android:layout_gravity="center"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="25sp"
@@ -35,10 +35,11 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_search_background"
         android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
+        android:inputType="text"
         android:paddingHorizontal="10dp"
         android:hint="Search menu"
-        android:drawableLeft="@drawable/search_icon"
+        android:fontFamily="@font/quicksand_medium"
+        android:drawableStart="@drawable/search_icon"
         android:drawablePadding="10dp" />
 
 

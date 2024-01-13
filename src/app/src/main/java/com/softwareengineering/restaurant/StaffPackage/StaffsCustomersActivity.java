@@ -1,5 +1,7 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -16,11 +18,19 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.ItemClasses.StaffCustomerItem;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
@@ -42,6 +52,9 @@ public class StaffsCustomersActivity extends AppCompatActivity {
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private ListView listView;
 
+    List<StaffCustomerItem> customerItems = new ArrayList<>();
+    StaffCustomersAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +75,8 @@ public class StaffsCustomersActivity extends AppCompatActivity {
         userName = findViewById(R.id.staffsNavName);
         listView = findViewById(R.id.staff_customersList);
 
-        // Dữ liệu mẫu cho ListView
-        List<StaffCustomerItem> customerItems = new ArrayList<>();
-        customerItems.add(new StaffCustomerItem(R.drawable.default_user, "Khách hàng 1"));
-        customerItems.add(new StaffCustomerItem(R.drawable.default_user, "Khách hàng 2"));
-        // Thêm thêm mục nếu cần...
-        StaffCustomersAdapter adapter = new StaffCustomersAdapter(this, R.layout.staff_list_item_customer, customerItems);
+        // Setup
+        adapter = new StaffCustomersAdapter(this, R.layout.staff_list_item_customer, customerItems);
         listView.setAdapter(adapter);
 
         // Get currentUser
@@ -75,15 +84,53 @@ public class StaffsCustomersActivity extends AppCompatActivity {
         assert currentUser != null;
         Uri avatarPhotoUrl = currentUser.getPhotoUrl();
         // Avatar Image
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into((ImageView) userAvatar);
 
         // Get user info from firestore
         getUserInfoFirestore(currentUser.getUid());
-
         setItemBackgroundColors(customers);
 
         topMenuImg.setImageResource(R.drawable.topmenu);
+        menuBarItemClick();
 
+
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("role", "customer")
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                                if (error != null) {
+                                    Log.e("Error_SCA", error.toString());
+                                    return;
+                                }
+                                if (value !=null && !value.isEmpty()){
+                                    fetchCustomerList();
+                                }
+                            }
+                        });
+    }
+
+    private void fetchCustomerList(){
+        customerItems.clear();
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("role", "customer").get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot doc: task.getResult()){
+                                StaffCustomerItem s = new StaffCustomerItem(
+                                        R.drawable.default_user,
+                                        doc.getString("name")
+                                        );
+                                customerItems.add(s);
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                        else Log.e("Error_SCA", task.getException().toString());
+                    }
+                });
+    }
+
+    private void menuBarItemClick() {
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,7 +195,6 @@ public class StaffsCustomersActivity extends AppCompatActivity {
                 redirectActivity(StaffsCustomersActivity.this, LoginActivity.class);
             }
         });
-
     }
 
     private void getUserInfoFirestore(String uid) {

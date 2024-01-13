@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -8,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +28,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.CustomerPackage.FoodAdapter;
@@ -56,13 +60,22 @@ public class StaffsMenuActivity extends AppCompatActivity {
     private List<Food> foodListHolder = new ArrayList<>();
     private GridView gridView;
 
-    private LinearLayout saladButton;
-    private LinearLayout pizzaButton;
-    private LinearLayout drinkButton;
-    private LinearLayout dessertButton;
-    private LinearLayout pastaButton;
-    private LinearLayout burgerButton;
+    private LinearLayout saladButton, pizzaButton, drinkButton, dessertButton, pastaButton, burgerButton, otherButton;
 
+    private TextView statusClick;
+
+    private FILTER_TYPE g1_filterType = FILTER_TYPE.FULL;
+
+    public enum FILTER_TYPE{
+        FULL,
+        SALAD,
+        PASTA,
+        PIZZA,
+        DESSERT,
+        DRINK,
+        BURGER,
+        OTHERS,
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,51 +96,53 @@ public class StaffsMenuActivity extends AppCompatActivity {
         userName = findViewById(R.id.staffsNavName);
         gridView = findViewById(R.id.list_menu);
 
-        //Filter button setup here:
+        // Filter button setup here:
         saladButton = findViewById(R.id.saladFilter);
         drinkButton = findViewById(R.id.drinkFilter);
         dessertButton = findViewById(R.id.dessertFilter);
         pizzaButton = findViewById(R.id.pizzaFilter);
         pastaButton = findViewById(R.id.pastaFilter);
         burgerButton = findViewById(R.id.burgerFilter);
+        otherButton = findViewById(R.id.otherFilter);
 
-        //TODO: HANDLE ON CLICK OF ALL ABOVE LINEAR LAYOUT: SET BACKGROUND TO STRONGER COLOR OR SOMETHING TO EMPHASIS (?)
+        statusClick = findViewById(R.id.status);
 
         //always showing by foodListHolder
         foodAdapter = new FoodAdapter(this, foodList);
         gridView.setAdapter(foodAdapter);
 
-        //Fetching data to foodList;
+        //Synchronize by event listener
+        realtimeUpdateMenu();
+        // Always showing by foodListHolder
+        foodAdapter = new FoodAdapter(this, foodList);
+        gridView.setAdapter(foodAdapter);
+
+        // Fetching data to foodList;
         fetchFoodList();
 
-        // Get currentUser
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
-        // Avatar Image
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        // Initialize Current User
+        initCurrentUser();
+        initToolBar();
+        initNavBar();
 
-        // Get user info from firestore
-        getUserInfoFirestore(currentUser.getUid());
+        //filter click
+        saladButton.setOnClickListener(saladClickEvent);
+        drinkButton.setOnClickListener(drinkClickEvent);
+        dessertButton.setOnClickListener(dessertClickEvent);
+        burgerButton.setOnClickListener(burgerClickEvent);
+        pizzaButton.setOnClickListener(pizzaClickEvent);
+        pastaButton.setOnClickListener(pastaClickEvent);
+        otherButton.setOnClickListener(otherClickEvent);
+    }
 
+    private void initNavBar() {
         setItemBackgroundColors(menu);
-
-        topMenuImg.setImageResource(R.drawable.topmenu);
-
-        topMenuImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDrawer(drawerLayout);
-            }
-        });
-
-        topMenuName.setText(R.string.menu);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                recreate();
+                closeDrawer(drawerLayout);
             }
         });
 
@@ -178,14 +193,30 @@ public class StaffsMenuActivity extends AppCompatActivity {
                 redirectActivity(StaffsMenuActivity.this, LoginActivity.class);
             }
         });
+    }
 
-        //filter click
-        saladButton.setOnClickListener(saladClickEvent);
-        drinkButton.setOnClickListener(drinkClickEvent);
-        dessertButton.setOnClickListener(dessertClickEvent);
-        burgerButton.setOnClickListener(burgerClickEvent);
-        pizzaButton.setOnClickListener(pizzaClickEvent);
-        pastaButton.setOnClickListener(pastaClickEvent);
+    private void initToolBar() {
+        topMenuImg.setImageResource(R.drawable.topmenu);
+
+        topMenuImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer(drawerLayout);
+            }
+        });
+
+        topMenuName.setText(R.string.menu);
+    }
+
+    private void initCurrentUser() {
+        // Get currentUser
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        assert currentUser != null;
+        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
+        // Avatar Image
+        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        // Get user info from firestore
+        getUserInfoFirestore(currentUser.getUid());
     }
 
     private void getUserInfoFirestore(String uid) {
@@ -277,41 +308,62 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener saladClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.SALAD;
             filterClickedShowing("Salad");
+            changeToggleColor(saladButton);
         }
     };
 
     View.OnClickListener drinkClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.DRINK;
             filterClickedShowing("Drink");
+            changeToggleColor(drinkButton);
         }
     };
+
     View.OnClickListener dessertClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.DESSERT;
             filterClickedShowing("Dessert");
+            changeToggleColor(dessertButton);
         }
     };
 
     View.OnClickListener pastaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.PASTA;
             filterClickedShowing("Pasta");
+            changeToggleColor(pastaButton);
         }
     };
 
     View.OnClickListener burgerClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.BURGER;
             filterClickedShowing("Burger");
+            changeToggleColor(burgerButton);
         }
     };
 
     View.OnClickListener pizzaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.PIZZA;
             filterClickedShowing("Pizza");
+            changeToggleColor(pizzaButton);
+        }
+    };
+
+    View.OnClickListener otherClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            filterClickedShowing("Other");
+            changeToggleColor(otherButton);
         }
     };
 
@@ -326,6 +378,63 @@ public class StaffsMenuActivity extends AppCompatActivity {
 
         foodAdapter.updateData(foodFilter);
         foodAdapter.notifyDataSetChanged();
+    }
+
+    private void realtimeUpdateMenu() {
+        firestore.collection("food").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value != null && !value.isEmpty()) {
+                    fetchFoodList();
+                    switch (g1_filterType) {
+                        case DRINK: {
+                            filterClickedShowing("Drink");
+                            break;
+                        }
+                        case PASTA: {
+                            filterClickedShowing("Pasta");
+                            break;
+                        }
+                        case SALAD: {
+                            filterClickedShowing("Salad");
+                            break;
+                        }
+                        case PIZZA: {
+                            filterClickedShowing("Pizza");
+                            break;
+                        }
+                        case DESSERT: {
+                            filterClickedShowing("Dessert");
+                            break;
+                        }
+                        case BURGER: {
+                            filterClickedShowing("Burger");
+                            break;
+                        }
+                        case OTHERS: {
+                            filterClickedShowing("Others");
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+
+                }
+            }
+        });
+    }
+
+    private void changeToggleColor(LinearLayout selectedFilter) {
+        int selectedColor = getResources().getColor(R.color.grey);
+        int deselectedColor = getResources().getColor(R.color.white);
+
+        saladButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == saladButton ? selectedColor : deselectedColor));
+        drinkButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == drinkButton ? selectedColor : deselectedColor));
+        pizzaButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == pizzaButton ? selectedColor : deselectedColor));
+        dessertButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == dessertButton ? selectedColor : deselectedColor));
+        pastaButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == pastaButton ? selectedColor : deselectedColor));
+        burgerButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == burgerButton ? selectedColor : deselectedColor));
+        otherButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == otherButton ? selectedColor : deselectedColor));
     }
 
     private void addToHolder(){

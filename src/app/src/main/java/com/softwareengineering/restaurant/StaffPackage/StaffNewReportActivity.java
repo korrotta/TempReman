@@ -7,49 +7,34 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-public class StaffsPaymentActivity extends AppCompatActivity {
-
+public class StaffNewReportActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private DrawerLayout drawerLayout;
+    private TextView topMenuName, title, sender, date, content;
     private ImageView topMenuImg;
-    private CircleImageView userAvatar;
-    private TextView topMenuName, userName;
+    private DrawerLayout drawerLayout;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
-    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs_payment);
+        setContentView(R.layout.activity_staff_new_report);
 
         mAuth = FirebaseAuth.getInstance();
-        drawerLayout = findViewById(R.id.staffsDrawerLayout);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
         topMenuImg = findViewById(R.id.topMenuImg);
-        topMenuName = findViewById(R.id.topMenuName);
+        drawerLayout = findViewById(R.id.staffsDrawerLayout);
         customers = findViewById(R.id.staffsCustomersDrawer);
         menu = findViewById(R.id.staffsMenuDrawer);
         tables = findViewById(R.id.staffsTablesDrawer);
@@ -57,64 +42,27 @@ public class StaffsPaymentActivity extends AppCompatActivity {
         payment = findViewById(R.id.staffsPaymentDrawer);
         account = findViewById(R.id.staffsAccountDrawer);
         logout = findViewById(R.id.staffsLogoutDrawer);
-        userAvatar = findViewById(R.id.staffsNavAvatar);
-        userName = findViewById(R.id.staffsNavName);
-        listView = findViewById(R.id.staff_customersTableList);
+        topMenuName = findViewById(R.id.topMenuName);
+        title = findViewById(R.id.title);
+        sender = findViewById(R.id.sender);
+        content = findViewById(R.id.content);
 
-        // Thay đổi ArrayList này thành danh sách khách hàng thực tế
-        ArrayList<String> customerNamesList = new ArrayList<>();
-        ArrayList<String> tableNumbersList = new ArrayList<>();
-
-        // Thêm dữ liệu mẫu
-        customerNamesList.add("Customer 1");
-        tableNumbersList.add("1");
-
-        CustomListAdapter adapter = new CustomListAdapter(this, customerNamesList, tableNumbersList);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCustomerName = customerNamesList.get(position);
-                String selectedTableNumber = tableNumbersList.get(position);
-
-                Intent intent = new Intent(StaffsPaymentActivity.this, CustomerPaymentActivity.class);
-
-                intent.putExtra("CUSTOMER_NAME", selectedCustomerName);
-                intent.putExtra("TABLE_NUMBER", selectedTableNumber);
-
-                startActivity(intent);
-            }
-        });
-
-        // Get currentUser
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
-        // Avatar Image
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
-
-        // Get user info from firestore
-        getUserInfoFirestore(currentUser.getUid());
-
-        setItemBackgroundColors(payment);
-
-        topMenuImg.setImageResource(R.drawable.topmenu);
+        topMenuImg.setImageResource(R.drawable.back);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDrawer(drawerLayout);
+                finish();
             }
         });
 
-        topMenuName.setText(R.string.customers);
+        topMenuName.setText("Write a report");
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(menu);
-                redirectActivity(StaffsPaymentActivity.this, StaffsMenuActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsMenuActivity.class);
             }
         });
 
@@ -122,7 +70,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(customers);
-                redirectActivity(StaffsPaymentActivity.this, StaffsCustomersActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsCustomersActivity.class);
             }
         });
 
@@ -130,7 +78,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(tables);
-                redirectActivity(StaffsPaymentActivity.this, StaffsTablesActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsTablesActivity.class);
             }
         });
 
@@ -138,7 +86,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(reports);
-                redirectActivity(StaffsPaymentActivity.this, StaffsReportsActivity.class);
+                recreate();
             }
         });
 
@@ -146,7 +94,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(payment);
-                recreate();
+                redirectActivity(StaffNewReportActivity.this, StaffsPaymentActivity.class);
             }
         });
 
@@ -154,7 +102,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setItemBackgroundColors(account);
-                redirectActivity(StaffsPaymentActivity.this, StaffsAccountActivity.class);
+                redirectActivity(StaffNewReportActivity.this, StaffsAccountActivity.class);
             }
         });
 
@@ -162,34 +110,9 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
-                redirectActivity(StaffsPaymentActivity.this, LoginActivity.class);
+                redirectActivity(StaffNewReportActivity.this, LoginActivity.class);
             }
         });
-
-    }
-
-    private void getUserInfoFirestore(String uid) {
-        DocumentReference userRef = firestore.collection("users").document(uid);
-        userRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Get user info
-                    String name;
-                    name = document.getString("name");
-
-                    // Set user info
-                    userName.setText(name);
-
-                } else {
-                    // User document not found
-                    Log.d("Auth Firestore Database", "No such document");
-                }
-            } else {
-                Log.d("Auth Firestore Database", "get failed with ", task.getException());
-            }
-        });
-
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {

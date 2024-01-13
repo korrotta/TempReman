@@ -16,11 +16,60 @@
 
         <include layout="@layout/toolbar_staff"></include>
 
-        <TextView
-            android:text="@string/reports"
-            android:layout_gravity="center"
+        <LinearLayout
+            android:id="@+id/reportAdd"
+            android:orientation="horizontal"
+            android:layout_gravity="end"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:src="@drawable/add"
+                android:scaleType="centerCrop"
+                android:layout_width="23dp"
+                android:layout_height="23dp"/>
+
+            <TextView
+                android:text="New report"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:textColor="@color/orange"
+                android:textSize="15sp"
+                android:layout_marginEnd="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Report list"
+                android:textStyle="bold"
+                android:fontFamily="@font/quicksand_bold"
+                android:layout_gravity="center"
+                android:textSize="22dp">
+            </TextView>
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+            </ListView>
+        </LinearLayout>
+
 
     </LinearLayout>
 

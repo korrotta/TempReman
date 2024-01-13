@@ -1,5 +1,7 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -11,23 +13,40 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
+import com.google.common.collect.Table;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.TablesAdapter;
+import com.softwareengineering.restaurant.TablesModel;
+import com.softwareengineering.restaurant.databinding.ActivityStaffsTablesBinding;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StaffsTablesActivity extends AppCompatActivity {
 
+    private ActivityStaffsTablesBinding binding;
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
@@ -35,11 +54,21 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private TextView topMenuName, userName;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private ArrayList<TablesModel> tablesModelArrayList;
+    private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
+    private ArrayList<String> tablesState;
+
+    //Item images
+    private final int idleTableImg = R.drawable.table_top_view;
+    private final int inuseTableImg = R.drawable.table_top_view_inuse;
+    private final int bookedTableImg = R.drawable.table_top_view_booked;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staffs_tables);
+        binding = ActivityStaffsTablesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.staffsDrawerLayout);
@@ -55,29 +84,83 @@ public class StaffsTablesActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
 
-        // Get currentUser
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        assert currentUser != null;
-        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
-        // Avatar Image
-        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        initCurrentUser();
+        initToolBar();
+        initNavBar();
 
-        // Get user info from firestore
-        getUserInfoFirestore(currentUser.getUid());
+        // Initialize Tables Layout
+        TablesModel tables = new TablesModel("1", R.drawable.table_top_view);
+        tablesModelArrayList = new ArrayList<>();
+        tablesModelArrayList.add(tables);
+        tablesModelArrayAdapter = new TablesAdapter(this, tablesModelArrayList);
+        tablesModelArrayAdapter.notifyDataSetChanged();
+        binding.staffsTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
+        // showTable Function with state
 
-        setItemBackgroundColors(tables);
-
-        topMenuImg.setImageResource(R.drawable.topmenu);
-
-        topMenuImg.setOnClickListener(new View.OnClickListener() {
+        // Set Click Listener For Table Layout
+        binding.staffsTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                openDrawer(drawerLayout);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(StaffsTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(StaffsTablesActivity.this, TablesDetails.class);
             }
         });
 
-        topMenuName.setText(R.string.tables);
+        realtimeUpdateTableList();
 
+    }
+    private void realtimeUpdateTableList(){
+
+        firestore.collection("table").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error!= null){
+                    Log.e("Staff table event", "onEvent: " + error.toString());
+                    return;
+                }
+                if (value!=null && !value.isEmpty()){
+                    fetchTableList();
+                }
+            }
+        });
+    }
+
+    private void fetchTableList(){
+        firestore.collection("table").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    tablesModelArrayList.clear();
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        String state = doc.getString("state");
+                        int tableImg = declareTableImage(state);
+
+                        if (tableImg == -1) continue; //not showing deleted table
+
+                        tablesModelArrayList.add(new TablesModel(
+                                doc.getId(),
+                                tableImg
+                        ));
+                    }
+                    tablesModelArrayAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private int declareTableImage(String state){
+        switch (state){
+            case "idle": return idleTableImg;
+            case "booked": return bookedTableImg;
+            case "inuse": return inuseTableImg;
+            case "deleted": return -1;
+            default: return -1; //as deleted
+        }
+    }
+
+
+    private void initNavBar() {
+        setItemBackgroundColors(tables);
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +216,31 @@ public class StaffsTablesActivity extends AppCompatActivity {
                 redirectActivity(StaffsTablesActivity.this, LoginActivity.class);
             }
         });
+    }
 
+    private void initToolBar() {
+        topMenuImg.setImageResource(R.drawable.topmenu);
+
+        topMenuImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer(drawerLayout);
+            }
+        });
+
+        topMenuName.setText(R.string.tables);
+    }
+
+    private void initCurrentUser() {
+        // Get currentUser
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        assert currentUser != null;
+        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
+        // Avatar Image
+        Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+
+        // Get user info from firestore
+        getUserInfoFirestore(currentUser.getUid());
     }
 
     private void getUserInfoFirestore(String uid) {
