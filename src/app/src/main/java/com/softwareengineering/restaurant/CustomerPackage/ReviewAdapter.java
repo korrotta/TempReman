@@ -31,14 +31,40 @@ public class ReviewAdapter extends ArrayAdapter<Review> {
         TextView cusName = convertView.findViewById(R.id.cusName);
         TextView date = convertView.findViewById(R.id.date);
         TextView reviewText = convertView.findViewById(R.id.review);
-        TextView rate = convertView.findViewById(R.id.rate);
+        ImageView starImage = convertView.findViewById(R.id.starImageView);
 
         userAvatar.setImageResource(review.getUserAvatar());
         cusName.setText(review.getCusName());
         date.setText(review.getDate());
         reviewText.setText(review.getReviewText());
-        rate.setText(review.getRate());
+
+        // Gọi phương thức updateStarImage để cập nhật hình ngôi sao
+        updateStarImage(starImage, Integer.parseInt(review.getRate()));
 
         return convertView;
+    }
+
+    // Phương thức để cập nhật hình ngôi sao dựa trên giá trị rate
+    private void updateStarImage(ImageView starImage, int rate) {
+        switch (rate) {
+            case 1:
+                starImage.setImageResource(R.drawable.rating_one);
+                break;
+            case 2:
+                starImage.setImageResource(R.drawable.rating_two);
+                break;
+            case 3:
+                starImage.setImageResource(R.drawable.rating_three);
+                break;
+            case 4:
+                starImage.setImageResource(R.drawable.rating_four);
+                break;
+            case 5:
+                starImage.setImageResource(R.drawable.rating_five);
+                break;
+            default:
+                starImage.setImageResource(R.drawable.rating);
+                break;
+        }
     }
 }

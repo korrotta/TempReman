@@ -62,6 +62,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
 
         // Thiết lập adapter cho ListView
         list_review.setAdapter(reviewAdapter);
+        reviewAdapter.notifyDataSetChanged();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
