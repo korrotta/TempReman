@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -10,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -20,10 +22,12 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.softwareengineering.restaurant.AddFoodActivity;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
@@ -63,9 +67,8 @@ public class MenuActivity extends AppCompatActivity {
         menuGridView = findViewById(R.id.admin_MenuGridView);
         setItemBackgroundColors(menu);
         menuAdapter = new Grid_MenuAdapter(this, new ArrayList<String>(), new ArrayList<String>());
-        setDataForAdapter(menuAdapter);
         menuGridView.setAdapter(menuAdapter);
-
+        setDataForAdapter(menuAdapter);
 
         menuBarItemClickHandler(); //Only one handler for all click-event
         addFoodToMenu(); // Handle adding food to menu
@@ -77,6 +80,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, AddFoodActivity.class);
                 startActivity(intent);
+                setDataForAdapter(menuAdapter);
             }
         });
     }
@@ -184,6 +188,31 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void setDataForAdapter(Grid_MenuAdapter a) {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("food").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error!=null){
+                    Log.e("Error", "onEvent: " + error.toString());
+                    return;
+                }
+                for (DocumentChange documentChange: value.getDocumentChanges()){
+                    switch (documentChange.getType()){
+                        case ADDED:
+                        case REMOVED: {
+                            fetchMenuAdapterData(a);
+                            break;
+                        }
+                        case MODIFIED:
+                        default:break;
+                    }
+                }
+            }
+        });
+
+    }
+
+    private void fetchMenuAdapterData(Grid_MenuAdapter a){
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.collection("food").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
