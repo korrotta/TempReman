@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.softwareengineering.restaurant.ItemClasses.PaymentFood;
 import com.softwareengineering.restaurant.R;
@@ -17,21 +18,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerPaymentActivity extends AppCompatActivity {
-    ListView listView;
-    ImageView btn_back;
 
-    Button btn_payment;
+    private TextView topMenuName;
+    private ListView listView;
+    private ImageView btn_back, topMenuImg;
+
+    private Button btn_payment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_payment);
 
+        topMenuImg = findViewById(R.id.topMenuImg);
+        topMenuName = findViewById(R.id.topMenuName);
         listView = findViewById(R.id.listView);
-        btn_back = findViewById(R.id.btn_back);
         btn_payment = findViewById(R.id.btn_payment);
 
-        btn_back.setOnClickListener(view -> onBackPressed());
+        topMenuImg.setImageResource(R.drawable.back);
+
+        topMenuImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        topMenuName.setText(R.string.payment);
 
         List<PaymentFood> data = new ArrayList<>();
         // Thêm dữ liệu vào danh sách
@@ -45,10 +58,11 @@ public class CustomerPaymentActivity extends AppCompatActivity {
         btn_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CustomerPaymentActivity.this, StaffBillActivity.class);
-
-                // intent.putExtra("key", value);
-                startActivity(intent);
+                // Bill Details
+//                Intent intent = new Intent(CustomerPaymentActivity.this, StaffBillActivity.class);
+//
+//                // intent.putExtra("key", value);
+//                startActivity(intent);
             }
         });
     }

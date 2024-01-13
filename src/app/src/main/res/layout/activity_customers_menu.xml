@@ -19,16 +19,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Food types" android:textStyle="bold"
-            android:textSize="18sp" android:fontFamily="@font/quicksand"
-            android:paddingLeft="30dp" android:paddingTop="15dp"
-            android:layout_marginBottom="10dp">
-        </TextView>
+            android:text="@string/food_types"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:fontFamily="@font/quicksand_medium"
+            android:paddingStart="30dp"
+            android:paddingTop="15dp"
+            android:layout_marginBottom="10dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <include layout="@layout/bar_food"></include>
+
+            <include layout="@layout/bar_food" />
         </LinearLayout>
 
         <TextView

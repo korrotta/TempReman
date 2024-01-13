@@ -108,7 +108,7 @@ public class StaffsPaymentActivity extends AppCompatActivity {
             }
         });
 
-        topMenuName.setText("Customers");
+        topMenuName.setText(R.string.customers);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,284 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StaffPackage.CustomerPaymentActivity"
-    android:orientation="vertical">
+    android:fillViewport="true"
+    tools:context=".StaffPackage.CustomerPaymentActivity">
 
     <LinearLayout
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/orange"
-        android:gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="20dp">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            android:id="@+id/topMenuName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/quicksand"
-            android:text="payment"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"/>
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/quicksand_bold"
-            android:textStyle="bold" android:text="Customer name: "
-            android:textSize="22sp">
-        </TextView>
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/customerName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/quicksand"
-            android:text="Tống Gia Khánh"
-            android:textSize="22sp">
-        </TextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="65dp">
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:background="@drawable/round_table"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp">
-            </ImageView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand"
-                android:text="TABLE: "
-                android:textSize="20sp">>
-            </TextView>
-
-            <TextView
-                android:id="@+id/numberTable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand"
-                android:text="1"
-                android:textSize="22dp" android:textStyle="bold"
-                android:textColor="@color/orange">
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:background="@drawable/customer"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp">
-            </ImageView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand"
-                android:text="GUESS: "
-                android:textSize="20sp">>
-            </TextView>
-
-            <TextView
-                android:id="@+id/numberGuess"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand"
-                android:text="2"
-                android:textSize="22dp" android:textStyle="bold"
-                android:textColor="@color/orange">
-            </TextView>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="65dp">
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:background="@drawable/date"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp">
-            </ImageView>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand"
-                android:text="DATE: "
-                android:textSize="20sp">>
-            </TextView>
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/quicksand"
-                android:text="25/12/2023"
-                android:textSize="22dp" android:textStyle="bold"
-                android:textColor="@color/orange">
-            </TextView>
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:background="@drawable/dashed_line"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_payment"
-        android:orientation="vertical"
-        android:layout_marginRight="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
+        <include layout="@layout/toolbar_staff" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_price"
-            android:padding="20dp">
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_bold"
+                android:textStyle="bold"
+                android:text="Customer name: "
+                android:textSize="22sp"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/customerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal">
+                android:fontFamily="@font/quicksand"
+                android:text="Tống Gia Khánh"
+                android:textSize="22sp">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="65dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/round_table"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"/>
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="ITEM"
-                    android:textSize="20sp" android:fontFamily="@font/quicksand"
-                    android:gravity="start"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="PRICE"
-                    android:textSize="20sp"
                     android:fontFamily="@font/quicksand"
-                    android:gravity="end"/>
+                    android:text="TABLE: "
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/numberTable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand"
+                    android:text="@string/_1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/orange" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/customer"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand"
+                    android:text="GUESS: "
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/numberGuess"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand"
+                    android:text="2"
+                    android:textSize="22dp" android:textStyle="bold"
+                    android:textColor="@color/orange"/>
             </LinearLayout>
 
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="65dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/date"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand"
+                    android:text="DATE: "
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand"
+                    android:text="25/12/2023"
+                    android:textSize="22dp" android:textStyle="bold"
+                    android:textColor="@color/orange">
+                </TextView>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1.5dp"
             android:background="@drawable/dashed_line"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal">
+            android:background="@drawable/rounded_payment"
+            android:orientation="vertical"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TOTAL"
-                android:textSize="24sp" android:fontFamily="@font/quicksand"
-                android:textStyle="bold"
-                android:gravity="start"/>
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_price"
+                android:padding="20dp">
 
-            <TextView
-                android:id="@+id/total"
-                android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ITEM"
+                        android:textSize="20sp" android:fontFamily="@font/quicksand"
+                        android:gravity="start"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="PRICE"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/quicksand"
+                        android:gravity="end"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@drawable/dashed_line"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="35.000" android:fontFamily="@font/quicksand"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:gravity="end"/>
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TOTAL"
+                    android:textSize="24sp" android:fontFamily="@font/quicksand"
+                    android:textStyle="bold"
+                    android:gravity="start"/>
+
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="35.000" android:fontFamily="@font/quicksand"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="end"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_payment"
+            android:layout_width="250dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/orange"
+            android:fontFamily="@font/roboto"
+            android:layout_gravity="center"
+            android:text="PAY NOW"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_payment"
-        android:layout_width="250dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/orange"
-        android:fontFamily="@font/roboto"
-        android:layout_gravity="center"
-        android:text="PAY NOW"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
-
-</LinearLayout>
+</ScrollView>
