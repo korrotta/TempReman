@@ -34,6 +34,8 @@ import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -126,8 +128,8 @@ public class CustomersReviewActivity extends AppCompatActivity {
                 fetchReviewList();
             }
         });
-
     }
+
 
     private void fetchReviewList(){
         firestore.collection("reviews").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -145,6 +147,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
                         Log.d(TAG, "onComplete: "+ r.getDate());
                         reviewList.add(r);
                     }
+                    Collections.sort(reviewList, Comparator.comparing(Review::getDate));
                     reviewAdapter.notifyDataSetChanged();
                 }
             }

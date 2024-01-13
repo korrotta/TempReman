@@ -1,5 +1,7 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -18,11 +20,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
+import com.google.common.collect.Table;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.TablesAdapter;
@@ -46,6 +56,13 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private ArrayList<TablesModel> tablesModelArrayList;
     private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
+    private ArrayList<String> tablesState;
+
+    //Item images
+    private final int idleTableImg = R.drawable.table_top_view;
+    private final int inuseTableImg = R.drawable.table_top_view_inuse;
+    private final int bookedTableImg = R.drawable.table_top_view_booked;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +106,61 @@ public class StaffsTablesActivity extends AppCompatActivity {
             }
         });
 
+        realtimeUpdateTableList();
+
     }
+    private void realtimeUpdateTableList(){
+
+        firestore.collection("table").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error!= null){
+                    Log.e("Staff table event", "onEvent: " + error.toString());
+                    return;
+                }
+                if (value!=null && !value.isEmpty()){
+                    fetchTableList();
+                }
+            }
+        });
+    }
+
+    private void fetchTableList(){
+        firestore.collection("table").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    tablesModelArrayList.clear();
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        String state = doc.getString("state");
+                        int tableImg = declareTableImage(state);
+
+                        if (tableImg == -1) continue; //not showing deleted table
+
+                        tablesModelArrayList.add(new TablesModel(
+                                doc.getId(),
+                                tableImg
+                        ));
+                    }
+                    tablesModelArrayAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private int declareTableImage(String state){
+        switch (state){
+            case "idle": return idleTableImg;
+            case "booked": return bookedTableImg;
+            case "inuse": return inuseTableImg;
+            case "deleted": return -1;
+            default: return -1; //as deleted
+        }
+    }
+
 
     private void initNavBar() {
         setItemBackgroundColors(tables);
-
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

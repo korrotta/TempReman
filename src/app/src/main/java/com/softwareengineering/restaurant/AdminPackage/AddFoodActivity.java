@@ -79,8 +79,13 @@ public class AddFoodActivity extends AppCompatActivity {
 
         // Initialize types of food (Dish or Combo)
         foodType = new ArrayList<>();
-        foodType.add("Dish");
-        foodType.add("Combo");
+        foodType.add("Burger");
+        foodType.add("Salad");
+        foodType.add("Pasta");
+        foodType.add("Drink");
+        foodType.add("Pizza");
+        foodType.add("Dessert");
+        foodType.add("Others");
 
         ArrayAdapter<String> foodTypesAdapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, foodType);
         foodTypesAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);

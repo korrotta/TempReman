@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.softwareengineering.restaurant.ItemClasses.Review;
 import com.softwareengineering.restaurant.R;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ReviewAdapter extends ArrayAdapter<Review> {
 
@@ -37,7 +39,9 @@ public class ReviewAdapter extends ArrayAdapter<Review> {
         userAvatar.setImageResource(review.getUserAvatar());
         cusName.setText(review.getCusName());
         Log.d("date", review.getDate().toString());
-        date.setText(review.getDate().toString());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        date.setText( dateFormat.format(review.getDate()));
         reviewText.setText(review.getReviewText());
 
         // Gọi phương thức updateStarImage để cập nhật hình ngôi sao

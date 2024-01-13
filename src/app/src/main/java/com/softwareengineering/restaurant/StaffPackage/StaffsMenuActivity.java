@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -26,7 +27,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.CustomerPackage.FoodAdapter;
@@ -63,6 +66,20 @@ public class StaffsMenuActivity extends AppCompatActivity {
     private LinearLayout pastaButton;
     private LinearLayout burgerButton;
 
+    private TextView statusClick;
+
+    private FILTER_TYPE g1_filterType = FILTER_TYPE.FULL;
+
+    public enum FILTER_TYPE{
+        FULL,
+        SALAD,
+        PASTA,
+        PIZZA,
+        DESSERT,
+        DRINK,
+        BURGER,
+        OTHERS,
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,14 +108,16 @@ public class StaffsMenuActivity extends AppCompatActivity {
         pastaButton = findViewById(R.id.pastaFilter);
         burgerButton = findViewById(R.id.burgerFilter);
 
+        statusClick = findViewById(R.id.status);
+
         //TODO: HANDLE ON CLICK OF ALL ABOVE LINEAR LAYOUT: SET BACKGROUND TO STRONGER COLOR OR SOMETHING TO EMPHASIS (?)
 
         //always showing by foodListHolder
         foodAdapter = new FoodAdapter(this, foodList);
         gridView.setAdapter(foodAdapter);
 
-        //Fetching data to foodList;
-        fetchFoodList();
+        //Synchronize by event listener
+        realtimeUpdateMenu();
 
         // Get currentUser
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -277,6 +296,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener saladClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.SALAD;
             filterClickedShowing("Salad");
         }
     };
@@ -284,12 +304,14 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener drinkClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.DRINK;
             filterClickedShowing("Drink");
         }
     };
     View.OnClickListener dessertClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.DESSERT;
             filterClickedShowing("Dessert");
         }
     };
@@ -297,6 +319,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener pastaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.PASTA;
             filterClickedShowing("Pasta");
         }
     };
@@ -304,6 +327,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener burgerClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.BURGER;
             filterClickedShowing("Burger");
         }
     };
@@ -311,6 +335,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener pizzaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            g1_filterType = FILTER_TYPE.PIZZA;
             filterClickedShowing("Pizza");
         }
     };
@@ -328,9 +353,46 @@ public class StaffsMenuActivity extends AppCompatActivity {
         foodAdapter.notifyDataSetChanged();
     }
 
-    private void addToHolder(){
-        for (int i = 0; i < foodAdapter.getCount(); i++){
-            foodListHolder.add((Food) foodAdapter.getItem(i));
-        }
+    private void realtimeUpdateMenu(){
+        firestore.collection("food").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value != null && !value.isEmpty()){
+                    fetchFoodList();
+                    switch (g1_filterType){
+                        case DRINK: {
+                            filterClickedShowing("Drink");
+                            break;
+                        }
+                        case PASTA: {
+                            filterClickedShowing("Pasta");
+                            break;
+                        }
+                        case SALAD: {
+                            filterClickedShowing("Salad");
+                            break;
+                        }
+                        case PIZZA: {
+                            filterClickedShowing("Pizza");
+                            break;
+                        }
+                        case DESSERT: {
+                            filterClickedShowing("Dessert");
+                            break;
+                        }
+                        case BURGER: {
+                            filterClickedShowing("Burger");
+                            break;
+                        }
+                        case OTHERS: {
+                            filterClickedShowing("Others");
+                            break;
+                        }
+                        default: break;
+                    }
+
+                }
+            }
+        });
     }
 }
