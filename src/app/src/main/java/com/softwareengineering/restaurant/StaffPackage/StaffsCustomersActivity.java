@@ -39,7 +39,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-//import de.hdodenhof.circleimageview.CircleImageView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StaffsCustomersActivity extends AppCompatActivity {
 
@@ -47,7 +47,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
     private TextView topMenuName, userName;
-    private View userAvatar;
+    private CircleImageView userAvatar;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private ListView listView;
@@ -75,10 +75,7 @@ public class StaffsCustomersActivity extends AppCompatActivity {
         userName = findViewById(R.id.staffsNavName);
         listView = findViewById(R.id.staff_customersList);
 
-        // Dữ liệu mẫu cho ListView
-        customerItems.add(new StaffCustomerItem(R.drawable.default_user, "Khách hàng 1"));
-        customerItems.add(new StaffCustomerItem(R.drawable.default_user, "Khách hàng 2"));
-        // Thêm thêm mục nếu cần...
+        // Setup
         adapter = new StaffCustomersAdapter(this, R.layout.staff_list_item_customer, customerItems);
         listView.setAdapter(adapter);
 
