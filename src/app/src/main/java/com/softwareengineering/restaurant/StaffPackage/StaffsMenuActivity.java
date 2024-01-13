@@ -22,7 +22,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,6 +39,7 @@ import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,20 +105,14 @@ public class StaffsMenuActivity extends AppCompatActivity {
         burgerButton = findViewById(R.id.burgerFilter);
         otherButton = findViewById(R.id.otherFilter);
 
-        statusClick = findViewById(R.id.status);
 
         //always showing by foodListHolder
         foodAdapter = new FoodAdapter(this, foodList);
         gridView.setAdapter(foodAdapter);
 
+
         //Synchronize by event listener
         realtimeUpdateMenu();
-        // Always showing by foodListHolder
-        foodAdapter = new FoodAdapter(this, foodList);
-        gridView.setAdapter(foodAdapter);
-
-        // Fetching data to foodList;
-        fetchFoodList();
 
         // Initialize Current User
         initCurrentUser();
@@ -133,6 +127,8 @@ public class StaffsMenuActivity extends AppCompatActivity {
         pizzaButton.setOnClickListener(pizzaClickEvent);
         pastaButton.setOnClickListener(pastaClickEvent);
         otherButton.setOnClickListener(otherClickEvent);
+
+        //statusClick.setOnClickListener(statusChangeEvent);
     }
 
     private void initNavBar() {
@@ -246,6 +242,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     private void fetchFoodList() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference foodCollection = db.collection("food");
+        foodList.clear();
 
         foodCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -263,6 +260,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
                         );
                         foodList.add(food);
                     }
+                    foodListHolder.clear();
                     //changed UI
                     foodAdapter.notifyDataSetChanged();
                     foodListHolder.addAll(foodList);
@@ -308,6 +306,12 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener saladClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.SALAD){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(saladButton);
+                return;
+            }
             g1_filterType = FILTER_TYPE.SALAD;
             filterClickedShowing("Salad");
             changeToggleColor(saladButton);
@@ -317,6 +321,12 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener drinkClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.DRINK){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(drinkButton);
+                return;
+            }
             g1_filterType = FILTER_TYPE.DRINK;
             filterClickedShowing("Drink");
             changeToggleColor(drinkButton);
@@ -326,6 +336,12 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener dessertClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.DESSERT){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(dessertButton);
+                return;
+            }
             g1_filterType = FILTER_TYPE.DESSERT;
             filterClickedShowing("Dessert");
             changeToggleColor(dessertButton);
@@ -335,6 +351,12 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener pastaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.PASTA){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(pastaButton);
+                return;
+            }
             g1_filterType = FILTER_TYPE.PASTA;
             filterClickedShowing("Pasta");
             changeToggleColor(pastaButton);
@@ -344,6 +366,12 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener burgerClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.BURGER){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(burgerButton);
+                return;
+            }
             g1_filterType = FILTER_TYPE.BURGER;
             filterClickedShowing("Burger");
             changeToggleColor(burgerButton);
@@ -353,6 +381,12 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener pizzaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.PIZZA){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(pizzaButton);
+                return;
+            }
             g1_filterType = FILTER_TYPE.PIZZA;
             filterClickedShowing("Pizza");
             changeToggleColor(pizzaButton);
@@ -362,6 +396,13 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener otherClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (g1_filterType == FILTER_TYPE.OTHERS){
+                g1_filterType = FILTER_TYPE.FULL;
+                fetchFoodList();
+                deselectFilter(otherButton);
+                return;
+            }
+            g1_filterType = FILTER_TYPE.OTHERS;
             filterClickedShowing("Other");
             changeToggleColor(otherButton);
         }
@@ -370,14 +411,25 @@ public class StaffsMenuActivity extends AppCompatActivity {
     private final String TAG = "UserChecker";
     //Filter handler:
     private void filterClickedShowing(String filterValue){
+        if (filterValue != "Other") {
+            //Known that foodList is fetched successfully
+            ArrayList<Food> foodFilter = foodListHolder.stream()
+                    .filter(x -> x.getType().equals(filterValue))
+                    .collect(Collectors.toCollection(ArrayList::new));
 
-        //Known that foodList is fetched successfully
-        ArrayList<Food> foodFilter = foodListHolder.stream()
-                .filter(x -> x.getType().equals(filterValue))
-                .collect(Collectors.toCollection(ArrayList::new));
+            foodAdapter.updateData(foodFilter);
+            foodAdapter.notifyDataSetChanged();
+        }
+        else {
+            String[] basicType = {"Salad", "Pasta", "Drink", "Dessert", "Pizza", "Burger"};
 
-        foodAdapter.updateData(foodFilter);
-        foodAdapter.notifyDataSetChanged();
+            ArrayList<Food> foodFilter = foodListHolder.stream()
+                    .filter(x-> !Arrays.asList(basicType).contains(x.getType()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            foodAdapter.updateData(foodFilter);
+            foodAdapter.notifyDataSetChanged();
+        }
     }
 
     private void realtimeUpdateMenu() {
@@ -385,47 +437,55 @@ public class StaffsMenuActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (value != null && !value.isEmpty()) {
-                    fetchFoodList();
+                    foodListHolder.clear();
+                    fetchFoodList(); //FIXME: i can't fking find out where's foodListHolder value after calling the second level callback
+                    Log.d("Drink_reach", String.valueOf(foodList.size()));
                     switch (g1_filterType) {
                         case DRINK: {
-                            filterClickedShowing("Drink");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(drinkButton);
                             break;
                         }
                         case PASTA: {
-                            filterClickedShowing("Pasta");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(pastaButton);
                             break;
                         }
                         case SALAD: {
-                            filterClickedShowing("Salad");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(saladButton);
                             break;
                         }
                         case PIZZA: {
-                            filterClickedShowing("Pizza");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(pizzaButton);
                             break;
                         }
                         case DESSERT: {
-                            filterClickedShowing("Dessert");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(dessertButton);
                             break;
                         }
                         case BURGER: {
-                            filterClickedShowing("Burger");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(burgerButton);
                             break;
                         }
                         case OTHERS: {
-                            filterClickedShowing("Others");
+                            g1_filterType = FILTER_TYPE.FULL;
+                            deselectFilter(otherButton);
                             break;
                         }
                         default:
                             break;
                     }
-
                 }
             }
         });
     }
 
     private void changeToggleColor(LinearLayout selectedFilter) {
-        int selectedColor = getResources().getColor(R.color.grey);
+        int selectedColor = getResources().getColor(R.color.orange);
         int deselectedColor = getResources().getColor(R.color.white);
 
         saladButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == saladButton ? selectedColor : deselectedColor));
@@ -437,9 +497,10 @@ public class StaffsMenuActivity extends AppCompatActivity {
         otherButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == otherButton ? selectedColor : deselectedColor));
     }
 
-    private void addToHolder(){
-        for (int i = 0; i < foodAdapter.getCount(); i++){
-            foodListHolder.add((Food) foodAdapter.getItem(i));
-        }
+    private void deselectFilter(LinearLayout selectedFilter){
+        int deselectedColor = getResources().getColor(R.color.white);
+        selectedFilter.setBackgroundTintList(ColorStateList.valueOf(deselectedColor));
     }
+
+
 }
