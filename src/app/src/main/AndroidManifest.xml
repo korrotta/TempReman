@@ -22,7 +22,7 @@
             android:name=".StaffPackage.CustomerPaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".AddFoodActivity"
+            android:name=".AdminPackage.AddFoodActivity"
             android:exported="false" />
         <activity
             android:name=".CustomerPackage.CustomersAccountEditActivity"

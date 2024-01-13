@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -22,10 +23,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.ItemClasses.Food;
@@ -90,8 +94,20 @@ public class CustomersMenuActivity extends AppCompatActivity {
         foodAdapter = new FoodAdapter(this, foodList);
         gridView.setAdapter(foodAdapter);
 
-        //Fetching data to foodList;
-        fetchFoodList();
+        //Synchronize data fetching:
+        FirebaseFirestore.getInstance().collection("food").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error!=null) {
+                    Log.e("ErrorCMA", error.toString());
+                    return;
+                }
+                if (value!=null && !value.isEmpty()){
+                    foodList.clear();
+                    fetchFoodList();
+                }
+            }
+        });
 
 
         //User data interface
@@ -290,11 +306,5 @@ public class CustomersMenuActivity extends AppCompatActivity {
 
         foodAdapter.updateData(foodFilter);
         foodAdapter.notifyDataSetChanged();
-    }
-
-    private void addToHolder(){
-        for (int i = 0; i < foodAdapter.getCount(); i++){
-            foodListHolder.add((Food) foodAdapter.getItem(i));
-        }
     }
 }
