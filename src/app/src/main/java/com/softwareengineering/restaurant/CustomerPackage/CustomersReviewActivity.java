@@ -147,7 +147,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
                         Log.d(TAG, "onComplete: "+ r.getDate());
                         reviewList.add(r);
                     }
-                    Collections.sort(reviewList, Comparator.comparing(Review::getDate));
+                    Collections.sort(reviewList, Comparator.comparing(Review::getDate).reversed());
                     reviewAdapter.notifyDataSetChanged();
                 }
             }

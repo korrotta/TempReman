@@ -1,5 +1,7 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -17,11 +19,17 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.AdminPackage.AddStaffsActivity;
 import com.softwareengineering.restaurant.AdminPackage.StaffsActivity;
 import com.softwareengineering.restaurant.ItemClasses.Reports;
@@ -48,6 +56,10 @@ public class StaffsReportsActivity extends AppCompatActivity {
     private ListView listView;
     private LinearLayout addReport;
 
+
+    private ArrayList<Reports> g1_reportList;
+    private ReportsAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,14 +82,8 @@ public class StaffsReportsActivity extends AppCompatActivity {
         addReport = findViewById(R.id.reportAdd);
 
 
-        ArrayList<Reports> reportsList = new ArrayList<>();
-
-        reportsList.add(new Reports("Báo cáo 1", "Người gửi 1", "Nội dung 1", new Date(), false));
-        reportsList.add(new Reports("Báo cáo 2", "Người gửi 2", "Nội dung 2", new Date(), true));
-
-        ReportsAdapter adapter = new ReportsAdapter(StaffsReportsActivity.this, reportsList);
-        listView.setAdapter(adapter);
-
+        g1_reportList = new ArrayList<Reports>();
+        adapter = new ReportsAdapter(StaffsReportsActivity.this, g1_reportList);
         listView.setAdapter(adapter);
 
         // Get currentUser
@@ -92,6 +98,56 @@ public class StaffsReportsActivity extends AppCompatActivity {
 
         setItemBackgroundColors(reports);
 
+        menuBarItemClick();
+
+        realtimeUpdateReportList();
+
+        addReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffsReportsActivity.this, StaffNewReportActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+    //TODO: Split finished report and not finished report. Save and confirm button
+    private void realtimeUpdateReportList(){
+        firestore.collection("reports").whereEqualTo("staffID", FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("SRA_ERROR", "onEvent: " + error );
+                        }
+                        if (value!= null && !value.isEmpty()){
+                            fetchReportList();
+                        }
+                    }
+                });
+    }
+
+    private void fetchReportList(){
+        g1_reportList.clear();
+        firestore.collection("reports").whereEqualTo("staffID", FirebaseAuth.getInstance().getCurrentUser().getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot doc: task.getResult()){
+                                g1_reportList.add(new Reports(
+                                        doc.getString("title"),
+                                        doc.getString("sender"),
+                                        doc.getString("storageRef"),
+                                        doc.getDate("date"),
+                                        Boolean.TRUE.equals(doc.getBoolean("isRead"))
+                                ));
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+    }
+    private void menuBarItemClick() {
         topMenuImg.setImageResource(R.drawable.topmenu);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
@@ -156,14 +212,6 @@ public class StaffsReportsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mAuth.signOut();
                 redirectActivity(StaffsReportsActivity.this, LoginActivity.class);
-            }
-        });
-
-        addReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StaffsReportsActivity.this, StaffNewReportActivity.class);
-                startActivity(intent);
             }
         });
     }
