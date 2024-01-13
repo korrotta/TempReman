@@ -41,7 +41,7 @@ public class StaffsAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg;
-    private TextView topMenuName, userName;
+    private TextView userName;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private EditText nameET, emailET, phoneET, genderET, roleET;
     private Button editBtn, resetPassBtn;
@@ -56,7 +56,6 @@ public class StaffsAccountActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.staffsDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
-        topMenuName = findViewById(R.id.topMenuName);
         customers = findViewById(R.id.staffsCustomersDrawer);
         menu = findViewById(R.id.staffsMenuDrawer);
         tables = findViewById(R.id.staffsTablesDrawer);
@@ -215,8 +214,6 @@ public class StaffsAccountActivity extends AppCompatActivity {
                 openDrawer(drawerLayout);
             }
         });
-
-        topMenuName.setText(R.string.account);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

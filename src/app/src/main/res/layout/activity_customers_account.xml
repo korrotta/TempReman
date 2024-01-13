@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
@@ -11,16 +12,18 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/light_orange_2">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="210dp"
+                android:layout_height="180dp"
                 android:background="@color/orange"
                 android:orientation="vertical"
                 android:padding="20dp">
@@ -34,160 +37,140 @@
 
             </FrameLayout>
 
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center|bottom"
-                android:layout_marginTop="-140dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/default_user" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/customerAccountImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:src="@drawable/default_user"
+                app:civ_border_color="@color/black"
+                app:civ_border_width="1dp" android:layout_marginTop="-90dp"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_review">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/layout_white_bg_design"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp">
-                ">
+                android:paddingVertical="15dp">
+
                 <TextView
-                    android:id="@+id/customer_nameView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="290dp"
                     android:layout_height="wrap_content"
-                    android:text="Name" android:textStyle="bold"
-                    android:textSize="14sp">
-                </TextView>
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="@string/name"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/customer_name"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/rounded_review"
-                    android:hint="" android:paddingLeft="10dp">
-                </EditText>
-            </LinearLayout>
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/round_corner_black_box_bg_design"
+                    android:drawableEnd="@drawable/pen"
+                    android:fontFamily="@font/quicksand"
+                    android:padding="10dp"
+                    android:text="@string/name"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp">
-                ">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="290dp"
                     android:layout_height="wrap_content"
-                    android:text="Email Address" android:textStyle="bold"
-                    android:textSize="14sp">
-                </TextView>
-                <TextView
-                    android:textAlignment="center"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="@string/email_address"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <EditText
                     android:id="@+id/customer_emailView"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/rounded_review"
-                    android:hint="" android:paddingLeft="10dp">
-                </TextView>
-            </LinearLayout>
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/round_corner_black_box_bg_design"
+                    android:fontFamily="@font/quicksand"
+                    android:padding="10dp"
+                    android:text="@string/email"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp">
-                ">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="290dp"
                     android:layout_height="wrap_content"
-                    android:text="Phone Number" android:textStyle="bold"
-                    android:textSize="14sp">
-                </TextView>
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="@string/phone_number"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/customer_phone"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/rounded_review"
-                    android:hint="" android:paddingLeft="10dp">
-                </EditText>
-            </LinearLayout>
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/round_corner_black_box_bg_design"
+                    android:drawableEnd="@drawable/pen"
+                    android:fontFamily="@font/quicksand"
+                    android:padding="10dp"
+                    android:text="@string/phone_number"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp">
-                ">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="290dp"
                     android:layout_height="wrap_content"
-                    android:text="Gender" android:textStyle="bold"
-                    android:textSize="14sp">
-                </TextView>
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:text="@string/gender"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/customer_gender"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:background="@drawable/rounded_review"
-                    android:hint="Nữ" android:paddingLeft="10dp">
-                </EditText>
-            </LinearLayout>
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/round_corner_black_box_bg_design"
+                    android:drawableEnd="@drawable/pen"
+                    android:fontFamily="@font/quicksand"
+                    android:padding="10dp"
+                    android:text="@string/gender"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp">
-                ">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Username" android:textStyle="bold"
-                    android:textSize="14sp">
-                </TextView>
-                <EditText
-                    android:id="@+id/customer_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/rounded_review"
-                    android:hint="Nguyễn Thanh Huệ" android:paddingLeft="10dp">
-                </EditText>
-            </LinearLayout>
+                <Button
+                    android:id="@+id/customerAccountResetPassBtn"
+                    android:layout_width="250dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/orange"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/reset_password"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp">
-                ">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Password" android:textStyle="bold"
-                    android:textSize="14sp">
-                </TextView>
+                <Button
+                    android:id="@+id/customerAccountEditBtn"
+                    android:layout_width="250dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/orange"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/edit"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
-
-
-
 
     <RelativeLayout
         android:layout_width="200dp"

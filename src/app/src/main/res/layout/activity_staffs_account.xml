@@ -20,7 +20,22 @@
             android:background="@color/light_orange_2"
             android:orientation="vertical">
 
-            <include layout="@layout/toolbar" />
+            <FrameLayout
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@color/orange"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/topMenuImg"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/topmenu" />
+
+
+            </FrameLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/staffsAccountImage"
@@ -29,13 +44,14 @@
                 android:layout_gravity="center"
                 android:src="@drawable/default_user"
                 app:civ_border_color="@color/black"
-                app:civ_border_width="1dp" />
+                app:civ_border_width="1dp" android:layout_marginTop="-90dp"/>
 
             <LinearLayout
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/layout_white_bg_design"
                 android:gravity="center"
                 android:orientation="vertical"
