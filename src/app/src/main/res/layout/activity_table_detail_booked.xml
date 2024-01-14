@@ -34,7 +34,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/no_table"
+        android:id="@+id/table_booked_id"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
@@ -91,7 +91,7 @@
 
 
                     <TextView
-                        android:id="@+id/customerName"
+                        android:id="@+id/table_booked_username"
                         android:layout_width="162dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/quicksand"
@@ -99,7 +99,7 @@
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/phoneNumber"
+                        android:id="@+id/table_booked_phoneNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/quicksand"
@@ -135,29 +135,13 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/numberTable"
+                    android:id="@+id/table_booked_id2"
                     android:layout_width="11dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand"
                     android:text="2"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="90dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_button_status_red"
-                    android:fontFamily="@font/quicksand"
-                    android:gravity="center"
-                    android:text="@string/booked"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
 
 
             </LinearLayout>
@@ -185,7 +169,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/table_booked_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand"
@@ -219,7 +203,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/time"
+                    android:id="@+id/table_booked_timerange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand"
@@ -243,7 +227,7 @@
 
 
         <Button
-            android:id="@+id/btn_order"
+            android:id="@+id/table_booked_toInUseButton"
             android:layout_width="130dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
@@ -258,7 +242,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_cancel"
+            android:id="@+id/table_booked_cancelButton"
             android:layout_width="130dp"
             android:layout_height="55dp"
             android:layout_gravity="center"

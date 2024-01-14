@@ -161,26 +161,29 @@ public class StaffsTablesActivity extends AppCompatActivity {
                                 ArrayList<String> bookedDate = (ArrayList<String>) task.getResult().get("bookedDate");
                                 ArrayList<String> bookedCustomer = (ArrayList<String>)task.getResult().get("customerID");
 
-                                // FIXME: ERROR:
-                                //java.lang.NullPointerException: Attempt to invoke virtual method
-                                // 'int java.util.ArrayList.indexOf(java.lang.Object)' on a null object reference
-
+                                //This is customerid
                                 String dataToTransfer = bookedCustomer.get(bookedDate.indexOf(getTimeFromRange(timeString[final_recentTimeRange[0]])));
-
                                 Log.d("Test data", dataToTransfer); //worked.
+                                //cai nay m co r
+
                                 //Also table id of course
+                                String id = t.getId(); //table id
                                 //Also time_range
+                                String timeRange = timeString[final_recentTimeRange[0]]; //timerange: cai 9:00 - 11:00 đó
+
+                                String[] data = new String[3]; //data để truyền, rồi set chỉ số cho nó
+                                data[0] = dataToTransfer; //Data này nó sẽ là số điện thoại, vì staff đặt nên chỉ cần truyền sđt thôi
+                                data[1] = id; //là id bàn
+                                data[2] = timeRange; // là time range
                                 //So all is done.
 
+                                Intent i = new Intent(StaffsTablesActivity.this, TableDetailBooked.class);
+                                i.putExtra("data", data);
                                 //And finally UI switching to bookedTable.
+                                startActivity(i);
                             }
                         }
                     });
-
-                    Intent i = new Intent(StaffsTablesActivity.this, TableDetailBooked.class);
-                    i.putExtra("id", t.getId());
-                    startActivity(i);
-
                 }
                 else if(t.getImage() == inuseTableImg){
                     //Maybe will be different to handle.
