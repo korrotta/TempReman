@@ -108,4 +108,6 @@
     <string name="booked">Booked</string>
     <string name="in_use">In use</string>
     <string name="other">Other</string>
+    <string name="time">Time</string>
+    <string name="reserve">Reserve</string>
 </resources>
