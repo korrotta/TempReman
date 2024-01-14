@@ -39,6 +39,7 @@ import com.softwareengineering.restaurant.BookTableActivity;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.StaffPackage.StaffsTablesActivity;
+import com.softwareengineering.restaurant.StaffPackage.TableDetailBooked;
 import com.softwareengineering.restaurant.TablesAdapter;
 import com.softwareengineering.restaurant.TablesModel;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersTablesBinding;
@@ -71,7 +72,10 @@ public class CustomersTablesActivity extends AppCompatActivity {
             "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00",
             "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
     };
+    private final int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 
+    private final String[] final_bookedId = new String[1];
+    private final String[] final_bookedTimeRange = new String[1];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,16 +145,16 @@ public class CustomersTablesActivity extends AppCompatActivity {
         binding.customersTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (final_isBooked[0]) {
-                    Toast.makeText(CustomersTablesActivity.this, "Can not book 2 tables for a customer!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 
                 TablesModel t = (TablesModel) tablesModelArrayAdapter.getItem(position);
-                Log.d("Position", "onItemClick: " + t.getId());
 
                 //Checking if the table is idle in that range of time? Color check is way faster and more convenient -DONE
                 if (t.getImage() == idleTableImg) {
+                    if (final_isBooked[0]) {
+                        Toast.makeText(CustomersTablesActivity.this, "Can not book 2 tables for a customer!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     Intent i = new Intent(CustomersTablesActivity.this, BookTableActivity.class);
 
                     //FIXME: What to put here?
@@ -168,6 +172,11 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     startActivity(i);
                 }
                 else if(t.getImage() == bookedTableImg){
+                    Log.d("Data", final_bookedId[0] + "  " + final_bookedTimeRange[0]);
+                    if (!final_bookedId[0].equals(t.getId()) || !getTimeFromRange(final_bookedTimeRange[0]).equals(final_selectedTime[0])){
+                        Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     FirebaseFirestore.getInstance().collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -178,11 +187,26 @@ public class CustomersTablesActivity extends AppCompatActivity {
                                 String dataToTransfer = bookedCustomer.get(bookedDate.indexOf(final_selectedTime[0]));
 
                                 Log.d("Test data", dataToTransfer); //worked.
+
+                                //cai nay m co r
+
                                 //Also table id of course
+                                String id = t.getId(); //table id
+
+
                                 //Also time_range
+                                String timeRange = timeString[Integer.parseInt(final_selectedTime[0])/2-4]; //timerange: cai 9:00 - 11:00 đó
+
+                                String[] data = new String[3]; //data để truyền, rồi set chỉ số cho nó
+                                data[0] = dataToTransfer; //Data này nó sẽ là số điện thoại, vì staff đặt nên chỉ cần truyền sđt thôi
+                                data[1] = id; //là id bàn
+                                data[2] = timeRange; // là time range
                                 //So all is done.
 
+                                Intent i = new Intent(CustomersTablesActivity.this, TableDetailBooked.class);
+                                i.putExtra("data", data);
                                 //And finally UI switching to bookedTable.
+                                startActivity(i);
                             }
                         }
                     });
@@ -213,6 +237,10 @@ public class CustomersTablesActivity extends AppCompatActivity {
                                 Log.d("exists or not", "onComplete: " + "exist");
                                 final_isBooked[0] = true;
                                 changeBookedView(doc.getDocument());
+
+                                //Booked something here. So fetch the booked table.
+                                final_bookedId[0] = doc.getDocument().getString("tableid");
+                                final_bookedTimeRange[0] = doc.getDocument().getString("timerange");
                             }
                         }
 
@@ -300,12 +328,14 @@ public class CustomersTablesActivity extends AppCompatActivity {
     private String checkBookedInTimeRange(QueryDocumentSnapshot doc, String state) {
         ArrayList<String> bookedDate = (ArrayList<String>) doc.get("bookedDate");
         if (bookedDate != null){
-            Log.d("checkig", "checkBookedInTimeRange: " + final_selectedTime[0]);
             for (String hour: bookedDate) {
                 if (hour.equals(final_selectedTime[0])){
                     state = "booked";
                 }
             }
+        }
+        if (state == "inuse"){
+            if (final_selectedTime[0].equals(timeSelection(hourNow))) return "idle"; // set idle if
         }
         return state;
     }

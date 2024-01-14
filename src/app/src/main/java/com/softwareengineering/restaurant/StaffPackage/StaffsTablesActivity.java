@@ -71,7 +71,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private final int idleTableImg = R.drawable.table_top_view;
     private final int inuseTableImg = R.drawable.table_top_view_inuse;
     private final int bookedTableImg = R.drawable.table_top_view_booked;
-
+    private final int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
     private final String[] timeString = {
             "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00",
             "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
@@ -121,7 +121,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         timeFilter.setAdapter(timeAdapter);
 
-        int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
         final_recentTimeRange[0] = timeSelection(hourNow);
 
         //need to change this to base on time - DONE
@@ -347,6 +347,9 @@ public class StaffsTablesActivity extends AppCompatActivity {
                     state = "booked";
                 }
             }
+        }
+        if (state == "inuse"){
+            if (final_recentTimeRange[0] != timeSelection(hourNow)) return "idle"; // set idle if
         }
         return state;
     }
