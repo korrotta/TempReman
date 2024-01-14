@@ -43,6 +43,7 @@ import com.softwareengineering.restaurant.databinding.ActivityStaffsTablesBindin
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -61,10 +62,19 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private ArrayList<String> tablesState;
     private Spinner timeFilter;
 
+    private final String final_statePerTime[] = new String[1];
+    private final int final_recentTimeRange[] = new int[1];
+
+    private final ArrayList<String>[] bookedListInRange = new ArrayList[1];
     //Item images
     private final int idleTableImg = R.drawable.table_top_view;
     private final int inuseTableImg = R.drawable.table_top_view_inuse;
     private final int bookedTableImg = R.drawable.table_top_view_booked;
+
+    private final String[] timeString = {
+            "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00",
+            "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
+    };
 
 
     @Override
@@ -101,48 +111,84 @@ public class StaffsTablesActivity extends AppCompatActivity {
         binding.staffsTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
         // showTable Function with state
 
-        realtimeUpdateTableList();
-        // Set Click Listener For Table Layout
-        binding.staffsTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TablesModel t = (TablesModel) tablesModelArrayAdapter.getItem(position);
-
-                //Checking if the table is idle in that range of time?
-                firestore.collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()) {
-                            DocumentSnapshot doc = task.getResult();
-                            if (doc.getString("state").equals("idle")) {
-                                Intent i = new Intent(StaffsTablesActivity.this, BookTableActivity.class);
-                                i.putExtra("id", t.getId());
-                                startActivity(i);
-                            }
-                        }
-                        else Log.e("GG", "onComplete: " + task.getException().toString());;
-                    }
-                });
-
-                //Intent intent = new Intent(StaffsTablesActivity.this, TablesDetails.class);
-            }
-        });
 
         // Handle Time Filter Spinner
-        String[] timeString = {
-                "7:00", "9:00", "11:00", "13:00",
-                "15:00", "17:00", "19:00", "21:00"
-        };
+
+
+
         ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeString);
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
         timeFilter.setAdapter(timeAdapter);
 
+        int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        final_recentTimeRange[0] = timeSelection(hourNow);
+
+        //need to change this to base on time - DONE
+        realtimeUpdateTableList();
+        // Set Click Listener For Table Layout
+        binding.staffsTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TablesModel t = (TablesModel) tablesModelArrayAdapter.getItem(position);
+                Log.d("Position", "onItemClick: " + t.getId());
+
+                //Checking if the table is idle in that range of time? Color check is way faster and more convenient -DONE
+                if (t.getImage() == idleTableImg) {
+                    Intent i = new Intent(StaffsTablesActivity.this, BookTableActivity.class);
+
+                    //FIXME: What to put here?
+                    //Booked detail need info of the one who ordered. So fetch firestore data from here, take customer id
+                    //What if customer id is anonymous, because customer booked the table for him?
+                    //Set all data to default data? Where's the phone number? Then what if that one calling again to cancel it?
+                    //How to find out? No name search, no phone number search.
+                    //Or, we can set the id by the phone number he entered. Then show it like a phone number, default name
+                    //Okay done
+                    //
+                    //Then what to put here? Nothing, this is in idle tho. But what to put in bookedActivity? This one.
+                    //Further develop, but absolutely must be this one
+
+
+                    i.putExtra("id", t.getId());
+                    startActivity(i);
+                }
+                else if(t.getImage() == bookedTableImg){
+                    FirebaseFirestore.getInstance().collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                ArrayList<String> bookedDate = (ArrayList<String>) task.getResult().get("bookedDate");
+                                ArrayList<String> bookedCustomer = (ArrayList<String>)task.getResult().get("customerID");
+
+                                String dataToTransfer = bookedCustomer.get(bookedDate.indexOf(getTimeFromRange(timeString[final_recentTimeRange[0]])));
+
+                                Log.d("Test data", dataToTransfer); //worked.
+                                //Also table id of course
+                                //Also time_range
+                                //So all is done.
+
+                                //And finally UI switching to bookedTable.
+                            }
+                        }
+                    });
+
+                }
+                else if(t.getImage() == inuseTableImg){
+                    //Maybe will be different to handle.
+                    //Actually same data needed as booked one. So not much. Most important is tableId we got already
+                }
+            }
+        });
+
+
+
         timeFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO: Handle show table here
+                // Handle show table here -DONE
+                final_recentTimeRange[0] = position;
+                fetchTableList();
             }
 
             @Override
@@ -152,6 +198,63 @@ public class StaffsTablesActivity extends AppCompatActivity {
         });
 
     }
+
+    private int timeSelection(int hourNow){
+        switch (hourNow){
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 0:
+            default:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                timeFilter.setSelection(0);
+                return 0;
+            case 11:
+            case 12:
+                timeFilter.setSelection(1);
+                return 1;
+            case 13:
+            case 14:
+                timeFilter.setSelection(2);
+                return 2;
+            case 15:
+            case 16:
+                timeFilter.setSelection(3);
+                return 3;
+            case 17:
+            case 18:
+                timeFilter.setSelection(4);
+                return 4;
+            case 19:
+            case 20:
+                timeFilter.setSelection(5);
+                return 5;
+
+        }
+    }
+
+    private String getTimeFromRange(String timeRange){
+        switch (timeRange){
+            case "9:00 - 11:00": return "9";
+            case "11:00 - 13:00": return "11";
+            case "13:00 - 15:00": return "13";
+            case "15:00 - 17:00": return "15";
+            case "17:00 - 19:00": return "17";
+            case "19:00 - 21:00": return "19";
+            default: return "0";
+        }
+    }
+
     private void realtimeUpdateTableList(){
 
         firestore.collection("table").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -176,6 +279,10 @@ public class StaffsTablesActivity extends AppCompatActivity {
                     tablesModelArrayList.clear();
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         String state = doc.getString("state");
+
+                        //re-check state if it was booked for further base timeRange;
+                        state = checkBookedInTimeRange(doc, state);
+                        Log.d("State check", "onComplete: "+state);
                         int tableImg = declareTableImage(state);
 
                         if (tableImg == -1) continue; //not showing deleted table
@@ -189,6 +296,19 @@ public class StaffsTablesActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String checkBookedInTimeRange(QueryDocumentSnapshot doc, String state) {
+        ArrayList<String> bookedDate = (ArrayList<String>) doc.get("bookedDate");
+        if (bookedDate != null){
+            Log.d("checkig", "checkBookedInTimeRange: " + String.valueOf(getTimeFromRange(timeString[final_recentTimeRange[0]])));
+            for (String hour: bookedDate) {
+                if (hour.equals(String.valueOf(getTimeFromRange(timeString[final_recentTimeRange[0]])))){
+                    state = "booked";
+                }
+            }
+        }
+        return state;
     }
 
     private int declareTableImage(String state){

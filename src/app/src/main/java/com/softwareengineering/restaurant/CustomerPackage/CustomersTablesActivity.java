@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -34,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.softwareengineering.restaurant.BookTableActivity;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.StaffPackage.StaffsTablesActivity;
@@ -43,7 +45,7 @@ import com.softwareengineering.restaurant.databinding.ActivityCustomersTablesBin
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
+import java.util.Calendar;
 
 
 public class CustomersTablesActivity extends AppCompatActivity {
@@ -62,6 +64,13 @@ public class CustomersTablesActivity extends AppCompatActivity {
     private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
     private LinearLayout customerBookedInfo;
     private Spinner timeFilter;
+
+    private final boolean[] final_isBooked = new boolean[1];
+    private final String[] final_selectedTime = new String[1];
+    private final String[] timeString = {
+            "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00",
+            "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,36 +107,28 @@ public class CustomersTablesActivity extends AppCompatActivity {
         binding.customersTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
         // showTable Function with state
 
+        final_isBooked[0] = false;
         // TODO: IF CURRENT USER HAS BOOKED A TABLE SHOW THE UI
-        boolean flag = true;
-        if (flag) {
-            // if booked show ui
-            customerBookedInfo.setVisibility(View.VISIBLE);
-            // Get customer info - name and phone (need to get from the getUserFromFirestore())
-            customerBookedDate.setText("01/02/2024");
-            customerBookedTableID.setText("02");
-            customerBookedTime.setText("19:30");
-        }
-        else {
-            // else hide
-            customerBookedInfo.setVisibility(View.INVISIBLE);
-        }
 
-        // Handle Time filter
-        String[] timeString = {
-                "7:00", "9:00", "11:00", "13:00",
-                "15:00", "17:00", "19:00", "21:00"
-        };
+        listenToDataChange();
+
         ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeString);
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
         timeFilter.setAdapter(timeAdapter);
 
+        int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        final_selectedTime[0] = timeSelection(hourNow);
+
         timeFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                //Time range here:
+                final_selectedTime[0] = getTimeFromRange(timeString[position]);
                 // TODO: Handle show table here
+                fetchTableList();
             }
 
             @Override
@@ -140,11 +141,114 @@ public class CustomersTablesActivity extends AppCompatActivity {
         binding.customersTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(CustomersTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(CustomersTablesActivity.this, TablesDetails.class);
+                if (final_isBooked[0] == true) {
+                    Toast.makeText(CustomersTablesActivity.this, "Can not book 2 tables for a customer!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                TablesModel t = (TablesModel) tablesModelArrayAdapter.getItem(position);
+                Log.d("Position", "onItemClick: " + t.getId());
+
+                //Checking if the table is idle in that range of time? Color check is way faster and more convenient -DONE
+                if (t.getImage() == idleTableImg) {
+                    Intent i = new Intent(CustomersTablesActivity.this, BookTableActivity.class);
+
+                    //FIXME: What to put here?
+                    //Booked detail need info of the one who ordered. So fetch firestore data from here, take customer id
+                    //What if customer id is anonymous, because customer booked the table for him?
+                    //Set all data to default data? Where's the phone number? Then what if that one calling again to cancel it?
+                    //How to find out? No name search, no phone number search.
+                    //Or, we can set the id by the phone number he entered. Then show it like a phone number, default name
+                    //Okay done
+                    //
+                    //Then what to put here? Nothing, this is in idle tho. But what to put in bookedActivity? This one.
+                    //Further develop, but absolutely must be this one
+
+
+                    i.putExtra("id", t.getId());
+                    startActivity(i);
+                }
+                else if(t.getImage() == bookedTableImg){
+                    FirebaseFirestore.getInstance().collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                ArrayList<String> bookedDate = (ArrayList<String>) task.getResult().get("bookedDate");
+                                ArrayList<String> bookedCustomer = (ArrayList<String>)task.getResult().get("customerID");
+
+                                String dataToTransfer = bookedCustomer.get(bookedDate.indexOf(final_selectedTime[0]));
+
+                                Log.d("Test data", dataToTransfer); //worked.
+                                //Also table id of course
+                                //Also time_range
+                                //So all is done.
+
+                                //And finally UI switching to bookedTable.
+                            }
+                        }
+                    });
+
+                }
+                else if(t.getImage() == inuseTableImg){
+                    //Maybe will be different to handle.
+                    //Actually same data needed as booked one. So not much. Most important is tableId we got already
+                }
             }
         });
         realtimeUpdateTableList();
+    }
+
+
+    private void listenToDataChange(){
+        firestore.collection("booking").whereEqualTo("userid", FirebaseAuth.getInstance().getCurrentUser().getUid().toString())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                        //search have data about table
+                        if (!value.isEmpty() && value != null){
+                            for (DocumentChange doc: value.getDocumentChanges()){
+                                Log.d("exists or not", "onComplete: " + "exist");
+                                final_isBooked[0] = true;
+                                changeBookedView(doc.getDocument());
+                            }
+                        }
+
+                        //search no data
+                        else {
+                            Log.d("Reach", "Reached remove for sure wtf");
+                            final_isBooked[0] = false;
+                            changeBookedView(null);
+                            Log.d("exists or not", "not exists");
+                        }
+                    }
+                });
+    }
+
+    private void changeBookedView(DocumentSnapshot doc){
+        if(final_isBooked[0]){
+            customerBookedInfo.setVisibility(View.VISIBLE);
+            // Get customer info - name and phone (need to get from the getUserFromFirestore())
+            customerBookedDate.setText(Calendar.getInstance().getTime().toString());
+            customerBookedTableID.setText(doc.getString("tableid"));
+            customerBookedTime.setText(doc.getString("timerange"));
+        }
+        else {
+            customerBookedInfo.setVisibility(View.GONE);
+            Log.d("exists or not", "destroyedView");
+        }
+
+    }
+    private String getTimeFromRange(String timeRange){
+        switch (timeRange){
+            case "9:00 - 11:00": return "9";
+            case "11:00 - 13:00": return "11";
+            case "13:00 - 15:00": return "13";
+            case "15:00 - 17:00": return "15";
+            case "17:00 - 19:00": return "17";
+            case "19:00 - 21:00": return "19";
+            default: return "0";
+        }
     }
 
     private void realtimeUpdateTableList(){
@@ -172,6 +276,10 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     tablesModelArrayList.clear();
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         String state = doc.getString("state");
+
+                        //re-check state if it was booked for further base timeRange;
+                        state = checkBookedInTimeRange(doc, state);
+                        Log.d("State check", "onComplete: "+state);
                         int tableImg = declareTableImage(state);
 
                         if (tableImg == -1) continue; //not showing deleted table
@@ -187,6 +295,18 @@ public class CustomersTablesActivity extends AppCompatActivity {
         });
     }
 
+    private String checkBookedInTimeRange(QueryDocumentSnapshot doc, String state) {
+        ArrayList<String> bookedDate = (ArrayList<String>) doc.get("bookedDate");
+        if (bookedDate != null){
+            Log.d("checkig", "checkBookedInTimeRange: " + final_selectedTime[0]);
+            for (String hour: bookedDate) {
+                if (hour.equals(final_selectedTime[0])){
+                    state = "booked";
+                }
+            }
+        }
+        return state;
+    }
     private int declareTableImage(String state){
         switch (state){
             case "idle": return idleTableImg;
@@ -319,5 +439,49 @@ public class CustomersTablesActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         closeDrawer(drawerLayout);
+    }
+
+    private String timeSelection(int hourNow){
+        switch (hourNow){
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 0:
+            default:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                timeFilter.setSelection(0);
+                return "9";
+            case 11:
+            case 12:
+                timeFilter.setSelection(1);
+                return "11";
+            case 13:
+            case 14:
+                timeFilter.setSelection(2);
+                return "13";
+            case 15:
+            case 16:
+                timeFilter.setSelection(3);
+                return "15";
+            case 17:
+            case 18:
+                timeFilter.setSelection(4);
+                return "17";
+            case 19:
+            case 20:
+                timeFilter.setSelection(5);
+                return "19";
+
+        }
     }
 }
