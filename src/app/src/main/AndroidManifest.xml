@@ -83,9 +83,13 @@
             android:exported="false" />
         <activity
             android:name=".StaffPackage.StaffsMenuActivity"
-            android:exported="false" /> <!-- <activity -->
-        <!-- android:name=".Account" -->
-        <!-- android:exported="false" /> -->
+            android:exported="false" />
+        <activity
+            android:name=".StaffPackage.TableDetailInuse"
+            android:exported="false" />
+        <activity
+            android:name=".StaffPackage.TableDetailBooked"
+            android:exported="false" />
         <activity
             android:name=".AdminPackage.SalesActivity"
             android:exported="false" />
@@ -158,8 +162,9 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
-        <activity android:name=".StaffPackage.StaffNewReportActivity" />
-        <activity android:name="com.softwareengineering.restaurant.StaffPackage.TableDetailBooked" />
+        <activity
+            android:name=".StaffPackage.StaffNewReportActivity"
+            android:exported="false"/>
 
         <meta-data
             android:name="preloaded_fonts"

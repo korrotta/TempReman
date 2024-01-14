@@ -141,7 +141,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
         binding.customersTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (final_isBooked[0] == true) {
+                if (final_isBooked[0]) {
                     Toast.makeText(CustomersTablesActivity.this, "Can not book 2 tables for a customer!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -163,7 +163,6 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     //
                     //Then what to put here? Nothing, this is in idle tho. But what to put in bookedActivity? This one.
                     //Further develop, but absolutely must be this one
-
 
                     i.putExtra("id", t.getId());
                     startActivity(i);
@@ -193,11 +192,14 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     //Maybe will be different to handle.
                     //Actually same data needed as booked one. So not much. Most important is tableId we got already
                 }
+                Toast.makeText(CustomersTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
+                // If table is available go to Book Table Activity
+
+                // Else show dialog for booked and in use table
             }
         });
         realtimeUpdateTableList();
     }
-
 
     private void listenToDataChange(){
         firestore.collection("booking").whereEqualTo("userid", FirebaseAuth.getInstance().getCurrentUser().getUid().toString())

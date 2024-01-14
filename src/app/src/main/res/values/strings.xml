@@ -110,4 +110,7 @@
     <string name="other">Other</string>
     <string name="time">Time</string>
     <string name="reserve">Reserve</string>
+    <string name="summer_salad">Summer Salad</string>
+    <string name="table_detail">Table Detail</string>
+    <string name="order">Order</string>
 </resources>

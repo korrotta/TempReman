@@ -57,7 +57,6 @@
 
                 <EditText
                     android:id="@+id/nameBookTable"
-                    android:text="@string/name"
                     android:padding="2dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +93,6 @@
                 <EditText
                     android:padding="2dp"
                     android:id="@+id/phoneBookTable"
-                    android:text="0123456789"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -141,72 +139,6 @@
                     android:textSize="16sp"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_bold"
-                    android:text="How many people?"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias=".06"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/decreasePeopleBookTable"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:text="-"
-                    android:textSize="18sp"
-                    android:background="@drawable/layout_bg_design"
-                    android:backgroundTint="@color/white"
-                    android:gravity="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.79"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/numPeopleBookTable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="2dp"
-                    android:text="@string/_1"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/quicksand_bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.862"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.526" />
-
-                <TextView
-                    android:id="@+id/increasePeopleBookTable"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:text="+"
-                    android:textSize="18sp"
-                    android:background="@drawable/layout_bg_design"
-                    android:backgroundTint="@color/white"
-                    android:gravity="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.965"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

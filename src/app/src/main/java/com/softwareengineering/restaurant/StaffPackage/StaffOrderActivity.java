@@ -43,8 +43,6 @@ public class StaffOrderActivity extends AppCompatActivity {
         // Kết nối ListView với Adapter
         listView.setAdapter(adapter);
 
-
-
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -135,6 +135,7 @@ public class DetailFoodActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private String formatPrice(double price) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
         return numberFormat.format(price) + " VND";

@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.BookTableActivity;
+import com.softwareengineering.restaurant.CustomerPackage.DetailFoodActivity;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.TablesAdapter;
@@ -109,13 +110,11 @@ public class StaffsTablesActivity extends AppCompatActivity {
         tablesModelArrayAdapter = new TablesAdapter(this, tablesModelArrayList);
         tablesModelArrayAdapter.notifyDataSetChanged();
         binding.staffsTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
-        // showTable Function with state
 
+        // showTable Function with state
+        realtimeUpdateTableList();
 
         // Handle Time Filter Spinner
-
-
-
         ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeString);
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -127,6 +126,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
 
         //need to change this to base on time - DONE
         realtimeUpdateTableList();
+
         // Set Click Listener For Table Layout
         binding.staffsTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -161,6 +161,10 @@ public class StaffsTablesActivity extends AppCompatActivity {
                                 ArrayList<String> bookedDate = (ArrayList<String>) task.getResult().get("bookedDate");
                                 ArrayList<String> bookedCustomer = (ArrayList<String>)task.getResult().get("customerID");
 
+                                // FIXME: ERROR:
+                                //java.lang.NullPointerException: Attempt to invoke virtual method
+                                // 'int java.util.ArrayList.indexOf(java.lang.Object)' on a null object reference
+
                                 String dataToTransfer = bookedCustomer.get(bookedDate.indexOf(getTimeFromRange(timeString[final_recentTimeRange[0]])));
 
                                 Log.d("Test data", dataToTransfer); //worked.
@@ -173,10 +177,17 @@ public class StaffsTablesActivity extends AppCompatActivity {
                         }
                     });
 
+                    Intent i = new Intent(StaffsTablesActivity.this, TableDetailBooked.class);
+                    i.putExtra("id", t.getId());
+                    startActivity(i);
+
                 }
                 else if(t.getImage() == inuseTableImg){
                     //Maybe will be different to handle.
                     //Actually same data needed as booked one. So not much. Most important is tableId we got already
+                    Intent i = new Intent(StaffsTablesActivity.this, TableDetailInuse.class);
+                    i.putExtra("id", t.getId());
+                    startActivity(i);
                 }
             }
         });

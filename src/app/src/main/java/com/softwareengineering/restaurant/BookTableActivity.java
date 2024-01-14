@@ -34,7 +34,7 @@ public class BookTableActivity extends AppCompatActivity {
     private ImageView topMenuImg;
     private EditText nameET, phoneET;
     private Spinner timeSpinner;
-    private TextView topMenuName, decreasePeopleTV, increasePeopleTV, numPeopleTV;
+    private TextView topMenuName;
     private AppCompatButton reserveButton;
     private TextView tableId;
 
@@ -53,11 +53,9 @@ public class BookTableActivity extends AppCompatActivity {
         nameET = findViewById(R.id.nameBookTable);
         phoneET = findViewById(R.id.phoneBookTable);
         timeSpinner = findViewById(R.id.timeSpinnerBookTable);
-        decreasePeopleTV = findViewById(R.id.decreasePeopleBookTable);
-        increasePeopleTV = findViewById(R.id.increasePeopleBookTable);
-        numPeopleTV = findViewById(R.id.numPeopleBookTable);
         topMenuImg = findViewById(R.id.topMenuImg);
         topMenuName = findViewById(R.id.topMenuName);
+        reserveButton = findViewById(R.id.reserveButton);
 
         tableId = findViewById(R.id.no_tableAvailable);
 
@@ -185,7 +183,6 @@ public class BookTableActivity extends AppCompatActivity {
         name = nameET.getText().toString();
         phone = phoneET.getText().toString();
         final_time[0] = "0:00";
-        final_numPeople[0] = Integer.parseInt(numPeopleTV.getText().toString());
         // Handle data for spinner
         String[] timeString =  {
                 "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00", "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
@@ -208,29 +205,10 @@ public class BookTableActivity extends AppCompatActivity {
             }
         });
 
-        decreasePeopleTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (final_numPeople[0] > 1) {
-                    numPeopleTV.setText(String.valueOf(--final_numPeople[0]));
-                    final_numPeople[0] = Integer.parseInt(numPeopleTV.getText().toString());
-                }
-            }
-        });
-        increasePeopleTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (final_numPeople[0] < 8) {
-                    numPeopleTV.setText(String.valueOf(++final_numPeople[0]));
-                    final_numPeople[0] = Integer.parseInt(numPeopleTV.getText().toString());
-                }
-            }
-        });
-
     }
 
     private void initToolBar() {
-        topMenuImg.setImageResource(R.drawable.topmenu);
+        topMenuImg.setImageResource(R.drawable.back);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -27,14 +27,15 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_back" />
+
             <TextView
                 android:id="@+id/topMenuName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:fontFamily="@font/quicksand_medium"
                 android:text="@string/menu"
-                android:layout_gravity="center"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="25sp"
@@ -43,17 +44,18 @@
             <EditText
                 android:id="@+id/search_menu"
                 android:layout_width="310dp"
-                android:layout_height="55dp" android:layout_gravity="center"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_search_background"
+                android:drawableStart="@drawable/search_icon"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/quicksand_medium"
+                android:hint="Search menu"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:paddingHorizontal="10dp"
-                android:hint="Search menu"
-                android:fontFamily="@font/quicksand_medium"
-                android:drawableStart="@drawable/search_icon"
-                android:drawablePadding="10dp" />
+                android:paddingHorizontal="10dp" />
         </LinearLayout>
 
         <TextView
@@ -76,11 +78,11 @@
 
         <Button
             android:id="@+id/btn_add"
-            android:layout_gravity="end"
             android:layout_width="180dp"
             android:layout_height="55dp"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="end"
             android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/orange"
             android:fontFamily="@font/roboto"
