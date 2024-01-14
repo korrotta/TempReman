@@ -82,9 +82,11 @@ public class ReportsActivity extends AppCompatActivity {
                         String title = doc.getString("title");
                         Date date = doc.getDate("date");
                         String rpContent = doc.getId();
-                        boolean isRead = Boolean.TRUE.equals(doc.getBoolean("isRead"));
-
-                        Reports rp = new Reports(title, staffID, rpContent, date, isRead);
+                        String id = doc.getString("id");
+                        String tempContent = doc.getString("content");
+                        //checker
+                        if (!tempContent.equals("")) continue;
+                        Reports rp = new Reports(title, staffID, rpContent, date, id);
                         reportsArrayList.add(rp);
                     }
                     // Sort Reports by Date
@@ -102,7 +104,7 @@ public class ReportsActivity extends AppCompatActivity {
                 Intent intent = new Intent(ReportsActivity.this, ReportsDetails.class);
                 intent.putExtra("reports", reportsArrayList.get(position));
                 startActivity(intent);
-                reportsArrayList.get(position).setRead(true);
+//                reportsArrayList.get(position).setRead(true);
                 reportsAdapter.notifyDataSetChanged();
             }
         });
