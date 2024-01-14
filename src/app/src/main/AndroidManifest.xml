@@ -16,6 +16,12 @@
         android:theme="@style/Theme.Material3.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".StaffPackage.StaffOrderAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StaffPackage.StaffOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".BookTableActivity"
             android:exported="false" />
         <activity

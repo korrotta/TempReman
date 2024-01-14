@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ public class BookTableActivity extends AppCompatActivity {
     private EditText nameET, phoneET;
     private Spinner daySpinner, monthSpinner, yearSpinner, timeSpinner;
     private TextView topMenuName, decreasePeopleTV, increasePeopleTV, numPeopleTV;
+    private AppCompatButton reserveButton;
 
     private Button reserveButton;
 

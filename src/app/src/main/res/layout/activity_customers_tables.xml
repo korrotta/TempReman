@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/toolbar_staff" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,13 +101,130 @@
         <GridView
             android:id="@+id/customersTableLayoutGridView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:isScrollContainer="false"
             android:nestedScrollingEnabled="false"
             android:numColumns="3"
             android:scrollbars="none" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/customersBookedInfo"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/layout_bg_design"
+                android:backgroundTint="@color/light_orange_2"
+                android:visibility="invisible"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksand_bold"
+                        android:text="Name: "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/customersBookedName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="Customer"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="60dp"
+                        android:fontFamily="@font/quicksand_bold"
+                        android:text="Booked Table: "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/customersBookedTableID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="1"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksand_bold"
+                        android:text="Date: "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/customersBookedDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="01/01/2024"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksand_bold"
+                        android:layout_marginStart="55dp"
+                        android:text="Time: "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/customersBookedTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="19:00"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/quicksand_bold"
+                        android:text="Phone number: "
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/customersBookedPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/quicksand_medium"
+                        android:text="1234567890"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

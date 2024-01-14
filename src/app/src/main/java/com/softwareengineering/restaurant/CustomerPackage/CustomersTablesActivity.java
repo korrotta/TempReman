@@ -9,12 +9,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -50,11 +54,12 @@ public class CustomersTablesActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg, userAvatar;
-    private TextView topMenuName, userName;
+    private TextView topMenuName, userName, customerBookedName, customerBookedTableID, customerBookedDate, customerBookedTime, customerBookedPhone;
     private RelativeLayout menu, tables, review, account, logout;
     private ActivityCustomersTablesBinding binding;
     private ArrayList<TablesModel> tablesModelArrayList;
     private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
+    private LinearLayout customerBookedInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,12 @@ public class CustomersTablesActivity extends AppCompatActivity {
         logout = findViewById(R.id.customersLogoutDrawer);
         userAvatar = findViewById(R.id.customersNavAvatar);
         userName = findViewById(R.id.customersNavName);
+        customerBookedInfo = findViewById(R.id.customersBookedInfo);
+        customerBookedName = findViewById(R.id.customersBookedName);
+        customerBookedTableID = findViewById(R.id.customersBookedTableID);
+        customerBookedDate = findViewById(R.id.customersBookedDate);
+        customerBookedTime = findViewById(R.id.customersBookedTime);
+        customerBookedPhone = findViewById(R.id.customersBookedPhone);
 
         initCurrentUser();
         initToolBar();
@@ -83,6 +94,21 @@ public class CustomersTablesActivity extends AppCompatActivity {
         tablesModelArrayAdapter = new TablesAdapter(this, tablesModelArrayList);
         binding.customersTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
         // showTable Function with state
+
+        // TODO: IF CURRENT USER HAS BOOKED A TABLE SHOW THE UI
+        boolean flag = true;
+        if (flag) {
+            // if booked show ui
+            customerBookedInfo.setVisibility(View.VISIBLE);
+            // Get customer info - name and phone (need to get from the getUserFromFirestore())
+            customerBookedDate.setText("01/02/2024");
+            customerBookedTableID.setText("02");
+            customerBookedTime.setText("19:30");
+        }
+        else {
+            // else hide
+            customerBookedInfo.setVisibility(View.INVISIBLE);
+        }
 
         // Set Click Listener For Table Layout
         binding.customersTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -202,18 +228,41 @@ public class CustomersTablesActivity extends AppCompatActivity {
     }
 
     private void initCurrentUser() {
+        // Get currentUser
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert currentUser != null;
-        String avatarPhotoUrl = String.valueOf(currentUser.getPhotoUrl());
-
+        Uri avatarPhotoUrl = currentUser.getPhotoUrl();
+        // Avatar Image
         Picasso.get().load(avatarPhotoUrl).placeholder(R.drawable.default_user).into(userAvatar);
+        // Get user info from firestore
+        getUserInfoFirestore(currentUser.getUid());
+    }
 
-        if (currentUser.getDisplayName() != null) {
-            userName.setText(currentUser.getDisplayName());
-        }
-        else {
-            userName.setText(R.string.name);
-        }
+    private void getUserInfoFirestore(String uid) {
+        DocumentReference userRef = firestore.collection("users").document(uid);
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    // Get user info
+                    String name, phone;
+                    name = document.getString("name");
+                    phone = document.getString("phone");
+
+                    // Set user info
+                    userName.setText(name);
+                    customerBookedName.setText(name);
+                    customerBookedPhone.setText(phone);
+
+                } else {
+                    // User document not found
+                    Log.d("Auth Firestore Database", "No such document");
+                }
+            } else {
+                Log.d("Auth Firestore Database", "get failed with ", task.getException());
+            }
+        });
+
     }
 
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
