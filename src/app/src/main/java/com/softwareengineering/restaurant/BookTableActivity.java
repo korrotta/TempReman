@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -15,6 +16,8 @@ public class BookTableActivity extends AppCompatActivity {
     private EditText nameET, phoneET;
     private Spinner daySpinner, monthSpinner, yearSpinner, timeSpinner;
     private TextView topMenuName, decreasePeopleTV, increasePeopleTV, numPeopleTV;
+
+    private Button reserveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,20 @@ public class BookTableActivity extends AppCompatActivity {
             }
         });
 
+        //FIXME: WHERE'S THE SPINNER? RESERVE BUTTON?
+        //on reserve click
+        reserveButton = findViewById(R.id.reserveButton);
+
+        reserveButton.setOnClickListener(reserveButtonClickEvent);
+        //
+
+
         topMenuName.setText("Book Table");
     }
+    View.OnClickListener reserveButtonClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO: As staff you can create an anonymous user, only check if the user's chosen date and time range to book is idle
+        }
+    };
 }

@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.AdminPackage.AddStaffsActivity;
+import com.softwareengineering.restaurant.AdminPackage.ReportsDetails;
 import com.softwareengineering.restaurant.AdminPackage.StaffsActivity;
 import com.softwareengineering.restaurant.ItemClasses.Reports;
 import com.softwareengineering.restaurant.LoginActivity;
@@ -42,6 +43,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -107,7 +109,20 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO: Add UI for viewing report. Send Reports item to new activity.
-
+                Reports r = (Reports) adapter.getItem(position);
+                String rId = r.getId();
+                String content = r.getContent();
+                if (Objects.equals(content, "")){
+                    //Empty means file has been saved
+                    Intent i = new Intent(StaffsReportsActivity.this, ReportsDetails.class);
+                    i.putExtra("reports", r);
+                    startActivity(i);
+                }
+                else {
+                    Intent i = new Intent(StaffsReportsActivity.this, StaffNewReportActivity.class);
+                    i.putExtra("reports", r);
+                    startActivity(i);
+                }
             }
         });
 
@@ -115,6 +130,8 @@ public class StaffsReportsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StaffsReportsActivity.this, StaffNewReportActivity.class);
+                Reports r = null;
+                intent.putExtra("reports", r);
                 startActivity(intent);
             }
         });
@@ -146,10 +163,10 @@ public class StaffsReportsActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot doc: task.getResult()){
                                 Reports r = new Reports(
                                         doc.getString("title"),
-                                        doc.getString("sender"),
+                                        doc.getString("staffID"),
                                         doc.getString("content"),
                                         doc.getDate("date"),
-                                        doc.getString("id"));
+                                        doc.getString("reportid"));
                                 if (!r.getContent().equals("")) r.setTitle(r.getTitle()+" (saved)");
                                 g1_reportList.add(r);
                             }

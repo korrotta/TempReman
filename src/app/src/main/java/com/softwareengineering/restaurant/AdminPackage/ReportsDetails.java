@@ -72,7 +72,7 @@ public class ReportsDetails extends AppCompatActivity {
                 }
             });
 
-            StorageReference ref2=  storage.child("reports/" + reports.getSender() + "/" + reports.getContent() + ".txt");
+            StorageReference ref2=  storage.child("reports/" + reports.getSender() + "/" + reports.getId() + ".txt");
             ref2.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {

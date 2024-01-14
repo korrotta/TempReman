@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -42,7 +43,8 @@ public class StaffNewReportActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private RelativeLayout customers, menu, tables, reports, payment, account, logout;
     private Button confirm, save;
-
+    Runnable runnable;
+    private final Reports[] recvReport = new Reports[1];
     private String g1_sender;
     private String g1_currentReportId = null;
     @Override
@@ -68,7 +70,7 @@ public class StaffNewReportActivity extends AppCompatActivity {
         content = findViewById(R.id.content);
 
         topMenuImg.setImageResource(R.drawable.back);
-
+        g1_currentReportId = getIntent().getExtras().getString("id");
         topMenuImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +81,27 @@ public class StaffNewReportActivity extends AppCompatActivity {
         confirm = (Button) findViewById(R.id.btn_confirm);
         save = (Button) findViewById(R.id.btn_save);
 
+        if (getIntent()!=null){
+            recvReport[0] = getIntent().getParcelableExtra("reports");
+        }
+        else {
+            recvReport[0]= null;
+        }
+
+        if (recvReport[0] != null) {
+            //Create a new report
+            title.setText(recvReport[0].getTitle());
+            content.setText(recvReport[0].getContent());
+            g1_currentReportId = recvReport[0].getId();
+        }
+//       runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                if (getIntent()!=null){
+//                    recvReport[0] = getIntent().getParcelableExtra("reports");
+//                }
+//            }
+//        };
         topMenuName.setText("Write a report");
 
         menuBarItemClick();
@@ -91,14 +114,15 @@ public class StaffNewReportActivity extends AppCompatActivity {
     View.OnClickListener saveButtonClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             if (title.getText() == null || title.getText().equals("")) {
                 return;
             }
             if (content.getText() == null || content.getText().equals("")) {
                 return;
             }
-
-            if (g1_currentReportId == null) {
+            //new one creating
+            if (recvReport[0] == null) {
                 FirebaseFirestore.getInstance().collection("reports").add(
                         new HashMap<String, Object>() {{
                             put("content", content.getText().toString());
@@ -116,6 +140,14 @@ public class StaffNewReportActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+
+            //update data for old one
+            else {
+                FirebaseFirestore.getInstance().collection("reports").document(recvReport[0].getId())
+                        .update("content", content.getText().toString());
+                FirebaseFirestore.getInstance().collection("reports").document(recvReport[0].getId())
+                        .update("title", title.getText().toString());
             }
             finish();
         }
@@ -145,7 +177,7 @@ public class StaffNewReportActivity extends AppCompatActivity {
 
     private void uploadReportFile(){
         //Upload to firestore first to get id
-        if (g1_currentReportId == null) {
+        if (recvReport[0] == null) {
             FirebaseFirestore.getInstance().collection("reports").add(
                     new HashMap<String, Object>(){{
                         put("content", content.getText().toString());
@@ -181,6 +213,37 @@ public class StaffNewReportActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+
+
+        else {
+            //Update data for firestore
+            String id = recvReport[0].getId();
+            Log.d("Runnable", "uploadReportFile: " + id);
+
+            FirebaseFirestore.getInstance().collection("reports").document(id)
+                    .update("title", title.getText().toString());
+            FirebaseFirestore.getInstance().collection("reports").document(id)
+                    .update("content", content.getText().toString());
+
+            //Upload file to storage
+            byte[] bytes = content.getText().toString().getBytes();
+            FirebaseStorage.getInstance().getReference().child("reports/"+mAuth.getCurrentUser().getUid()+"/"
+                            + recvReport[0].getId() +".txt").putBytes(bytes)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Log.d("Done", "onSuccess: " + taskSnapshot.toString());
+                            FirebaseFirestore.getInstance().collection("reports").document(id)
+                                    .update("content", "");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Failed", "onFailure: " + e.toString());
+                        }
+                    });
         }
     }
 

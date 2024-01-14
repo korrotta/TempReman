@@ -91,7 +91,6 @@ public class ReportsActivity extends AppCompatActivity {
         });
 
         menuBarClickEvent();
-
     }
 
 
@@ -116,12 +115,11 @@ public class ReportsActivity extends AppCompatActivity {
                         String staffID = doc.getString("staffID");
                         String title = doc.getString("title");
                         Date date = doc.getDate("date");
-                        String rpContent = doc.getId();
-                        String id = doc.getString("id");
+                        String id = doc.getString("reportid");
                         String tempContent = doc.getString("content");
                         //checker
                         if (!tempContent.equals("")) continue;
-                        Reports rp = new Reports(title, staffID, rpContent, date, id);
+                        Reports rp = new Reports(title, staffID, tempContent, date, id);
                         reportsArrayList.add(rp);
                     }
                     // Sort Reports by Date

@@ -153,6 +153,7 @@
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity android:name=".StaffPackage.StaffNewReportActivity" />
+        <activity android:name="com.softwareengineering.restaurant.StaffPackage.TableDetailBooked" />
 
         <meta-data
             android:name="preloaded_fonts"
