@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.softwareengineering.restaurant.BookTableActivity;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.TablesAdapter;
@@ -97,17 +98,32 @@ public class StaffsTablesActivity extends AppCompatActivity {
         binding.staffsTableLayoutGridView.setAdapter(tablesModelArrayAdapter);
         // showTable Function with state
 
+        realtimeUpdateTableList();
         // Set Click Listener For Table Layout
         binding.staffsTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(StaffsTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(StaffsTablesActivity.this, StaffOrderActivity.class);
-                startActivity(intent);
+                TablesModel t = (TablesModel) tablesModelArrayAdapter.getItem(position);
+
+                //Checking if the table is idle in that range of time?
+                firestore.collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            if (doc.getString("state").equals("idle")) {
+                                Intent i = new Intent(StaffsTablesActivity.this, BookTableActivity.class);
+                                i.putExtra("id", t.getId());
+                                startActivity(i);
+                            }
+                        }
+                        else Log.e("GG", "onComplete: " + task.getException().toString());;
+                    }
+                });
+
+                //Intent intent = new Intent(StaffsTablesActivity.this, TablesDetails.class);
             }
         });
-
-        realtimeUpdateTableList();
 
     }
     private void realtimeUpdateTableList(){
