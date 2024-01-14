@@ -59,10 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="10dp"
-            android:gravity="center"
             android:layout_marginBottom="10dp"
             android:background="@drawable/layout_bg_design"
             android:backgroundTint="@color/light_orange_2"
+            android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp"
             android:radius="15dp">
@@ -221,19 +221,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp">
-
+        android:gravity="center">
 
         <Button
             android:id="@+id/table_booked_toInUseButton"
             android:layout_width="130dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/dark_green"
             android:fontFamily="@font/roboto"
             android:text="In Use"
@@ -247,8 +243,6 @@
             android:layout_height="55dp"
             android:layout_gravity="center"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:backgroundTint="@color/light_red"
             android:fontFamily="@font/roboto"
             android:text="@string/cancel"

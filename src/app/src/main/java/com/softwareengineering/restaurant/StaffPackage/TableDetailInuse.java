@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +13,10 @@ import android.widget.TextView;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.databinding.ActivityTableDetailInuseBinding;
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class TableDetailInuse extends AppCompatActivity {
 
@@ -37,7 +42,6 @@ public class TableDetailInuse extends AppCompatActivity {
         binding.tableDetailsInuseCustomerImg.setImageResource(R.drawable.default_user);
         binding.tableDetailsInuseCustomerName.setText("Name");
         binding.tableDetailsInuseNumberTable.setText("1");
-        binding.tableDetailsInuseDate.setText("01/01/2024");
         binding.tableDetailsInuseTime.setText("20:00");
 
         // Order Button
@@ -72,4 +76,18 @@ public class TableDetailInuse extends AppCompatActivity {
 
         topMenuName.setText(R.string.table_detail);
     }
+
+    private void setDateToCurrentTime(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date timeNow = Calendar.getInstance().getTime();
+        binding.tableDetailsInuseDate.setText(dateFormat.format(timeNow));
+    }
+
+    private void getDataFromPreviousIntent(){
+        String[] datas = getIntent().getStringArrayExtra("data");
+        if (datas!= null) {
+            Log.d("", "getDataFromPreviousIntent: " + datas[0] + " " + datas[1] + " " + datas[2]);
+        }
+    }
+
 }

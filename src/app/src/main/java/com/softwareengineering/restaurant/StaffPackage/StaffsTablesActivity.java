@@ -64,7 +64,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private Spinner timeFilter;
 
     private final String final_statePerTime[] = new String[1];
-    private final int final_recentTimeRange[] = new int[1];
+    private final int[] final_recentTimeRange = new int[1];
 
     private final ArrayList<String>[] bookedListInRange = new ArrayList[1];
     //Item images
@@ -163,18 +163,17 @@ public class StaffsTablesActivity extends AppCompatActivity {
 
                                 //This is customerid
                                 String dataToTransfer = bookedCustomer.get(bookedDate.indexOf(getTimeFromRange(timeString[final_recentTimeRange[0]])));
-                                Log.d("Test data", dataToTransfer); //worked.
-                                //cai nay m co r
+                                Log.d("Test data", dataToTransfer);
 
                                 //Also table id of course
                                 String id = t.getId(); //table id
                                 //Also time_range
-                                String timeRange = timeString[final_recentTimeRange[0]]; //timerange: cai 9:00 - 11:00 đó
+                                String timeRange = timeString[final_recentTimeRange[0]]; //timerange: 9:00 - 11:00
 
-                                String[] data = new String[3]; //data để truyền, rồi set chỉ số cho nó
-                                data[0] = dataToTransfer; //Data này nó sẽ là số điện thoại, vì staff đặt nên chỉ cần truyền sđt thôi
-                                data[1] = id; //là id bàn
-                                data[2] = timeRange; // là time range
+                                String[] data = new String[3];
+                                data[0] = dataToTransfer; //Phone number
+                                data[1] = id; // Table Id
+                                data[2] = timeRange; // Time range
                                 //So all is done.
 
                                 Intent i = new Intent(StaffsTablesActivity.this, TableDetailBooked.class);
@@ -186,11 +185,38 @@ public class StaffsTablesActivity extends AppCompatActivity {
                     });
                 }
                 else if(t.getImage() == inuseTableImg){
-                    //Maybe will be different to handle.
-                    //Actually same data needed as booked one. So not much. Most important is tableId we got already
-                    Intent i = new Intent(StaffsTablesActivity.this, TableDetailInuse.class);
-                    i.putExtra("id", t.getId());
-                    startActivity(i);
+                    FirebaseFirestore.getInstance().collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                ArrayList<String> bookedDate = (ArrayList<String>) task.getResult().get("bookedDate");
+                                ArrayList<String> bookedCustomer = (ArrayList<String>)task.getResult().get("customerID");
+
+                                int dateIndex = bookedDate.indexOf(getTimeFromRange(timeString[final_recentTimeRange[0]]));
+                                String dataToTransfer = "";
+                                if (dateIndex != -1) {
+                                    dataToTransfer = bookedCustomer.get(dateIndex);
+                                    Log.d("Test data", dataToTransfer);
+                                }
+                                else {
+                                    dataToTransfer = bookedCustomer.toString();
+                                    Log.d("Test data", dataToTransfer);
+                                }
+
+                                String id = t.getId();
+                                String timeRange = timeString[final_recentTimeRange[0]];
+
+                                String[] data = new String[3];
+                                data[0] = dataToTransfer;
+                                data[1] = id;
+                                data[2] = timeRange;
+
+                                Intent i = new Intent(StaffsTablesActivity.this, TableDetailInuse.class);
+                                i.putExtra("data", data);
+                                startActivity(i);
+                            }
+                        }
+                    });
                 }
             }
         });
