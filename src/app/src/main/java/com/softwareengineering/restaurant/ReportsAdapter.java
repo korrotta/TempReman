@@ -40,14 +40,14 @@ public class ReportsAdapter extends ArrayAdapter<Reports> {
         reportsName.setText(reports.getTitle());
         reportsDate.setText(dateFormat.format(reports.getDate()));
 
-        if (!reports.isRead()) {
-            reportsName.setTextColor(ContextCompat.getColor(getContext(), R.color.dark_green));
-            reportsDate.setTextColor(ContextCompat.getColor(getContext(), R.color.dark_green));
-        }
-        else {
-            reportsName.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-            reportsDate.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-        }
+//        if (!reports.isRead()) {
+//            reportsName.setTextColor(ContextCompat.getColor(getContext(), R.color.dark_green));
+//            reportsDate.setTextColor(ContextCompat.getColor(getContext(), R.color.dark_green));
+//        }
+//        else {
+//            reportsName.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+//            reportsDate.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+//        }
 
         return convertView;
     }

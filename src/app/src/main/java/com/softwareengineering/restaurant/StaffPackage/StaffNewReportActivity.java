@@ -17,14 +17,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
+import com.softwareengineering.restaurant.ItemClasses.Reports;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 public class StaffNewReportActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -73,11 +82,45 @@ public class StaffNewReportActivity extends AppCompatActivity {
         topMenuName.setText("Write a report");
 
         menuBarItemClick();
-
+        fetchName();
         confirm.setOnClickListener(confirmButtonClickEvent);
+        save.setOnClickListener(saveButtonClickEvent);
 
     }
-    //TODO: Remove isRead in Reports parcel, add id as a String
+
+    View.OnClickListener saveButtonClickEvent = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (title.getText() == null || title.getText().equals("")) {
+                return;
+            }
+            if (content.getText() == null || content.getText().equals("")) {
+                return;
+            }
+
+            if (g1_currentReportId == null) {
+                FirebaseFirestore.getInstance().collection("reports").add(
+                        new HashMap<String, Object>() {{
+                            put("content", content.getText().toString());
+                            put("reportid", "");
+                            put("sender", g1_sender);
+                            put("staffID", mAuth.getCurrentUser().getUid().toString());
+                            put("title", title.getText().toString());
+                            put("date", Calendar.getInstance().getTime());
+                        }}
+                ).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if (task.isSuccessful()) {
+                            task.getResult().update("reportid", task.getResult().getId());
+                        }
+                    }
+                });
+            }
+            finish();
+        }
+    };
+
     View.OnClickListener confirmButtonClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -101,7 +144,44 @@ public class StaffNewReportActivity extends AppCompatActivity {
     };
 
     private void uploadReportFile(){
-        FirebaseStorage.getInstance().getReference().child("reports/"+mAuth.getCurrentUser().getUid() + "/" );
+        //Upload to firestore first to get id
+        if (g1_currentReportId == null) {
+            FirebaseFirestore.getInstance().collection("reports").add(
+                    new HashMap<String, Object>(){{
+                        put("content", content.getText().toString());
+                        put("reportid", "");
+                        put("sender", g1_sender);
+                        put("staffID", mAuth.getCurrentUser().getUid().toString());
+                        put("title", title.getText().toString());
+                        put("date", Calendar.getInstance().getTime());
+                    }}
+            ).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    if (task.isSuccessful()){
+                        task.getResult().update("reportid", task.getResult().getId());
+
+                        byte[] bytes = content.getText().toString().getBytes();
+
+                        FirebaseStorage.getInstance().getReference().child("reports/"+mAuth.getCurrentUser().getUid()+"/"
+                     + task.getResult().getId() +".txt").putBytes(bytes)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Log.d("Done", "onSuccess: " + taskSnapshot.toString());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e("Failed", "onFailure: " + e.toString());
+                                    }
+                                });
+                        task.getResult().update("content", "");
+                    }
+                }
+            });
+        }
     }
 
     private void fetchName(){

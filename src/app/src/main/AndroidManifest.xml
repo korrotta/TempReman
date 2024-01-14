@@ -16,10 +16,14 @@
         android:theme="@style/Theme.Material3.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+<<<<<<< HEAD
             android:name=".StaffPackage.StaffOrderAddActivity"
             android:exported="false" />
         <activity
             android:name=".StaffPackage.StaffOrderActivity"
+=======
+            android:name=".BookTableActivity"
+>>>>>>> origin/main
             android:exported="false" />
         <activity
             android:name=".StaffPackage.StaffBillActivity"
@@ -28,7 +32,7 @@
             android:name=".StaffPackage.CustomerPaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".AddFoodActivity"
+            android:name=".AdminPackage.AddFoodActivity"
             android:exported="false" />
         <activity
             android:name=".CustomerPackage.CustomersAccountEditActivity"
@@ -80,10 +84,9 @@
             android:exported="false" />
         <activity
             android:name=".StaffPackage.StaffsMenuActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminPackage.AccountActivity"
-            android:exported="false" />
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".Account" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".AdminPackage.SalesActivity"
             android:exported="false" />
@@ -156,6 +159,7 @@
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
+        <activity android:name=".StaffPackage.StaffNewReportActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

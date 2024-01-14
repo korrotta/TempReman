@@ -336,6 +336,7 @@ public class TablesActivity extends AppCompatActivity {
 
         String finalId = chosenID;
         Log.d("The chosen id: ", chosenID.toString());
+
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

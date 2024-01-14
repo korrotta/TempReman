@@ -10,14 +10,15 @@ import java.util.Date;
 public class Reports implements Parcelable, Comparable<Reports> {
     String title, sender, content;
     Date date;
-    boolean isRead;
 
-    public Reports(String title, String sender, String content, Date date, boolean isRead) {
+    String id;
+
+    public Reports(String title, String sender, String content, Date date, String id) {
         this.title = title;
         this.sender = sender;
         this.content = content;
         this.date = date;
-        this.isRead = isRead;
+        this.id  = id;
     }
 
     protected Reports(Parcel in) {
@@ -25,7 +26,7 @@ public class Reports implements Parcelable, Comparable<Reports> {
         sender = in.readString();
         content = in.readString();
         date = new Date(in.readLong());
-        isRead = in.readByte() != 0;
+        id = in.readString();
     }
 
     public static final Creator<Reports> CREATOR = new Creator<Reports>() {
@@ -72,12 +73,12 @@ public class Reports implements Parcelable, Comparable<Reports> {
         this.date = date;
     }
 
-    public boolean isRead() {
-        return isRead;
+    public String getId() {
+        return id;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class Reports implements Parcelable, Comparable<Reports> {
         dest.writeString(sender);
         dest.writeString(content);
         dest.writeLong(date.getTime());
-        dest.writeByte((byte) (isRead ? 1 : 0));
+        dest.writeString(id);
     }
 
     @Override
