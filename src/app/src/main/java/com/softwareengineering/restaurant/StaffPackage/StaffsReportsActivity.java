@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -102,6 +103,14 @@ public class StaffsReportsActivity extends AppCompatActivity {
 
         realtimeUpdateReportList();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO: Add UI for viewing report. Send Reports item to new activity.
+
+            }
+        });
+
         addReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,14 +142,16 @@ public class StaffsReportsActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
+                            g1_reportList.clear();
                             for (QueryDocumentSnapshot doc: task.getResult()){
-                                g1_reportList.add(new Reports(
+                                Reports r = new Reports(
                                         doc.getString("title"),
                                         doc.getString("sender"),
-                                        doc.getString("storageRef"),
+                                        doc.getString("content"),
                                         doc.getDate("date"),
-                                        Boolean.TRUE.equals(doc.getBoolean("isRead"))
-                                ));
+                                        doc.getString("id"));
+                                if (!r.getContent().equals("")) r.setTitle(r.getTitle()+" (saved)");
+                                g1_reportList.add(r);
                             }
                             adapter.notifyDataSetChanged();
                         }
