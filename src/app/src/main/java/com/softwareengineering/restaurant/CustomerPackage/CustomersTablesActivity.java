@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
     private ArrayList<TablesModel> tablesModelArrayList;
     private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
     private LinearLayout customerBookedInfo;
+    private Spinner timeFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
         customerBookedDate = findViewById(R.id.customersBookedDate);
         customerBookedTime = findViewById(R.id.customersBookedTime);
         customerBookedPhone = findViewById(R.id.customersBookedPhone);
+        timeFilter = findViewById(R.id.filterTimeTables);
 
         initCurrentUser();
         initToolBar();
@@ -109,6 +112,29 @@ public class CustomersTablesActivity extends AppCompatActivity {
             // else hide
             customerBookedInfo.setVisibility(View.INVISIBLE);
         }
+
+        // Handle Time filter
+        String[] timeString = {
+                "7:00", "9:00", "11:00", "13:00",
+                "15:00", "17:00", "19:00", "21:00"
+        };
+        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeString);
+        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        timeFilter.setAdapter(timeAdapter);
+
+        timeFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: Handle show table here
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // Set Click Listener For Table Layout
         binding.customersTableLayoutGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

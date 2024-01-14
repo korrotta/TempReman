@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private ArrayList<TablesModel> tablesModelArrayList;
     private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
     private ArrayList<String> tablesState;
+    private Spinner timeFilter;
 
     //Item images
     private final int idleTableImg = R.drawable.table_top_view;
@@ -84,6 +86,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
         logout = findViewById(R.id.staffsLogoutDrawer);
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
+        timeFilter = findViewById(R.id.filterTimeTablesStaffs);
 
         initCurrentUser();
         initToolBar();
@@ -122,6 +125,29 @@ public class StaffsTablesActivity extends AppCompatActivity {
                 });
 
                 //Intent intent = new Intent(StaffsTablesActivity.this, TablesDetails.class);
+            }
+        });
+
+        // Handle Time Filter Spinner
+        String[] timeString = {
+                "7:00", "9:00", "11:00", "13:00",
+                "15:00", "17:00", "19:00", "21:00"
+        };
+        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeString);
+        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        timeFilter.setAdapter(timeAdapter);
+
+        timeFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: Handle show table here
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
