@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -10,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -19,7 +21,9 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -72,11 +76,42 @@ public class ReportsActivity extends AppCompatActivity {
         reportsArrayList = new ArrayList<>();
         reportsAdapter = new ReportsAdapter(ReportsActivity.this, reportsArrayList);
 
+        realtimeUpdateArrayList();
+
+        binding.adminReportsListView.setAdapter(reportsAdapter);
+        binding.adminReportsListView.setClickable(true);
+        binding.adminReportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ReportsActivity.this, ReportsDetails.class);
+                intent.putExtra("reports", reportsArrayList.get(position));
+                startActivity(intent);
+//                reportsArrayList.get(position).setRead(true);
+            }
+        });
+
+        menuBarClickEvent();
+
+    }
+
+
+    private void realtimeUpdateArrayList(){
+        firestore.collection("reports").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error!= null) Log.e("ARA", "onEvent: "+ error.toString());
+                if (value != null && !value.isEmpty()) fetchReportArrayList();
+            }
+        });
+    }
+    private void fetchReportArrayList() {
+        reportsArrayList.clear();
         firestore.collection("reports").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful())
                 {
+                    reportsArrayList.clear();
                     for (QueryDocumentSnapshot doc: task.getResult()){
                         String staffID = doc.getString("staffID");
                         String title = doc.getString("title");
@@ -95,22 +130,6 @@ public class ReportsActivity extends AppCompatActivity {
                 }
             }
         });
-
-        binding.adminReportsListView.setAdapter(reportsAdapter);
-        binding.adminReportsListView.setClickable(true);
-        binding.adminReportsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ReportsActivity.this, ReportsDetails.class);
-                intent.putExtra("reports", reportsArrayList.get(position));
-                startActivity(intent);
-//                reportsArrayList.get(position).setRead(true);
-                reportsAdapter.notifyDataSetChanged();
-            }
-        });
-
-        menuBarClickEvent();
-
     }
 
     private void menuBarClickEvent() {
