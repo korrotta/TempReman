@@ -62,7 +62,6 @@ public class CustomersReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customers_review);
 
-
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.customersDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
