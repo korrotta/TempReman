@@ -102,7 +102,8 @@ public class StaffsTablesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(StaffsTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(StaffsTablesActivity.this, TablesDetails.class);
+                Intent intent = new Intent(StaffsTablesActivity.this, StaffOrderActivity.class);
+                startActivity(intent);
             }
         });
 
