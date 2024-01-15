@@ -123,7 +123,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
         timeFilter.setAdapter(timeAdapter);
 
         int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        final_selectedTime[0] = timeSelection(hourNow);
+        final_selectedTime[0] = timeSelection(hourNow, true);
 
         timeFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -172,8 +172,12 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     startActivity(i);
                 }
                 else if(t.getImage() == bookedTableImg){
-                    Log.d("Data", final_bookedId[0] + "  " + final_bookedTimeRange[0]);
-                    if (!final_bookedId[0].equals(t.getId()) || !getTimeFromRange(final_bookedTimeRange[0]).equals(final_selectedTime[0])){
+                    if (final_isBooked[0] && (!final_bookedId[0].equals(t.getId()) || !getTimeFromRange(final_bookedTimeRange[0]).equals(final_selectedTime[0]))){
+                        Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (!final_isBooked[0]){
                         Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -334,8 +338,10 @@ public class CustomersTablesActivity extends AppCompatActivity {
                 }
             }
         }
-        if (state == "inuse"){
-            if (final_selectedTime[0].equals(timeSelection(hourNow))) return "idle"; // set idle if
+        if (state.equals("inuse")){
+            Log.d("Parse", String.valueOf(Integer.parseInt(final_selectedTime[0])/2-4));
+            Log.d("Parse", String.valueOf(Integer.parseInt(timeSelection(hourNow, false))/2-3));
+            if (Integer.parseInt(final_selectedTime[0])/2-4 > Integer.parseInt(timeSelection(hourNow, false))/2-3) state = "idle";
         }
         return state;
     }
@@ -473,7 +479,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
         closeDrawer(drawerLayout);
     }
 
-    private String timeSelection(int hourNow){
+    private String timeSelection(int hourNow, boolean needChange){
         switch (hourNow){
             case 21:
             case 22:
@@ -491,27 +497,28 @@ public class CustomersTablesActivity extends AppCompatActivity {
             case 8:
             case 9:
             case 10:
-                timeFilter.setSelection(0);
+                if (needChange)  timeFilter.setSelection(0);
+
                 return "9";
             case 11:
             case 12:
-                timeFilter.setSelection(1);
+                 if (needChange)  timeFilter.setSelection(1);
                 return "11";
             case 13:
             case 14:
-                timeFilter.setSelection(2);
+                if (needChange) timeFilter.setSelection(2);
                 return "13";
             case 15:
             case 16:
-                timeFilter.setSelection(3);
+                if (needChange)timeFilter.setSelection(3);
                 return "15";
             case 17:
             case 18:
-                timeFilter.setSelection(4);
+                if (needChange)  timeFilter.setSelection(4);
                 return "17";
             case 19:
             case 20:
-                timeFilter.setSelection(5);
+                if (needChange)timeFilter.setSelection(5);
                 return "19";
 
         }

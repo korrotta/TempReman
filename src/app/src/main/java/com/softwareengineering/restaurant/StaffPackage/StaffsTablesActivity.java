@@ -122,7 +122,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
         timeFilter.setAdapter(timeAdapter);
 
 
-        final_recentTimeRange[0] = timeSelection(hourNow);
+        final_recentTimeRange[0] = timeSelection(hourNow, true);
 
         //need to change this to base on time - DONE
         realtimeUpdateTableList();
@@ -239,7 +239,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
 
     }
 
-    private int timeSelection(int hourNow){
+    private int timeSelection(int hourNow, boolean needChange){
         switch (hourNow){
             case 21:
             case 22:
@@ -257,27 +257,28 @@ public class StaffsTablesActivity extends AppCompatActivity {
             case 8:
             case 9:
             case 10:
-                timeFilter.setSelection(0);
+                if (needChange) timeFilter.setSelection(0);
                 return 0;
             case 11:
             case 12:
-                timeFilter.setSelection(1);
+                if (needChange)  timeFilter.setSelection(1);
                 return 1;
             case 13:
             case 14:
-                timeFilter.setSelection(2);
+                if (needChange)  timeFilter.setSelection(2);
                 return 2;
             case 15:
             case 16:
-                timeFilter.setSelection(3);
+                if (needChange)  timeFilter.setSelection(3);
                 return 3;
             case 17:
             case 18:
-                timeFilter.setSelection(4);
+                if (needChange)  timeFilter.setSelection(4);
                 return 4;
             case 19:
             case 20:
-                timeFilter.setSelection(5);
+                if (needChange)  timeFilter.setSelection(5);
+
                 return 5;
 
         }
@@ -348,8 +349,9 @@ public class StaffsTablesActivity extends AppCompatActivity {
                 }
             }
         }
-        if (state == "inuse"){
-            if (final_recentTimeRange[0] != timeSelection(hourNow)) return "idle"; // set idle if
+        if (state.equals("inuse")){
+            //If higher one zone
+            if (final_recentTimeRange[0] > (timeSelection(hourNow,false)+1)) state = "idle"; // set idle if
         }
         return state;
     }
