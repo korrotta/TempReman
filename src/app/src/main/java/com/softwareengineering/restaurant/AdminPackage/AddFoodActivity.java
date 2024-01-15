@@ -1,12 +1,5 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,28 +13,23 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseError;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
-import com.softwareengineering.restaurant.ItemClasses.Food;
 import com.softwareengineering.restaurant.R;
-import com.softwareengineering.restaurant.databinding.ActivityAddFoodBinding;
-import com.softwareengineering.restaurant.databinding.ActivityReportsDetailsBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class AddFoodActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageView imageView;
-    private ActivityAddFoodBinding binding;
     private ImageView topMenuImg;
     private TextView topMenuName;
     private ArrayList<String> foodType;
@@ -52,6 +40,7 @@ public class AddFoodActivity extends AppCompatActivity {
     private EditText description;
     private ImageView addImageButton;
     private Button doneBtn;
+    private Spinner addFoodType;
 
     //Level 1 callback variable
     private Uri g1_imageUri;
@@ -59,8 +48,7 @@ public class AddFoodActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAddFoodBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_add_food);
 
         topMenuImg = findViewById(R.id.topMenuImg);
         topMenuName = findViewById(R.id.topMenuName);
@@ -69,7 +57,7 @@ public class AddFoodActivity extends AppCompatActivity {
         cost = findViewById(R.id.adminAddFoodCostET);
         ingredient = findViewById(R.id.adminAddFoodIngredientsET);
         description = findViewById(R.id.adminAddFoodDescET);
-
+        addFoodType = findViewById(R.id.adminAddFoodTypeSpinner);
         addImageButton = findViewById(R.id.adminAddFoodImage);
 
         doneBtn = findViewById(R.id.adminAddFoodDoneButton);
@@ -90,9 +78,9 @@ public class AddFoodActivity extends AppCompatActivity {
         ArrayAdapter<String> foodTypesAdapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, foodType);
         foodTypesAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
 
-        // binding foodTypeAdapter into spinner
-        binding.adminAddFoodTypeSpinner.setAdapter(foodTypesAdapter);
-        binding.adminAddFoodTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // bind foodTypeAdapter into spinner
+        addFoodType.setAdapter(foodTypesAdapter);
+        addFoodType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Do something
@@ -106,7 +94,7 @@ public class AddFoodActivity extends AppCompatActivity {
         });
 
         // Set Done Button Click Listener
-        binding.adminAddFoodDoneButton.setOnClickListener(new View.OnClickListener() {
+        doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

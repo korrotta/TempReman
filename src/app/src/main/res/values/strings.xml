@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Restaurant</string>
+    <string name="app_name">FreeSpriteRestaurant</string>
     <string name="login">Log in</string>
     <string name="login_u"><u>Log in</u></string>
     <string name="email">Email</string>
