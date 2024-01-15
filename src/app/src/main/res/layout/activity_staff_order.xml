@@ -32,11 +32,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/customerName"
+                android:id="@+id/staff_order_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="41dp"
                 android:fontFamily="@font/quicksand"
-                android:text="Tống Gia Khánh"
+                android:text="Anonymous"
                 android:textSize="22sp"></TextView>
 
         </LinearLayout>
@@ -68,7 +68,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/numberTable"
+                    android:id="@+id/staff_order_numberId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand"
@@ -81,32 +81,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/customer" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand"
-                    android:text="GUESS: "
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/numberGuess"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand"
-                    android:text="2"
-                    android:textColor="@color/orange"
-                    android:textSize="22dp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
@@ -137,7 +112,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/date"
+                    android:id="@+id/staff_order_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand"
@@ -160,7 +135,7 @@
             android:background="@drawable/dashed_line" />
 
         <Button
-            android:id="@+id/btn_add"
+            android:id="@+id/staff_order_addButton"
             android:layout_width="180dp"
             android:layout_height="55dp"
             android:layout_gravity="end"
@@ -252,7 +227,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/total"
+                    android:id="@+id/staff_order_total"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

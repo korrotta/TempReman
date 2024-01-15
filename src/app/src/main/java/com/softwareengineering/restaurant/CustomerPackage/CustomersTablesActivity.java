@@ -40,6 +40,7 @@ import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.StaffPackage.StaffsTablesActivity;
 import com.softwareengineering.restaurant.StaffPackage.TableDetailBooked;
+import com.softwareengineering.restaurant.StaffPackage.TableDetailInuse;
 import com.softwareengineering.restaurant.TablesAdapter;
 import com.softwareengineering.restaurant.TablesModel;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersTablesBinding;
@@ -216,11 +217,34 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     });
 
                 }
+
+                //Handle table inuse
                 else if(t.getImage() == inuseTableImg){
+                    //Cannot view someone's table
+                    FirebaseFirestore.getInstance().collection("table").document(t.getId()).get().addOnCompleteListener(
+                            new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        if (!task.getResult().getString("userinuse").equals(mAuth.getCurrentUser().getUid())) {
+                                            Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        //Data sending through intent
+                                        Intent i = new Intent(CustomersTablesActivity.this, TableDetailInuse.class);
+                                        String[] data = new String[2];
+                                        data[0] = mAuth.getCurrentUser().getUid(); //userID
+                                        data[1] = t.getId(); //tableid
+
+                                        i.putExtra("data", data);
+                                        startActivity(i);
+                                    }
+                                }
+                            });
+
                     //Maybe will be different to handle.
                     //Actually same data needed as booked one. So not much. Most important is tableId we got already
                 }
-                Toast.makeText(CustomersTablesActivity.this, "Table No. " + (position + 1), Toast.LENGTH_SHORT).show();
                 // If table is available go to Book Table Activity
 
                 // Else show dialog for booked and in use table
