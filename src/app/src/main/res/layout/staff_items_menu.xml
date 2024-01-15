@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="153dp"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginBottom="20dp"
         android:layout_gravity="start"
@@ -28,7 +28,6 @@
             android:id="@+id/name_food"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:layout_gravity="center"
             android:textStyle="bold"
@@ -58,6 +57,7 @@
             android:gravity="center"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp">
 
             <TextView
@@ -73,14 +73,60 @@
                 android:textColor="#333333">
             </TextView>
 
-            <ImageView
-                android:id="@+id/btn_add"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:gravity="end"
-                android:textSize="12sp"
-                android:background="@drawable/add_other">
-            </ImageView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/btn_add"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="end"
+                    android:textSize="12sp"
+                    android:background="@drawable/add_other">
+                </ImageView>
+
+                <FrameLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/btn_add"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_order"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/btn_minus"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/ic_minus">
+                        </ImageView>
+
+                        <TextView
+                            android:id="@+id/quanlity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            >
+                        </TextView>
+
+                        <ImageView
+                            android:id="@+id/btn_plus"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_plus"
+                            android:layout_marginRight="5dp">
+                        </ImageView>
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
