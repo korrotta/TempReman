@@ -92,6 +92,9 @@ public class TableDetailBooked extends AppCompatActivity {
                 removeDataInArrayList(FirebaseFirestore.getInstance().collection("table"));
                 FirebaseFirestore.getInstance().collection("table").document(datas[1]).update("state", "inuse");
             }
+
+
+            FirebaseFirestore.getInstance().collection("table").document(datas[1]).update("userinuse", datas[0]);
             finish();
         }
     };

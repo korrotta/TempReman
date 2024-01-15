@@ -30,6 +30,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
+import com.softwareengineering.restaurant.databinding.ActivityAddFoodBinding;
 
 import java.util.ArrayList;
 

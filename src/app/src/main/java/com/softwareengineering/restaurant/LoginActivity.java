@@ -21,9 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.softwareengineering.restaurant.AdminPackage.AdminMainActivity;
 import com.softwareengineering.restaurant.CustomerPackage.CustomersMenuActivity;
 import com.softwareengineering.restaurant.StaffPackage.StaffsMenuActivity;
+import com.softwareengineering.restaurant.databinding.ActivityAddFoodBinding;
 
 import java.util.Objects;
 
@@ -129,7 +129,7 @@ public class  LoginActivity extends AppCompatActivity {
 
                     // Login as Admin
                     if(Objects.equals(userRole, "admin")) {
-                        Intent intent = new Intent(LoginActivity.this, AdminMainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, ActivityAddFoodBinding.class);
                         startActivity(intent);
                         finish();
                     }
