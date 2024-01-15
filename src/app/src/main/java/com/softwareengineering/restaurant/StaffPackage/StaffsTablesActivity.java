@@ -189,30 +189,8 @@ public class StaffsTablesActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if(task.isSuccessful()){
-                                ArrayList<String> bookedDate = (ArrayList<String>) task.getResult().get("bookedDate");
-                                ArrayList<String> bookedCustomer = (ArrayList<String>)task.getResult().get("customerID");
-
-                                int dateIndex = bookedDate.indexOf(getTimeFromRange(timeString[final_recentTimeRange[0]]));
-                                String dataToTransfer = "";
-                                if (dateIndex != -1) {
-                                    dataToTransfer = bookedCustomer.get(dateIndex);
-                                    Log.d("Test data", dataToTransfer);
-                                }
-                                else {
-                                    dataToTransfer = bookedCustomer.toString();
-                                    Log.d("Test data", dataToTransfer);
-                                }
-
-                                String id = t.getId();
-                                String timeRange = timeString[final_recentTimeRange[0]];
-
-                                String[] data = new String[3];
-                                data[0] = dataToTransfer;
-                                data[1] = id;
-                                data[2] = timeRange;
-
                                 Intent i = new Intent(StaffsTablesActivity.this, TableDetailInuse.class);
-                                i.putExtra("data", data);
+                                i.putExtra("id", t.getId());
                                 startActivity(i);
                             }
                         }
