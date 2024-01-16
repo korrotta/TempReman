@@ -98,10 +98,10 @@ public class BookTableActivity extends AppCompatActivity {
 
             int hourParsed[] = new int[2];
             hourParsed = timeParser(final_time[0]);
-//
-//            if (hour >= hourParsed[1])
-//                Toast.makeText(BookTableActivity.this, "Time has passed, book failed", Toast.LENGTH_SHORT).show();
-//            else {
+
+            if (hour >= hourParsed[1])
+                Toast.makeText(BookTableActivity.this, "Time has passed, book failed", Toast.LENGTH_SHORT).show();
+            else {
                 Log.d("Success", final_tableID[0]);
                 //Able to book - changing firestore data:
                 FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).get().addOnCompleteListener(
@@ -150,7 +150,7 @@ public class BookTableActivity extends AppCompatActivity {
                             }
                         });
             }
-//        }
+        }
     };
 
     private void bookingDocumentWrite(){

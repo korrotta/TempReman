@@ -12,8 +12,11 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -59,7 +62,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     private FoodAdapter foodAdapter;
     private List<Food> foodListHolder = new ArrayList<>();
     private GridView gridView;
-
+    private EditText searchMenu;
     private LinearLayout saladButton, pizzaButton, drinkButton, dessertButton, pastaButton, burgerButton, otherButton;
 
     private TextView statusClick;
@@ -74,7 +77,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
         DESSERT,
         DRINK,
         BURGER,
-        OTHERS,
+        OTHERS
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.staffsNavAvatar);
         userName = findViewById(R.id.staffsNavName);
         gridView = findViewById(R.id.list_menu);
+        searchMenu = findViewById(R.id.search_menu);
 
         // Filter button setup here:
         saladButton = findViewById(R.id.saladFilter);
@@ -119,6 +123,9 @@ public class StaffsMenuActivity extends AppCompatActivity {
         initToolBar();
         initNavBar();
 
+        // Handle search menu
+        handleSearchMenu();
+
         //filter click
         saladButton.setOnClickListener(saladClickEvent);
         drinkButton.setOnClickListener(drinkClickEvent);
@@ -129,6 +136,25 @@ public class StaffsMenuActivity extends AppCompatActivity {
         otherButton.setOnClickListener(otherClickEvent);
 
         //statusClick.setOnClickListener(statusChangeEvent);
+    }
+
+    private void handleSearchMenu() {
+        searchMenu.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                fetchSearchedFoodList(s.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     private void initNavBar() {
@@ -271,6 +297,44 @@ public class StaffsMenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void fetchSearchedFoodList(String searchedName) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference foodCollection = db.collection("food");
+        foodList.clear();
+
+        foodCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot doc: task.getResult()){
+                        if (doc.getBoolean("state") == null) Log.d("null_Long", doc.getId().toString());
+                        Food food = new Food(
+                                doc.getString("imageRef"),
+                                doc.getString("imageURL"),
+                                doc.getString("name"),
+                                doc.getLong("price"),
+                                Boolean.TRUE.equals(doc.getBoolean("state")),
+                                doc.getString("type")
+                        );
+
+                        if (food.getName().toLowerCase().contains(searchedName)
+                                || food.getName().toLowerCase().equals(searchedName)) {
+                            foodList.add(food);
+                        }
+                    }
+                    foodListHolder.clear();
+                    //changed UI
+                    foodAdapter.notifyDataSetChanged();
+                    foodListHolder.addAll(foodList);
+                }
+                else {
+                    Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
     private void setItemBackgroundColors(RelativeLayout selectedItem) {
         customers.setBackgroundColor(selectedItem == customers ? ContextCompat.getColor(this, R.color.light_orange_3) : ContextCompat.getColor(this, R.color.light_orange_2));
         menu.setBackgroundColor(selectedItem == menu ? ContextCompat.getColor(this, R.color.light_orange_3) : ContextCompat.getColor(this, R.color.light_orange_2));
@@ -438,8 +502,10 @@ public class StaffsMenuActivity extends AppCompatActivity {
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (value != null && !value.isEmpty()) {
                     foodListHolder.clear();
-                    fetchFoodList(); //FIXME: i can't fking find out where's foodListHolder value after calling the second level callback
+                    fetchFoodList(); //FIXME: i can't find out where's foodListHolder value after calling the second level callback
                     Log.d("Drink_reach", String.valueOf(foodList.size()));
+
+                    // Handle filters
                     switch (g1_filterType) {
                         case DRINK: {
                             g1_filterType = FILTER_TYPE.FULL;

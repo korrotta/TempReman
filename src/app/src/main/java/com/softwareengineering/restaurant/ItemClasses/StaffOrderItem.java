@@ -3,10 +3,10 @@ package com.softwareengineering.restaurant.ItemClasses;
 public class StaffOrderItem {
     private int imageResourceId;
     private String foodName;
-    private String price;
-    private String quantity;
+    private Long price;
+    private Long quantity;
 
-    public StaffOrderItem(int imageResourceId, String foodName, String price, String quantity) {
+    public StaffOrderItem(int imageResourceId, String foodName, Long price, Long quantity) {
         this.imageResourceId = imageResourceId;
         this.foodName = foodName;
         this.price = price;
@@ -21,11 +21,11 @@ public class StaffOrderItem {
         return foodName;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public String getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 }

@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.softwareengineering.restaurant.AdminPackage.AdminMainActivity;
 import com.softwareengineering.restaurant.CustomerPackage.CustomersMenuActivity;
 import com.softwareengineering.restaurant.StaffPackage.StaffsMenuActivity;
+import com.softwareengineering.restaurant.databinding.ActivityAddFoodBinding;
 
 import java.util.Objects;
 
