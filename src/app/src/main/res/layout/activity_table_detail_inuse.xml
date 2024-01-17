@@ -32,7 +32,8 @@
         android:backgroundTint="@color/light_orange"
         android:background="@drawable/layout_bg_design"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:radius="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -185,7 +186,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/btn_order"
@@ -193,7 +195,7 @@
             android:layout_height="55dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
+            android:layout_marginRight="40dp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/orange"
             android:fontFamily="@font/roboto"
@@ -206,7 +208,6 @@
             android:id="@+id/btn_cancel"
             android:layout_width="130dp"
             android:layout_height="55dp"
-            android:layout_marginStart="60dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
