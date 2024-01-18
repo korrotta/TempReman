@@ -113,6 +113,6 @@
     <string name="summer_salad">Summer Salad</string>
     <string name="table_detail">Table Detail</string>
     <string name="order">Order</string>
-    <string name="today_s_sale">Today\'s Sales</string>
+    <string name="today_s_sale">Today\'s Sale</string>
     <string name="to_previous_day">To Previous Day</string>
 </resources>
