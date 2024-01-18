@@ -1,0 +1,3 @@
+Update data for table
+- bookedDate
+- customer ID
