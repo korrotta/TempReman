@@ -76,4 +76,7 @@ dependencies {
     // Import Circle Image View
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
+    // Import Chart
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 }
