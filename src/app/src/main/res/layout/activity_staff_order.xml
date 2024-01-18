@@ -37,7 +37,7 @@
                 android:layout_height="41dp"
                 android:fontFamily="@font/quicksand"
                 android:text="Anonymous"
-                android:textSize="22sp"></TextView>
+                android:textSize="22sp" />
 
         </LinearLayout>
 

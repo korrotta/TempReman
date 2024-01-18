@@ -35,7 +35,7 @@ public class ReportsAdapter extends ArrayAdapter<Reports> {
         TextView reportsName = convertView.findViewById(R.id.adminReportsName);
         TextView reportsDate = convertView.findViewById(R.id.adminReportsDate);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
         reportsName.setText(reports.getTitle());
         reportsDate.setText(dateFormat.format(reports.getDate()));
