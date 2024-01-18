@@ -19,6 +19,7 @@
     <color name="light_grey">#F5F5F5</color>
     <color name="blue">#365899</color>
     <color name="blue_2">#4979D1</color>
+    <color name="light_green">#6AC259</color>
     <color name="dark_green">#4F970F</color>
     <color name="green">#33A02C</color>
 </resources>
