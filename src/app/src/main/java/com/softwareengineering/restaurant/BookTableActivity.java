@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ public class BookTableActivity extends AppCompatActivity {
     private TextView topMenuName;
     private AppCompatButton reserveButton;
     private TextView tableId;
+    private Handler handler;
 
     private final String[] final_tableID = new String[1];
     private final String[] final_time = new String[1];
@@ -89,9 +94,25 @@ public class BookTableActivity extends AppCompatActivity {
                     }
                 });
     }
+
     View.OnClickListener reserveTableEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            String name, phone;
+            name = nameET.getText().toString();
+            phone = phoneET.getText().toString();
+
+            if (TextUtils.isEmpty(name)) {
+                Toast.makeText(BookTableActivity.this, "Name must not be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (TextUtils.isEmpty(phone)) {
+                Toast.makeText(BookTableActivity.this, "Phone Number must not be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             //Booking time handle
             int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int min = Calendar.getInstance().get(Calendar.MINUTE);
@@ -145,13 +166,34 @@ public class BookTableActivity extends AppCompatActivity {
                                         doc.update("bookedDate", bookedDate);
                                         doc.update("customerID", bookedCustomer);
                                     }
-                                    finish();
+
+
                                 }
                             }
                         });
+
+                showSuccessDialog(BookTableActivity.this::finish);
             }
         }
     };
+
+    private void showSuccessDialog(Runnable onDismissAction) {
+        Dialog successDialog = new Dialog(this);
+        successDialog.setContentView(R.layout.reserve_success_dialog);
+        successDialog.setCancelable(true);
+
+        // Handle close button click
+        ImageButton closeButton = successDialog.findViewById(R.id.imageButtonClose);
+        closeButton.setOnClickListener(v -> {
+            if (successDialog.isShowing()) {
+                successDialog.dismiss();
+            }
+        });
+
+        successDialog.setOnDismissListener(dialog -> onDismissAction.run());
+        successDialog.show();
+    }
+
 
     private void bookingDocumentWrite(){
         FirebaseFirestore.getInstance().collection("booking").add(
@@ -173,15 +215,8 @@ public class BookTableActivity extends AppCompatActivity {
 
 
     private void UISetup() {
-        // Get data from user input
-        String name;
-        String phone;
-
         //tableID:
         tableId.setText(final_tableID[0]);
-
-        name = nameET.getText().toString();
-        phone = phoneET.getText().toString();
         final_time[0] = "0:00";
         // Handle data for spinner
         String[] timeString =  {
