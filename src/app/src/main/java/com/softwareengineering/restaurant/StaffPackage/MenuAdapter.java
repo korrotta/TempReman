@@ -14,17 +14,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.softwareengineering.restaurant.ItemClasses.MenuItem;
+import com.softwareengineering.restaurant.ItemClasses.OrderItem;
 import com.softwareengineering.restaurant.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuAdapter extends BaseAdapter {
     private Context context;
     private List<MenuItem> menuItems;
+    private List<OrderItem> selectedItems;
 
     public MenuAdapter(Context context, List<MenuItem> menuItems) {
         this.context = context;
         this.menuItems = menuItems;
+        this.selectedItems = new ArrayList<>();
     }
 
     @Override
@@ -129,6 +133,14 @@ public class MenuAdapter extends BaseAdapter {
                 }
             }
         });
+
+        // Lưu thông tin món ăn đã chọn vào danh sách
+        saveSelectedItem(menuItem, Long.parseLong(holder.quanlity.getText().toString()));
+    }
+
+    private void saveSelectedItem(MenuItem menuItem, Long quantity) {
+        OrderItem orderItem = new OrderItem(menuItem.getName(), menuItem.getPrice(), quantity);
+        selectedItems.add(orderItem);
     }
 
     // Thêm phương thức hideNewLayout để ẩn layout mới và hiển thị lại nút btn_add
@@ -139,6 +151,11 @@ public class MenuAdapter extends BaseAdapter {
         // Hiển thị lại nút btn_add
         holder.btnAdd.setVisibility(View.VISIBLE);
     }
+
+    public List<OrderItem> getSelectedItems() {
+        return selectedItems;
+    }
+
 }
 
 
