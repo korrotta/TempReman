@@ -3,6 +3,7 @@ package com.softwareengineering.restaurant.StaffPackage;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -80,10 +82,44 @@ public class TableDetailInuse extends AppCompatActivity {
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                showCancelTableDialog();
             }
         });
 
+    }
+
+    private void showCancelTableDialog() {
+        Dialog cancelTableDialog = new Dialog(this);
+        cancelTableDialog.setContentView(R.layout.cancel_table_dialog);
+        cancelTableDialog.setCancelable(true);
+
+        Button yesButton = cancelTableDialog.findViewById(R.id.cancelTableDialogYesBtn);
+        Button noButton = cancelTableDialog.findViewById(R.id.cancelTableDialogNoBtn);
+
+        yesButton.setOnClickListener(v -> {
+            cancelTableDialog.dismiss();
+            handleYesButtonClick();
+        });
+
+        noButton.setOnClickListener(v -> {
+            cancelTableDialog.dismiss();
+        });
+
+        cancelTableDialog.show();
+    }
+
+    private void handleYesButtonClick() {
+        CollectionReference tableReference = FirebaseFirestore.getInstance().collection("table");
+        // TODO: Handle cancel In Use Table
+//        if (final_isCustomer[0]){
+//            removeDataInArrayList(tableReference);
+//            removeBookingDocument();
+//        }
+//        //handle as staff booked - anonymous
+//        else {
+//            removeDataInArrayList(tableReference);
+//        }
+        finish();
     }
 
     private void initToolBar() {
@@ -127,11 +163,7 @@ public class TableDetailInuse extends AppCompatActivity {
     }
 
 
-    private void fetchUsingUserRole() {
-
-    }
     private void fetchUserRole(){
-//        Log.d("Inuse2", final_id[0]);
         FirebaseFirestore.getInstance().collection("users").document(final_id[0])
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -145,6 +177,7 @@ public class TableDetailInuse extends AppCompatActivity {
                     }
                 });
     }
+
     private void fetchUserData(){
         if (final_isCustomer[0]){
             FirebaseFirestore.getInstance().collection("users").document(final_id[0]).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
