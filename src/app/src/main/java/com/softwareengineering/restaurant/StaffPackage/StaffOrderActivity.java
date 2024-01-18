@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,7 +20,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.softwareengineering.restaurant.ItemClasses.OrderItem;
 import com.softwareengineering.restaurant.ItemClasses.StaffOrderItem;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
 import java.lang.reflect.Array;
@@ -70,6 +73,26 @@ public class StaffOrderActivity extends AppCompatActivity {
         adapter = new StaffOrderAdapter(this, orderItems);
         // Kết nối ListView với Adapter
         listView.setAdapter(adapter);
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("listFoodSelected")) {
+            List<OrderItem> listFoodSelected = intent.getParcelableArrayListExtra("listFoodSelected");
+
+            // Thêm các món đã chọn vào danh sách orderItems
+            for (OrderItem selected : listFoodSelected) {
+                StaffOrderItem staffOrderItem = new StaffOrderItem(
+                        R.drawable.circle_background,
+                        selected.getNameFood(),
+                        selected.getPrice(),
+                        selected.getQuantity());
+
+                Toast.makeText(StaffOrderActivity.this, selected.getNameFood(), Toast.LENGTH_SHORT).show();
+                orderItems.add(staffOrderItem);
+            }
+
+            // Cập nhật giao diện
+            adapter.notifyDataSetChanged();
+        }
 
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override
