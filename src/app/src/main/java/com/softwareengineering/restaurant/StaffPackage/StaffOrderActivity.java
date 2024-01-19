@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -147,7 +149,7 @@ public class StaffOrderActivity extends AppCompatActivity {
                         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("quantityList", new ArrayList<String>());
                         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("state", "idle");
                         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("userinuse", "");
-                        showSuccessDialog();
+                        showSuccessDialog(StaffOrderActivity.this::finish);
                     }
                 });
             }
@@ -170,27 +172,22 @@ public class StaffOrderActivity extends AppCompatActivity {
                 });
     }
 
-    private void showSuccessDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(StaffOrderActivity.this);
+    private void showSuccessDialog(Runnable onDismissAction) {
+        Dialog successDialog = new Dialog(this);
+        successDialog.setContentView(R.layout.payment_success_dialog);
+        successDialog.setCancelable(true);
 
-        // Create a TextView with custom text color
-        TextView messageTextView = new TextView(StaffOrderActivity.this);
-        messageTextView.setText("You have successfully paid!");
-        messageTextView.setTextColor(Color.parseColor("#6AC259"));
-        messageTextView.setTextSize(24);
-        messageTextView.setGravity(Gravity.CENTER);
-        messageTextView.setPadding(16, 16, 16, 16);
+        // Handle close button click
+        ImageButton closeButton = successDialog.findViewById(R.id.imageButtonClose);
+        closeButton.setOnClickListener(v -> {
+            if (successDialog.isShowing()) {
+                successDialog.dismiss();
+            }
+        });
 
-        builder.setMessage(" ")
-                .setView(messageTextView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
-                .show();
+        successDialog.setOnDismissListener(dialog -> onDismissAction.run());
+        successDialog.show();
     }
-
 
     private void setDataForTextView(){
 

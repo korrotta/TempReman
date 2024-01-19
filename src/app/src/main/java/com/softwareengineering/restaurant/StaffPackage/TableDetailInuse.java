@@ -57,7 +57,6 @@ public class TableDetailInuse extends AppCompatActivity {
         getDataFromPreviousIntent();
         autoFinish();
 
-
         // Order Button
         binding.btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,9 +90,6 @@ public class TableDetailInuse extends AppCompatActivity {
                                                             data[2] = task.getResult().getString("name");
                                                             intent.putExtra("data",data);
                                                             startActivity(intent);
-                                                        }
-                                                        else {
-                                                            //bo m chiu, loi duoc thi thua
                                                         }
                                                     }
                                                 });

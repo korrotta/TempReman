@@ -1,6 +1,7 @@
 package com.softwareengineering.restaurant.CustomerPackage;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -163,28 +166,17 @@ public class CustomersTablesActivity extends AppCompatActivity {
 
                     Intent i = new Intent(CustomersTablesActivity.this, BookTableActivity.class);
 
-                    //FIXME: What to put here?
-                    //Booked detail need info of the one who ordered. So fetch firestore data from here, take customer id
-                    //What if customer id is anonymous, because customer booked the table for him?
-                    //Set all data to default data? Where's the phone number? Then what if that one calling again to cancel it?
-                    //How to find out? No name search, no phone number search.
-                    //Or, we can set the id by the phone number he entered. Then show it like a phone number, default name
-                    //Okay done
-                    //
-                    //Then what to put here? Nothing, this is in idle tho. But what to put in bookedActivity? This one.
-                    //Further develop, but absolutely must be this one
-
                     i.putExtra("id", t.getId());
                     i.putExtra("time_range", timeString[Integer.parseInt(final_selectedTime[0])/2-4]);
                     startActivity(i);
                 } else if (t.getImage() == bookedTableImg) {
                     if (final_isBooked[0] && (!final_bookedId[0].equals(t.getId()) || !getTimeFromRange(final_bookedTimeRange[0]).equals(final_selectedTime[0]))) {
-                        Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
+                        showBlockedBookedDialog();
                         return;
                     }
 
                     if (!final_isBooked[0]) {
-                        Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
+                        showBlockedBookedDialog();
                         return;
                     }
                     FirebaseFirestore.getInstance().collection("table").document(t.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -223,7 +215,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if (task.isSuccessful()) {
                                         if (!task.getResult().getString("userinuse").equals(mAuth.getCurrentUser().getUid())) {
-                                            Toast.makeText(CustomersTablesActivity.this, "Not your table to view", Toast.LENGTH_SHORT).show();
+                                            showBlockedDialog();
                                             return;
                                         }
                                         //Data sending through intent
@@ -245,6 +237,40 @@ public class CustomersTablesActivity extends AppCompatActivity {
             }
         });
         realtimeUpdateTableList();
+    }
+
+    private void showBlockedDialog() {
+        Dialog blockedDialog = new Dialog(this);
+        blockedDialog.setContentView(R.layout.customer_table_block_view_dialog);
+        blockedDialog.setCancelable(true);
+
+        // Handle close button click
+        Button closeButton = blockedDialog.findViewById(R.id.CustomerTableViewCancelButton);
+        closeButton.setOnClickListener(v -> {
+            if (blockedDialog.isShowing()) {
+                blockedDialog.dismiss();
+            }
+        });
+
+        blockedDialog.show();
+    }
+
+    private void showBlockedBookedDialog() {
+        Dialog blockedDialog = new Dialog(this);
+        blockedDialog.setContentView(R.layout.customer_table_block_view_dialog);
+        blockedDialog.setCancelable(true);
+
+        // Handle close button click
+        TextView message = blockedDialog.findViewById(R.id.CustomerTableViewMsg);
+        message.setText("This Table has been Booked");
+        Button closeButton = blockedDialog.findViewById(R.id.CustomerTableViewCancelButton);
+        closeButton.setOnClickListener(v -> {
+            if (blockedDialog.isShowing()) {
+                blockedDialog.dismiss();
+            }
+        });
+
+        blockedDialog.show();
     }
 
     private void listenToDataChange() {
