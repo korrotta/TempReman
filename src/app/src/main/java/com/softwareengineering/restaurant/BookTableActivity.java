@@ -208,7 +208,32 @@ public class BookTableActivity extends AppCompatActivity {
 
         String time_range = getIntent().getStringExtra("time_range");
         final_time[0] = time_range;
-        timeTextView.setText(time_range);
+
+        switch (final_time[0]) {
+            case "9":
+                final_time[0] = "9:00 - 11:00";
+                break;
+            case "11":
+                final_time[0] = "11:00 - 13:00";
+                break;
+            case "13":
+                final_time[0] = "13:00 - 15:00";
+                break;
+            case "15":
+                final_time[0] = "15:00 - 17:00";
+                break;
+            case "17":
+                final_time[0] = "17:00 - 19:00";
+                break;
+            case "19:":
+                final_time[0] = "19:00 - 21:00";
+                break;
+            default:
+                final_time[0] = "0";
+                break;
+        }
+
+        timeTextView.setText(final_time[0]);
     }
 
     private void initToolBar() {
