@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -157,14 +158,16 @@ public class StaffNewReportActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //TODO: Avoid empty title
-            if (title == null || title.equals("")){
+            if (title.getText() == null || title.getText().toString().equals("")){
+                Toast.makeText(StaffNewReportActivity.this, "Empty title to confirm", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             //Obviously level 1 callback
             Log.d("Sender_check", g1_sender);
 
-            if (content.getText() == null || content.getText().equals("")) {
+            if (content.getText() == null || content.getText().toString().equals("")) {
+                Toast.makeText(StaffNewReportActivity.this, "Empty content to confirm", Toast.LENGTH_SHORT).show();
                 return;
             }
 
