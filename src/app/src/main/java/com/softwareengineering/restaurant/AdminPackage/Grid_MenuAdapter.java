@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.auth.api.signin.internal.Storage;
@@ -113,26 +115,32 @@ public class Grid_MenuAdapter extends BaseAdapter {
         File imgFile = new File(dataFolder, imageName+".jpg");
 
         if (!imgFile.exists()) {
-            //Load image from database
+            // Load image from database
             imgRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
-                        //Load with Glide
+                        // Load with Glide and customize image size and rounded corners
+                        RequestOptions requestOptions = new RequestOptions()
+                                .centerCrop() // Sử dụng centerCrop để đảm bảo kích thước ảnh được cố định và đầy đủ cả chiều ngang và chiều cao
+                                .transforms(new RoundedCorners(20)) // Bo góc 20px
+                                .override(300, 300) // Kích thước ảnh
+                                .skipMemoryCache(true)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE);
+
                         Glide.with(context)
                                 .load(task.getResult())
-                                .diskCacheStrategy(DiskCacheStrategy.ALL) // Sử dụng DiskCacheStrategy.ALL để cache hình ảnh ở cả ổ đĩa và bộ nhớ
+                                .apply(requestOptions)
                                 .into(foodImgView);
-                        //Download to cache:
+
+                        // Download to cache:
                         createCacheFile(imgFile, imgRef);
-                    }
-                    else {
+                    } else {
                         Log.e("Load image Task", "Failed");
                     }
                 }
             });
-        }
-        else {
+        } else {
             Log.d("Error", imgFile.getAbsolutePath());
             Bitmap img = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             foodImgView.setImageBitmap(img);
