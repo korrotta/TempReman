@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -37,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class MenuAdapter extends BaseAdapter {
     private Context context;
@@ -73,11 +73,9 @@ public class MenuAdapter extends BaseAdapter {
             holder.imageFood = convertView.findViewById(R.id.image_food);
             holder.nameFood = convertView.findViewById(R.id.name_food);
             holder.price = convertView.findViewById(R.id.price);
-            holder.btnAdd = convertView.findViewById(R.id.btn_add);
-            holder.container = convertView.findViewById(R.id.container);
             holder.btnPlus = convertView.findViewById(R.id.btn_plus);
             holder.btnMinus = convertView.findViewById(R.id.btn_minus);
-            holder.quanity = convertView.findViewById(R.id.quanlity);
+            holder.quantity = convertView.findViewById(R.id.quantity);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -89,13 +87,8 @@ public class MenuAdapter extends BaseAdapter {
 
         holder.nameFood.setText(menuItem.getName());
         holder.price.setText(menuItem.getFormattedPrice());
-        holder.btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Hiển thị layout mới và ẩn nút btn_add
-                showNewLayout(holder, menuItem);
-            }
-        });
+        holder.quantity.setText(String.valueOf(menuItem.getQuantity()));
+        showNewLayout(holder, menuItem);
 
         return convertView;
     }
@@ -109,27 +102,20 @@ public class MenuAdapter extends BaseAdapter {
         ImageView imageFood;
         TextView nameFood;
         TextView price;
-        ImageView btnAdd;
-        FrameLayout container;
         ImageView btnPlus;
         ImageView btnMinus;
-        TextView quanity;
+        TextView quantity;
     }
 
     private void showNewLayout(ViewHolder holder, MenuItem menuItem) {
-        // Ẩn nút btn_add
-        holder.btnAdd.setVisibility(View.GONE);
-
-        // Hiển thị layout mới
-        holder.container.setVisibility(View.VISIBLE);
-
         // Xử lý sự kiện cho các nút trong layout mới
         holder.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Tăng giá trị quanity
-                int newQuanlity = Integer.parseInt(holder.quanity.getText().toString()) + 1;
-                holder.quanity.setText(String.valueOf(newQuanlity));
+                // Tăng giá trị quantity
+                Long newQuantity = Long.parseLong(holder.quantity.getText().toString()) + 1;
+                holder.quantity.setText(String.valueOf(newQuantity));
+                menuItem.setQuantity(newQuantity);
             }
         });
 
@@ -137,32 +123,24 @@ public class MenuAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 // Giảm giá trị quanity, đảm bảo giá trị không âm
-                int newQuanlity = Math.max(Integer.parseInt(holder.quanity.getText().toString()) - 1, 0);
-                holder.quanity.setText(String.valueOf(newQuanlity));
+                Long newQuantity = Math.max(Long.parseLong(holder.quantity.getText().toString()) - 1, 0);
 
-                // Nếu quanity giảm xuống 0, ẩn layout mới và hiển thị lại nút btn_add
-                if (newQuanlity == 0) {
-                    hideNewLayout(holder);
+                if (newQuantity == 0) {
+                    return;
                 }
+
+                holder.quantity.setText(String.valueOf(newQuantity));
+                menuItem.setQuantity(newQuantity);
             }
         });
 
         // Lưu thông tin món ăn đã chọn vào danh sách
-        saveSelectedItem(menuItem, Integer.parseInt(holder.quanity.getText().toString()));
+        saveSelectedItem(menuItem, Integer.parseInt(holder.quantity.getText().toString()));
     }
 
     private void saveSelectedItem(MenuItem menuItem, Integer quantity) {
         OrderItem orderItem = new OrderItem(menuItem.getName(), menuItem.getPrice(), quantity);
         selectedItems.add(orderItem);
-    }
-
-    // Thêm phương thức hideNewLayout để ẩn layout mới và hiển thị lại nút btn_add
-    private void hideNewLayout(ViewHolder holder) {
-        // Ẩn layout mới
-        holder.container.setVisibility(View.GONE);
-
-        // Hiển thị lại nút btn_add
-        holder.btnAdd.setVisibility(View.VISIBLE);
     }
 
     public List<OrderItem> getSelectedItems() {
