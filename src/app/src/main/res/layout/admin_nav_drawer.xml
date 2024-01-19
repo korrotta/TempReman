@@ -199,8 +199,8 @@
             android:layout_height="45dp"
             android:layout_marginStart="10dp"
             android:scaleType="centerCrop"
-            app:tint="@color/orange"
-            android:src="@drawable/logout" />
+            android:src="@drawable/logout"
+            app:tint="@color/orange" />
 
         <TextView
             android:layout_width="wrap_content"

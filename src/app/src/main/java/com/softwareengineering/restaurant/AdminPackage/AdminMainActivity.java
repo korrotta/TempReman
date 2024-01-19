@@ -45,7 +45,6 @@ public class AdminMainActivity extends AppCompatActivity {
                 startItemActivity(position);
             }
         });
-
     }
 
     private void startItemActivity(int position) {
@@ -82,7 +81,6 @@ public class AdminMainActivity extends AppCompatActivity {
                 break;
             }
         }
-
         Intent intent = new Intent(AdminMainActivity.this, toStartActivity);
         startActivity(intent);
     }

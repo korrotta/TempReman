@@ -38,7 +38,7 @@ public class PaymentAdapter extends ArrayAdapter<PaymentFood> {
         PaymentFood currentItem = data.get(position);
 
         TextView foodName = listItem.findViewById(R.id.foodName);
-        TextView quantity = listItem.findViewById(R.id.quanlity);
+        TextView quantity = listItem.findViewById(R.id.quantity);
         TextView price = listItem.findViewById(R.id.price);
 
         foodName.setText(currentItem.getFoodName());

@@ -49,13 +49,11 @@ public class CustomersDetails extends AppCompatActivity {
             String email = customers.getEmail();
             String phone = customers.getPhone();
             String gender = customers.getGender();
-            String username = customers.getUsername();
 
             binding.customersDetailName.setText(name);
             binding.customersDetailEmail.setText(email);
             binding.customersDetailGender.setText(gender);
             binding.customersDetailPhone.setText(phone);
-            binding.customersDetailUsername.setText(username);
         }
 
         // Handle Remove Staff (Also remove from database)

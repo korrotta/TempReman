@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,17 +29,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 public class BookTableActivity extends AppCompatActivity {
 
     private ImageView topMenuImg;
     private EditText nameET, phoneET;
-    private Spinner timeSpinner;
+    private TextView timeTextView;
     private TextView topMenuName;
     private AppCompatButton reserveButton;
     private TextView tableId;
+    private Handler handler;
 
     private final String[] final_tableID = new String[1];
     private final String[] final_time = new String[1];
@@ -52,7 +55,7 @@ public class BookTableActivity extends AppCompatActivity {
 
         nameET = findViewById(R.id.nameBookTable);
         phoneET = findViewById(R.id.phoneBookTable);
-        timeSpinner = findViewById(R.id.timeSpinnerBookTable);
+        timeTextView = findViewById(R.id.timeTVBookTable);
         topMenuImg = findViewById(R.id.topMenuImg);
         topMenuName = findViewById(R.id.topMenuName);
         reserveButton = findViewById(R.id.reserveButton);
@@ -63,7 +66,7 @@ public class BookTableActivity extends AppCompatActivity {
 
         final_tableID[0] = getIntent().getStringExtra("id");
         if (final_tableID[0] == "" || final_tableID[0] == null){
-            return; //>?????
+            return;
         }
 
         Log.d(TAG, "onCreate: " + final_tableID[0]);
@@ -89,9 +92,15 @@ public class BookTableActivity extends AppCompatActivity {
                     }
                 });
     }
+
     View.OnClickListener reserveTableEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            String name, phone;
+            name = nameET.getText().toString();
+            phone = phoneET.getText().toString();
+
             //Booking time handle
             int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int min = Calendar.getInstance().get(Calendar.MINUTE);
@@ -145,13 +154,34 @@ public class BookTableActivity extends AppCompatActivity {
                                         doc.update("bookedDate", bookedDate);
                                         doc.update("customerID", bookedCustomer);
                                     }
-                                    finish();
+
+
                                 }
                             }
                         });
+
+                showSuccessDialog(BookTableActivity.this::finish);
             }
         }
     };
+
+    private void showSuccessDialog(Runnable onDismissAction) {
+        Dialog successDialog = new Dialog(this);
+        successDialog.setContentView(R.layout.reserve_success_dialog);
+        successDialog.setCancelable(true);
+
+        // Handle close button click
+        ImageButton closeButton = successDialog.findViewById(R.id.imageButtonClose);
+        closeButton.setOnClickListener(v -> {
+            if (successDialog.isShowing()) {
+                successDialog.dismiss();
+            }
+        });
+
+        successDialog.setOnDismissListener(dialog -> onDismissAction.run());
+        successDialog.show();
+    }
+
 
     private void bookingDocumentWrite(){
         FirebaseFirestore.getInstance().collection("booking").add(
@@ -173,38 +203,37 @@ public class BookTableActivity extends AppCompatActivity {
 
 
     private void UISetup() {
-        // Get data from user input
-        String name;
-        String phone;
-
         //tableID:
         tableId.setText(final_tableID[0]);
 
-        name = nameET.getText().toString();
-        phone = phoneET.getText().toString();
-        final_time[0] = "0:00";
-        // Handle data for spinner
-        String[] timeString =  {
-                "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00", "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
-        };
+        String time_range = getIntent().getStringExtra("time_range");
+        final_time[0] = time_range;
 
-        ArrayList<String> timeArraylist = new ArrayList<>(Arrays.asList(timeString));
-        ArrayAdapter<String> timeArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeArraylist);
-        timeArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        timeSpinner.setAdapter(timeArrayAdapter);
+        switch (final_time[0]) {
+            case "9":
+                final_time[0] = "9:00 - 11:00";
+                break;
+            case "11":
+                final_time[0] = "11:00 - 13:00";
+                break;
+            case "13":
+                final_time[0] = "13:00 - 15:00";
+                break;
+            case "15":
+                final_time[0] = "15:00 - 17:00";
+                break;
+            case "17":
+                final_time[0] = "17:00 - 19:00";
+                break;
+            case "19:":
+                final_time[0] = "19:00 - 21:00";
+                break;
+            default:
+                final_time[0] = "0";
+                break;
+        }
 
-        timeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final_time[0] = timeArrayAdapter.getItem(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
+        timeTextView.setText(final_time[0]);
     }
 
     private void initToolBar() {

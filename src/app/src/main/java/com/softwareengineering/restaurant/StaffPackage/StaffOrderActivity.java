@@ -6,26 +6,33 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.softwareengineering.restaurant.ItemClasses.OrderItem;
 import com.softwareengineering.restaurant.ItemClasses.StaffOrderItem;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,20 +43,26 @@ public class StaffOrderActivity extends AppCompatActivity {
     private ListView listView;
     private StaffOrderAdapter adapter;
     private List<StaffOrderItem> orderItems;
-
+    private ImageView topMenuImg;
     private TextView name, tableId, date, total;
-    private Button addOrder;
-
+    private Button addOrder, cancelOrder, paymentOrder;
     private final String final_tableID[] = new String[1];
     private final String final_customerId[] = new String[1];
+
+    private static String customerName = "1!1";
+
+    private static Long priceInBill = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_order);
 
+        topMenuImg = findViewById(R.id.topMenuImg);
         topMenuName = findViewById(R.id.topMenuName);
         addOrder = findViewById(R.id.staff_order_addButton);
+        cancelOrder = findViewById(R.id.staffsOrderCancelBtn);
+        paymentOrder = findViewById(R.id.staffsOrderPaymentBtn);
         listView = findViewById(R.id.listView);
 
         name = (TextView) findViewById(R.id.staff_order_name);
@@ -57,8 +70,9 @@ public class StaffOrderActivity extends AppCompatActivity {
         tableId = (TextView) findViewById(R.id.staff_order_numberId);
         total = (TextView) findViewById(R.id.staff_order_total);
 
-        topMenuName.setText("Order");
-
+        topMenuName.setText(R.string.order);
+        topMenuImg.setImageResource(R.drawable.back);
+        topMenuImg.setOnClickListener(v -> finish());
 
         getDataFromPreviousIntent();
         realtimeUpdateOrderedList();
@@ -80,30 +94,62 @@ public class StaffOrderActivity extends AppCompatActivity {
 
             }
         });
+
+        cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle cancel Order
+                finish();
+            }
+        });
+
+        paymentOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle Payment here
+
+                //get the final timestamp
+
+                //put data into firestore bill collection
+                FirebaseFirestore.getInstance().collection("bill").add(new HashMap<String, Object>(){{
+                    put("customerName", customerName);
+                    put("date", Calendar.getInstance().getTime());
+                    put("value", priceInBill);
+                }}).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Log.d("Completed", task.getResult().getId());
+
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("foodName", new ArrayList<String>());
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("foodPrice", new ArrayList<String>());
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("quantityList", new ArrayList<String>());
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("state", "idle");
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("userinuse", "");
+                        finish();
+                    }
+                });
+            }
+        });
     }
 
     private void setDataForTextView(){
+
         tableId.setText(final_tableID[0]);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         date.setText(dateFormat.format(Calendar.getInstance().getTime()));
-
-        FirebaseFirestore.getInstance().collection("users").document(final_customerId[0]).get().addOnCompleteListener(
-                new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()){
-                            name.setText(task.getResult().getString("name"));
-                        }
-                    }
-                });
     }
+
     private void getDataFromPreviousIntent(){
         String data[] = getIntent().getStringArrayExtra("data");
         if (data!= null){
             final_customerId[0] = data[0];
             final_tableID[0] = data[1];
+            customerName = data[2];
+            Log.d("name", customerName);
+            name.setText(customerName);
         }
     }
+
     private void realtimeUpdateOrderedList(){
         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -142,6 +188,7 @@ public class StaffOrderActivity extends AppCompatActivity {
                             quantityList.get(i));
                     orderItems.add(soi);
                     totalPrice+= foodPriceList.get(i)*quantityList.get(i);
+                    priceInBill = totalPrice;
                 }
 
                 adapter.notifyDataSetChanged();

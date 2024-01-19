@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +30,9 @@ import java.util.Date;
 
 public class TableDetailBooked extends AppCompatActivity {
 
-    private TextView idOnImage, uname, phone, idText, bookedDate, bookedTime;
+    private TextView idOnImage, uname, phone, idText, bookedDate, bookedTime, topMenuName;
     private Button toInUse, toIdle;
-
+    private ImageView topMenuImg;
     private final String datas[] = new String[3];
     private final boolean[] final_isCustomer = new boolean[1];
     private final String[] final_name = new String[1];
@@ -44,7 +45,7 @@ public class TableDetailBooked extends AppCompatActivity {
 
         final_isCustomer[0] = false;
         setUiItemsView();
-
+        initToolBar();
         fetchUserRole();
 
         setDateToCurrentTime(); //Set time
@@ -190,9 +191,16 @@ public class TableDetailBooked extends AppCompatActivity {
         phone = (TextView) findViewById(R.id.table_booked_phoneNumber);
         bookedDate = (TextView) findViewById(R.id.table_booked_date);
         bookedTime = (TextView) findViewById(R.id.table_booked_timerange);
-
+        topMenuImg = findViewById(R.id.topMenuImg);
+        topMenuName = findViewById(R.id.topMenuName);
         toInUse = (Button) findViewById(R.id.table_booked_toInUseButton);
         toIdle = (Button) findViewById(R.id.table_booked_cancelButton); //toIdle, cancel book, not quit
+    }
+
+    private void initToolBar() {
+        topMenuName.setText(R.string.table_detail);
+        topMenuImg.setOnClickListener(v -> finish());
+        topMenuImg.setImageResource(R.drawable.back);
     }
 
     private void setDateToCurrentTime(){

@@ -1,8 +1,10 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +17,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.databinding.ActivityTableDetailInuseBinding;
@@ -50,6 +55,7 @@ public class TableDetailInuse extends AppCompatActivity {
 
         setDateToCurrentTime();
         getDataFromPreviousIntent();
+        autoFinish();
 
 
         // Order Button
@@ -63,13 +69,34 @@ public class TableDetailInuse extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Intent intent = new Intent(TableDetailInuse.this, StaffOrderActivity.class);
 
-                                    String[] data = new String[2];
+                                    String[] data = new String[3];
 
                                     data[0] = task.getResult().getString("userinuse");
                                     data[1] = final_tableID[0];
 
-                                    intent.putExtra("data", data);
-                                    startActivity(intent);
+
+                                    //not a customer
+                                    if (!final_isCustomer[0]){
+                                        data[2] = final_id[0];
+                                        intent.putExtra("data", data);
+                                        startActivity(intent);
+                                    }
+                                    else {
+                                        FirebaseFirestore.getInstance().collection("users").document(final_id[0]).get()
+                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                        if (task.isSuccessful()) {
+                                                            data[2] = task.getResult().getString("name");
+                                                            intent.putExtra("data",data);
+                                                            startActivity(intent);
+                                                        }
+                                                        else {
+                                                            //bo m chiu, loi duoc thi thua
+                                                        }
+                                                    }
+                                                });
+                                    }
                                 }
                             }
                         });
@@ -84,6 +111,54 @@ public class TableDetailInuse extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    private void autoFinish(){
+        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value!=null && value.exists()){
+                    if (value.getString("state").equals("idle")){
+                        TableDetailInuse.this.finish();
+                    }
+                }
+            }
+        });
+    }
+  
+    private void showCancelTableDialog() {
+        Dialog cancelTableDialog = new Dialog(this);
+        cancelTableDialog.setContentView(R.layout.cancel_table_dialog);
+        cancelTableDialog.setCancelable(true);
+
+        Button yesButton = cancelTableDialog.findViewById(R.id.cancelTableDialogYesBtn);
+        Button noButton = cancelTableDialog.findViewById(R.id.cancelTableDialogNoBtn);
+
+        yesButton.setOnClickListener(v -> {
+            cancelTableDialog.dismiss();
+            handleYesButtonClick();
+        });
+
+        noButton.setOnClickListener(v -> {
+            cancelTableDialog.dismiss();
+        });
+
+        cancelTableDialog.show();
+    }
+
+    private void handleYesButtonClick() {
+        CollectionReference tableReference = FirebaseFirestore.getInstance().collection("table");
+        // TODO: Handle cancel In Use Table
+//        if (final_isCustomer[0]){
+//            removeDataInArrayList(tableReference);
+//            removeBookingDocument();
+//        }
+//        //handle as staff booked - anonymous
+//        else {
+//            removeDataInArrayList(tableReference);
+//        }
+        finish();
     }
 
     private void initToolBar() {
@@ -127,11 +202,7 @@ public class TableDetailInuse extends AppCompatActivity {
     }
 
 
-    private void fetchUsingUserRole() {
-
-    }
     private void fetchUserRole(){
-//        Log.d("Inuse2", final_id[0]);
         FirebaseFirestore.getInstance().collection("users").document(final_id[0])
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -145,6 +216,7 @@ public class TableDetailInuse extends AppCompatActivity {
                     }
                 });
     }
+
     private void fetchUserData(){
         if (final_isCustomer[0]){
             FirebaseFirestore.getInstance().collection("users").document(final_id[0]).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

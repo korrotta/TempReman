@@ -30,7 +30,7 @@ public class StaffOrderAdapter extends ArrayAdapter<StaffOrderItem> {
         TextView foodNameTextView = convertView.findViewById(R.id.foodName);
         TextView priceTextView = convertView.findViewById(R.id.price);
         TextView quantityTextView = convertView.findViewById(R.id.quantity);
-
+      
         foodNameTextView.setText(item.getFoodName());
         priceTextView.setText(item.getPrice().toString());
         quantityTextView.setText(item.getQuantity().toString());
