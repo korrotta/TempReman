@@ -382,7 +382,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
     }
 
     private void initNavBar() {
-        setItemBackgroundColors(menu);
+        setItemBackgroundColors(tables);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

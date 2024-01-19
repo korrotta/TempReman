@@ -7,10 +7,10 @@
     tools:context=".BookTableActivity">
 
     <LinearLayout
-        android:gravity="center"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <include layout="@layout/toolbar_staff" />
 
@@ -21,9 +21,9 @@
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:background="@drawable/table_top_view"
+            android:fontFamily="@font/quicksand_medium"
             android:padding="70dp"
             android:text="2"
-            android:fontFamily="@font/quicksand_medium"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="40sp"
@@ -44,32 +44,32 @@
                 android:padding="10dp">
 
                 <TextView
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias=".04"
-                    android:text="Name"
-                    android:fontFamily="@font/quicksand_bold"
-                    android:textSize="16sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:text="Name"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".04"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/nameBookTable"
-                    android:padding="2dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias=".95"
-                    android:gravity="center"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_bg_design"
                     android:backgroundTint="@color/white"
-                    android:textSize="16sp"
-                    android:layout_width="140dp"
+                    android:gravity="center"
                     android:inputType="text"
-                    android:layout_height="wrap_content" />
+                    android:padding="2dp"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".95"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -79,32 +79,32 @@
                 android:padding="10dp">
 
                 <TextView
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias=".05"
-                    android:text="Phone Number"
-                    android:fontFamily="@font/quicksand_bold"
-                    android:textSize="16sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_bold"
+                    android:text="Phone Number"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".05"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:padding="2dp"
                     android:id="@+id/phoneBookTable"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias=".95"
-                    android:gravity="center"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_bg_design"
                     android:backgroundTint="@color/white"
+                    android:gravity="center"
                     android:inputType="phone"
+                    android:padding="2dp"
                     android:textSize="16sp"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".95"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,47 +114,45 @@
                 android:padding="10dp">
 
                 <TextView
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias=".045"
-                    android:text="@string/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/quicksand_bold"
+                    android:text="@string/time"
                     android:textSize="16sp"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
-                    android:padding="2dp"
                     android:id="@+id/timeTVBookTable"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias=".95"
-                    android:gravity="center"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/layout_bg_design"
                     android:backgroundTint="@color/white"
+                    android:gravity="center"
+                    android:padding="2dp"
                     android:textSize="16sp"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias=".95"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
-        
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/reserveButton"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:layout_marginVertical="20dp"
-            android:gravity="center"
-            android:text="@string/reserve"
-            android:fontFamily="@font/quicksand_medium"
-            android:textColor="@color/white"
             android:background="@drawable/btn_bg_design"
             android:backgroundTint="@color/orange"
-            android:layout_width="300dp"
-            android:layout_height="50dp" />
+            android:fontFamily="@font/quicksand_medium"
+            android:gravity="center"
+            android:text="@string/reserve"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 </ScrollView>

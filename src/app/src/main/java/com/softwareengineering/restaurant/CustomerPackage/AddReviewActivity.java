@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class AddReviewActivity extends AppCompatActivity {
-    ImageView btn_back;
     private final String TAG = "AddReviewActivity_userCheck";
     Button submit;
     EditText reviewContent;
@@ -75,9 +74,12 @@ public class AddReviewActivity extends AppCompatActivity {
 
         handleStarOnClick();
         Log.d(TAG, "onClick: submitButton g_rating value: " + g_rating);
-        btn_back = findViewById(R.id.btn_back);
+    }
 
-        btn_back.setOnClickListener(view -> onBackPressed());
+    private void initToolBar() {
+        topMenuName.setText(R.string.review);
+        topMenuImg.setOnClickListener(v -> finish());
+        topMenuImg.setImageResource(R.drawable.back);
     }
 
     private void initToolBar() {
