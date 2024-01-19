@@ -151,6 +151,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
 
 
                     i.putExtra("id", t.getId());
+                    i.putExtra("time_range", timeString[final_recentTimeRange[0]]);
                     startActivity(i);
                 }
                 else if(t.getImage() == bookedTableImg){

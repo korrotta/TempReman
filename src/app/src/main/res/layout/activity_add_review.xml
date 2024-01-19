@@ -4,43 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".CustomerPackage.DetailFoodActivity">
+    tools:context=".CustomerPackage.AddReviewActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/orange"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="12dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/quicksand"
-            android:text="your review"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+    <include layout="@layout/toolbar_staff" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
+        android:fontFamily="@font/quicksand_medium"
         android:text="Are you satisfied with our restaurant?"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

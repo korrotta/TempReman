@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,7 +34,8 @@ public class AddReviewActivity extends AppCompatActivity {
     private final String TAG = "AddReviewActivity_userCheck";
     Button submit;
     EditText reviewContent;
-
+    private ImageView topMenuImg;
+    private TextView topMenuName;
     ArrayList<ImageView> starRating;
 
     //Inside listener variable zone:
@@ -46,7 +49,8 @@ public class AddReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_review);
 
-
+        topMenuImg = findViewById(R.id.topMenuImg);
+        topMenuName = findViewById(R.id.topMenuName);
         starRating = new ArrayList<ImageView>(5);
         starRating.add((ImageView)findViewById(R.id.rate1));
         starRating.add((ImageView)findViewById(R.id.rate2));
@@ -56,6 +60,8 @@ public class AddReviewActivity extends AppCompatActivity {
 
         submit = (Button) findViewById(R.id.btn_submit);
         reviewContent = (EditText) findViewById(R.id.reviewContent);
+
+        initToolBar();
 
         submit.setOnClickListener(submitButtonClickEvent);
 
@@ -72,6 +78,12 @@ public class AddReviewActivity extends AppCompatActivity {
         btn_back = findViewById(R.id.btn_back);
 
         btn_back.setOnClickListener(view -> onBackPressed());
+    }
+
+    private void initToolBar() {
+        topMenuName.setText(R.string.review);
+        topMenuImg.setOnClickListener(v -> finish());
+        topMenuImg.setImageResource(R.drawable.ic_back);
     }
 
     View.OnClickListener submitButtonClickEvent = new View.OnClickListener() {
@@ -95,6 +107,8 @@ public class AddReviewActivity extends AppCompatActivity {
                 put("datetime", Calendar.getInstance().getTime());
                 put("name", g_reviewerName);
             }});
+            // Add Toast
+            showToast("Submitted review");
 
             Log.d(TAG, "onClick: "+ content);
             finish();
@@ -117,5 +131,8 @@ public class AddReviewActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+    private void showToast(String message) {
+        Toast.makeText(AddReviewActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }

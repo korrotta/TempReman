@@ -169,6 +169,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
                     //Further develop, but absolutely must be this one
 
                     i.putExtra("id", t.getId());
+                    i.putExtra("time_range", final_selectedTime[0]);
                     startActivity(i);
                 } else if (t.getImage() == bookedTableImg) {
                     if (final_isBooked[0] && (!final_bookedId[0].equals(t.getId()) || !getTimeFromRange(final_bookedTimeRange[0]).equals(final_selectedTime[0]))) {
