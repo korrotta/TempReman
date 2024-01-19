@@ -151,7 +151,8 @@ public class StaffOrderAddActivity extends AppCompatActivity {
                                 doc.getString("imageURL"),
                                 doc.getString("name"),
                                 doc.getLong("price"),
-                                doc.getString("type")
+                                doc.getString("type"),
+                                0L
                         );
                         menuItems.add(menuItem);
                     }
@@ -182,7 +183,8 @@ public class StaffOrderAddActivity extends AppCompatActivity {
                                 doc.getString("imageURL"),
                                 doc.getString("name"),
                                 doc.getLong("price"),
-                                doc.getString("type")
+                                doc.getString("type"),
+                                0L
                         );
 
                         if (menuItem.getName().toLowerCase().contains(searchedName)
