@@ -29,9 +29,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
-                android:fontFamily="@font/quicksand"
+                android:fontFamily="@font/quicksand_medium"
                 android:text="@string/employee"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
         </LinearLayout>
 
