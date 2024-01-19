@@ -107,11 +107,12 @@ public class TableDetailInuse extends AppCompatActivity {
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCancelTableDialog();
+                finish();
             }
         });
 
     }
+
 
     private void autoFinish(){
         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -125,6 +126,7 @@ public class TableDetailInuse extends AppCompatActivity {
             }
         });
     }
+  
     private void showCancelTableDialog() {
         Dialog cancelTableDialog = new Dialog(this);
         cancelTableDialog.setContentView(R.layout.cancel_table_dialog);

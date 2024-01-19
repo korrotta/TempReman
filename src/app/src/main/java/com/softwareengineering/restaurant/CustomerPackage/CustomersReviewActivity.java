@@ -182,7 +182,7 @@ public class CustomersReviewActivity extends AppCompatActivity {
         });
     }
     private void menuBarItemsClick() {
-        setItemBackgroundColors(menu);
+        setItemBackgroundColors(review);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

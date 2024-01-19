@@ -42,8 +42,8 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class DetailFoodActivity extends AppCompatActivity {
-    ImageView btn_back, image;
-    TextView name, status, price, type, des, ingredients;
+    private ImageView image, topMenuImg;
+    private TextView name, status, price, type, des, ingredients, topMenuName;
 
     String g1_role = "";
     String foodImageRef = "";
@@ -62,15 +62,17 @@ public class DetailFoodActivity extends AppCompatActivity {
         des = findViewById(R.id.des);
         ingredients = findViewById(R.id.ingredients);
 
-        btn_back = findViewById(R.id.btn_back);
         status = findViewById(R.id.s_statusBar);
 
-        btn_back.setOnClickListener(view -> onBackPressed());
+        topMenuImg = findViewById(R.id.topMenuImg);
+        topMenuName = findViewById(R.id.topMenuName);
+
         status.setOnClickListener(changeStatusClickEvent);
 
         Intent intent = getIntent();
 
         fetchUserRole();
+        initToolBar();
 
         if (intent != null) {
             String foodName = intent.getStringExtra("foodName");
@@ -96,6 +98,12 @@ public class DetailFoodActivity extends AppCompatActivity {
             setImageFromReference(FirebaseStorage.getInstance().getReferenceFromUrl(foodImageRef), foodName, image);
 
         }
+    }
+
+    private void initToolBar() {
+        topMenuName.setText(R.string.table_detail);
+        topMenuImg.setOnClickListener(v -> finish());
+        topMenuImg.setImageResource(R.drawable.back);
     }
 
     View.OnClickListener changeStatusClickEvent = new View.OnClickListener() {
