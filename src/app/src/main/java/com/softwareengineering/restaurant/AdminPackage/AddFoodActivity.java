@@ -75,11 +75,11 @@ public class AddFoodActivity extends AppCompatActivity {
         foodType.add("Dessert");
         foodType.add("Others");
 
-        ArrayAdapter<String> foodTypesAdapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, foodType);
-        foodTypesAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
+        //ArrayAdapter<String> foodTypesAdapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, foodType);
+        //foodTypesAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
 
         // bind foodTypeAdapter into spinner
-        addFoodType.setAdapter(foodTypesAdapter);
+       // addFoodType.setAdapter(foodTypesAdapter);
         addFoodType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
