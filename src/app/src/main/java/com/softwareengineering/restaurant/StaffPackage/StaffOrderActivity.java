@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +32,7 @@ import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,6 +48,10 @@ public class StaffOrderActivity extends AppCompatActivity {
     private Button addOrder, cancelOrder, paymentOrder;
     private final String final_tableID[] = new String[1];
     private final String final_customerId[] = new String[1];
+
+    private static String customerName = "1!1";
+
+    private static Long priceInBill = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,26 +85,6 @@ public class StaffOrderActivity extends AppCompatActivity {
         // Kết nối ListView với Adapter
         listView.setAdapter(adapter);
 
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("listFoodSelected")) {
-            List<OrderItem> listFoodSelected = intent.getParcelableArrayListExtra("listFoodSelected");
-            Log.d("Selected List", String.valueOf(listFoodSelected.size()));
-            // Thêm các món đã chọn vào danh sách orderItems
-            for (OrderItem selected : listFoodSelected) {
-                StaffOrderItem staffOrderItem = new StaffOrderItem(
-                        R.drawable.circle_background,
-                        selected.getNameFood(),
-                        selected.getPrice(),
-                        selected.getQuantity());
-
-                Toast.makeText(StaffOrderActivity.this, selected.getNameFood(), Toast.LENGTH_SHORT).show();
-                orderItems.add(staffOrderItem);
-            }
-
-            // Cập nhật giao diện
-            adapter.notifyDataSetChanged();
-        }
-
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,24 +107,36 @@ public class StaffOrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Handle Payment here
+
+                //get the final timestamp
+
+                //put data into firestore bill collection
+                FirebaseFirestore.getInstance().collection("bill").add(new HashMap<String, Object>(){{
+                    put("customerName", customerName);
+                    put("date", Calendar.getInstance().getTime());
+                    put("value", priceInBill);
+                }}).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Log.d("Completed", task.getResult().getId());
+
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("foodName", new ArrayList<String>());
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("foodPrice", new ArrayList<String>());
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("quantityList", new ArrayList<String>());
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("state", "idle");
+                        FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("userinuse", "");
+                        finish();
+                    }
+                });
             }
         });
     }
 
     private void setDataForTextView(){
+
         tableId.setText(final_tableID[0]);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         date.setText(dateFormat.format(Calendar.getInstance().getTime()));
-
-        FirebaseFirestore.getInstance().collection("users").document(final_customerId[0]).get().addOnCompleteListener(
-                new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()){
-                            name.setText(task.getResult().getString("name"));
-                        }
-                    }
-                });
     }
 
     private void getDataFromPreviousIntent(){
@@ -146,6 +144,9 @@ public class StaffOrderActivity extends AppCompatActivity {
         if (data!= null){
             final_customerId[0] = data[0];
             final_tableID[0] = data[1];
+            customerName = data[2];
+            Log.d("name", customerName);
+            name.setText(customerName);
         }
     }
 
@@ -166,7 +167,7 @@ public class StaffOrderActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 orderItems.clear();
                 ArrayList<String> foodNameList = (ArrayList<String>) task.getResult().get("foodName");
-                ArrayList<Integer> quantityList = (ArrayList<Integer>) task.getResult().get("quantityList");
+                ArrayList<Long> quantityList = (ArrayList<Long>) task.getResult().get("quantityList");
                 ArrayList<Long> foodPriceList = (ArrayList<Long>) task.getResult().get("foodPrice");
                 //Empty for empty
                 if (foodNameList == null || quantityList == null || foodPriceList == null) {
@@ -187,6 +188,7 @@ public class StaffOrderActivity extends AppCompatActivity {
                             quantityList.get(i));
                     orderItems.add(soi);
                     totalPrice+= foodPriceList.get(i)*quantityList.get(i);
+                    priceInBill = totalPrice;
                 }
 
                 adapter.notifyDataSetChanged();
