@@ -94,10 +94,14 @@ public class AddReviewActivity extends AppCompatActivity {
             if (content == null || content.equals("")) {
                 //TODO: UI HANDLE EMPTY REVIEW EXCEPTION
                 Log.d(TAG, "onClick: submitButton" + "data is null");
+                // Add Toast
+                showToast("Please add in your comment");
                 return;
             }
             if (g_rating == -1) {
                 //TODO: UI HANDLE ZERO RATING EXCEPTION
+                // Add Toast
+                showToast("Please add in your rating");
                 return;
             }
             firestore.collection("reviews").add(new HashMap<String, Object>(){{
