@@ -1,0 +1,31 @@
+user list:
+
+"thanhhue12155@gmail.com"
+"customer"
+
+"kuntenti03@gmail.com"
+ "Cook"
+
+ "mathuyanh2808@gmail.com"
+ "staff"
+
+ "metylch3@gmail.com"
+ "customer"
+
+ "hoaihieulam@gmail.com"
+ "tent"
+
+ "annguyenhoai3112@gmail.com"
+ "customer"
+
+ "tpminthu@gmail.com"
+  "customer"
+
+  "asdfghjkl91213@gmail.com"
+  "customer"
+
+  "21@gmail.com"
+  "customer"
+
+  "bridgetw2808@gmail.com"
+  "admin"

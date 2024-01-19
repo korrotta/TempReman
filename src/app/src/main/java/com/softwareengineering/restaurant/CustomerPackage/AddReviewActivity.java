@@ -82,6 +82,12 @@ public class AddReviewActivity extends AppCompatActivity {
         topMenuImg.setImageResource(R.drawable.back);
     }
 
+    private void initToolBar() {
+        topMenuName.setText(R.string.review);
+        topMenuImg.setOnClickListener(v -> finish());
+        topMenuImg.setImageResource(R.drawable.ic_back);
+    }
+
     View.OnClickListener submitButtonClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
