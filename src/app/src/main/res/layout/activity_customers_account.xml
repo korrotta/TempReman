@@ -20,27 +20,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <include layout="@layout/toolbar_staff" />
+
             <FrameLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="110dp"
                 android:background="@color/orange"
                 android:orientation="vertical"
-                android:padding="20dp">
-
-                <ImageView
-                    android:id="@+id/topMenuImg"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/topmenu" />
-
-
-            </FrameLayout>
+                android:padding="20dp" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/customerAccountImage"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:src="@drawable/default_user"
                 app:civ_border_color="@color/black"

@@ -1,9 +1,5 @@
 package com.softwareengineering.restaurant.AdminPackage;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,20 +13,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.api.LogDescriptor;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.softwareengineering.restaurant.R;
 import com.softwareengineering.restaurant.ItemClasses.Staffs;
+import com.softwareengineering.restaurant.R;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddStaffsActivity extends AppCompatActivity {
@@ -161,14 +159,18 @@ public class AddStaffsActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> Log.e("Error adding staff to Firestore", "Error ", e));
     }
 
-    private void changeRoleForExisted(String email){
+    private void changeRoleForExisted(String email) {
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
         firestore.collection("users").whereEqualTo("email", email)
                 .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        String docID= "";
-                        for (QueryDocumentSnapshot doc: task.getResult()) { docID = doc.getId(); break; }
-                        firestore.collection("users").document(docID).update("role", "staff").addOnCompleteListener(task1 -> {});
+                    if (task.isSuccessful()) {
+                        String docID = "";
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            docID = doc.getId();
+                            break;
+                        }
+                        firestore.collection("users").document(docID).update("role", "staff").addOnCompleteListener(task1 -> {
+                        });
                     }
                 });
     }

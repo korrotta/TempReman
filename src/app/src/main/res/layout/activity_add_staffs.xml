@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".AdminPackage.AddStaffsActivity">
 
     <ScrollView
@@ -20,9 +19,9 @@
             <include layout="@layout/toolbar" />
 
             <TextView
-                android:layout_marginTop="40dp"
                 android:layout_width="310dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/roboto"
                 android:text="@string/name"
                 android:textAllCaps="true"
@@ -31,13 +30,13 @@
 
             <EditText
                 android:id="@+id/addStaffsName"
-                android:inputType="textPersonName"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:paddingHorizontal="10dp"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
                 android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -50,13 +49,13 @@
 
             <EditText
                 android:id="@+id/addStaffsEmail"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -69,13 +68,13 @@
 
             <EditText
                 android:id="@+id/addStaffsPhone"
-                android:inputType="phone"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -90,22 +89,24 @@
                 android:id="@+id/addStaffsGender"
                 android:layout_width="310dp"
                 android:layout_height="35dp"
-                android:gravity="center"
                 android:layout_marginBottom="5dp"
-                android:weightSum="4"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
                 <RadioButton
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/male"
-                    android:textColor="@color/grey"
-                    android:layout_weight="1"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content" />
+                    android:textColor="@color/grey" />
+
                 <RadioButton
-                    android:text="@string/female"
-                    android:textColor="@color/grey"
-                    android:layout_weight="1"
                     android:layout_width="80dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/female"
+                    android:textColor="@color/grey" />
             </RadioGroup>
 
             <TextView
@@ -119,13 +120,13 @@
 
             <EditText
                 android:id="@+id/addStaffsRole"
-                android:inputType="text"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -138,23 +139,23 @@
 
             <EditText
                 android:id="@+id/addStaffsPassword"
-                android:inputType="textPassword"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="textPassword"
+                android:paddingHorizontal="10dp" />
 
             <Button
-                android:layout_marginTop="30dp"
                 android:id="@+id/btn_add_staff_done"
-                android:text="@string/done"
+                android:layout_width="310dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
                 android:backgroundTint="@color/orange"
                 android:fontFamily="@font/roboto"
-                android:textSize="24sp"
-                android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:text="@string/done"
+                android:textSize="24sp" />
 
         </LinearLayout>
 

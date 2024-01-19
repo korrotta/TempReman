@@ -6,32 +6,7 @@
     android:orientation="vertical"
     tools:context=".StaffPackage.TableDetailBooked">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/orange"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:fontFamily="@font/quicksand"
-            android:text="Table Detail"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+    <include layout="@layout/toolbar_staff" />
 
     <TextView
         android:id="@+id/table_booked_id"

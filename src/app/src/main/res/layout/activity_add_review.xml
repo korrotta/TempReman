@@ -28,63 +28,59 @@
             android:id="@+id/rate1"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/star" />
 
         <ImageView
             android:id="@+id/rate2"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/star" />
 
         <ImageView
             android:id="@+id/rate3"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/star" />
 
         <ImageView
             android:id="@+id/rate4"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/star" />
 
         <ImageView
             android:id="@+id/rate5"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/star" />
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:text="Tell us your opinion."
-        android:textSize="16dp" />
+        android:fontFamily="@font/quicksand_medium"
+        android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:gravity="center">
-
-        <EditText
-            android:id="@+id/reviewContent"
-            android:layout_width="360dp"
-            android:layout_height="230dp"
-            android:background="@drawable/rounded_review"
-            android:gravity="top"
-            android:hint="Enter your opinion here."
-            android:inputType="textMultiLine"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp" />
-    </LinearLayout>
+    <EditText
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/reviewContent"
+        android:layout_width="360dp"
+        android:layout_height="230dp"
+        android:background="@drawable/rounded_review"
+        android:padding="10dp"
+        android:gravity="start"
+        android:hint="Enter your opinion here."
+        android:scrollbars="vertical"
+        android:layout_marginTop="20dp"
+        android:inputType="textMultiLine" />
 
     <Button
         android:id="@+id/btn_submit"
