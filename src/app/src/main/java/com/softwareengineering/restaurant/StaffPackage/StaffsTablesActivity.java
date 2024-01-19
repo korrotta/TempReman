@@ -62,7 +62,7 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private ArrayAdapter<TablesModel> tablesModelArrayAdapter;
     private ArrayList<String> tablesState;
     private Spinner timeFilter;
-
+    private int hourNow;
     private final String final_statePerTime[] = new String[1];
     private final int[] final_recentTimeRange = new int[1];
 
@@ -71,7 +71,6 @@ public class StaffsTablesActivity extends AppCompatActivity {
     private final int idleTableImg = R.drawable.table_top_view;
     private final int inuseTableImg = R.drawable.table_top_view_inuse;
     private final int bookedTableImg = R.drawable.table_top_view_booked;
-    private final int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
     private final String[] timeString = {
             "9:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00",
             "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"
@@ -121,6 +120,10 @@ public class StaffsTablesActivity extends AppCompatActivity {
         // Apply the adapter to the spinner
         timeFilter.setAdapter(timeAdapter);
 
+        // Fake time
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Calendar.MONTH,Calendar.DATE, 9,30, 0);
+        hourNow = calendar.get(Calendar.HOUR);
 
         final_recentTimeRange[0] = timeSelection(hourNow, true);
 

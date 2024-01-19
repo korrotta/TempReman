@@ -125,8 +125,10 @@ public class CustomersTablesActivity extends AppCompatActivity {
 
         // Apply the adapter to the spinner
         timeFilter.setAdapter(timeAdapter);
-
-        int hourNow = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        // Fake time
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Calendar.MONTH,Calendar.DATE, 9,30, 0);
+        int hourNow = calendar.get(Calendar.HOUR_OF_DAY);
         final_selectedTime[0] = timeSelection(hourNow, true);
 
         timeFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

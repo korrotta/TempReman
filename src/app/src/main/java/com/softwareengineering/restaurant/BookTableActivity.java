@@ -26,9 +26,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class BookTableActivity extends AppCompatActivity {
@@ -76,7 +79,6 @@ public class BookTableActivity extends AppCompatActivity {
         fetchUserRole();
 
         reserveButton.setOnClickListener(reserveTableEvent);
-        //TODO: Handle data synchronizing
     }
 
     private void fetchUserRole(){
@@ -97,15 +99,13 @@ public class BookTableActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
-            String name, phone;
-            name = nameET.getText().toString();
-            phone = phoneET.getText().toString();
-
             //Booking time handle
-            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-            int min = Calendar.getInstance().get(Calendar.MINUTE);
+            // Fake time
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, Calendar.MONTH,Calendar.DATE, 9,30, 0);
+            int hour = calendar.get(Calendar.HOUR);
 
-            int hourParsed[] = new int[2];
+            int[] hourParsed;
             hourParsed = timeParser(final_time[0]);
 
             if (hour >= hourParsed[1])
