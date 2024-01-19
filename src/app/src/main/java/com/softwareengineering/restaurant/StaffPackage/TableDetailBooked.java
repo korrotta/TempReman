@@ -38,6 +38,8 @@ public class TableDetailBooked extends AppCompatActivity {
     private final String[] final_name = new String[1];
     private final String[] final_phone = new String[1];
     private final String[] final_role = new String[1];
+
+    private static String userBookedId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,8 +163,7 @@ public class TableDetailBooked extends AppCompatActivity {
 
     private void removeBookingDocument() {
         //update in booking collection also
-        FirebaseFirestore.getInstance().collection("booking").whereEqualTo("userid",
-                FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("booking").whereEqualTo("userid", userBookedId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
@@ -175,6 +176,10 @@ public class TableDetailBooked extends AppCompatActivity {
                                         {
                                             Log.d("Reach delete", "done");
                                             finish();
+                                        }
+                                        else {
+                                            Log.e("Error", "error here");
+                                            Log.e("Reach delete", task.getException().toString());
                                         }
                                     }
                                 });
@@ -215,6 +220,7 @@ public class TableDetailBooked extends AppCompatActivity {
             datas[0] = dataHolder[0]; // CustomerId / AnonymousPhoneNumber
             datas[1] = dataHolder[1]; // TableId
             datas[2] = dataHolder[2]; // TimeRange
+            userBookedId = dataHolder[0];
         }
     }
 

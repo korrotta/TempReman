@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -58,6 +59,8 @@ public class StaffOrderActivity extends AppCompatActivity {
 
     private static Long priceInBill = 0L;
 
+    private static String userRole;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,7 @@ public class StaffOrderActivity extends AppCompatActivity {
 
         getDataFromPreviousIntent();
         realtimeUpdateOrderedList();
+        fetchUserRole();
         setDataForTextView();
 
         // Khởi tạo danh sách mẫu (bạn có thể thay thế bằng dữ liệu thực tế)
@@ -93,6 +97,13 @@ public class StaffOrderActivity extends AppCompatActivity {
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Customer can not add food
+                if (userRole.equals("customer")) {
+                    Toast.makeText(StaffOrderActivity.this, "Do not have permission for this.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent intent = new Intent(StaffOrderActivity.this, StaffOrderAddActivity.class);
                 intent.putExtra("tableId", final_tableID[0]);
                 startActivity(intent);
@@ -114,6 +125,12 @@ public class StaffOrderActivity extends AppCompatActivity {
                 // Handle Payment here
 
                 //get the final timestamp
+
+                //customer can not finish eating themselves
+                if (userRole.equals("customer")) {
+                    Toast.makeText(StaffOrderActivity.this, "Do not have permission for this.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //put data into firestore bill collection
                 FirebaseFirestore.getInstance().collection("bill").add(new HashMap<String, Object>(){{
@@ -137,6 +154,22 @@ public class StaffOrderActivity extends AppCompatActivity {
         });
     }
 
+
+    private void fetchUserRole(){
+        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            userRole = task.getResult().getString("role");
+                        }
+                        else {
+                            Log.d("Error", task.getException().toString());
+                        }
+                    }
+                });
+    }
+
     private void showSuccessDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(StaffOrderActivity.this);
 
@@ -157,6 +190,7 @@ public class StaffOrderActivity extends AppCompatActivity {
                 })
                 .show();
     }
+
 
     private void setDataForTextView(){
 

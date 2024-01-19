@@ -62,6 +62,7 @@ public class TableDetailInuse extends AppCompatActivity {
         binding.btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).get().addOnCompleteListener(
                         new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -115,6 +116,7 @@ public class TableDetailInuse extends AppCompatActivity {
 
 
     private void autoFinish(){
+        if (final_tableID[0] == null) return;
         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -181,9 +183,9 @@ public class TableDetailInuse extends AppCompatActivity {
     }
 
     private void getDataFromPreviousIntent() {
-        String data = getIntent().getStringExtra("id");
+        String[] data = getIntent().getStringArrayExtra("id");
         if (data != null) {
-            final_tableID[0] = data;
+            final_tableID[0] = data[1];
             Log.d("", "getDataFromPreviousIntent: " + final_tableID[0]);
 
             FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).get().addOnCompleteListener(
