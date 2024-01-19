@@ -125,10 +125,6 @@ public class MenuAdapter extends BaseAdapter {
                 // Giảm giá trị quanity, đảm bảo giá trị không âm
                 Long newQuantity = Math.max(Long.parseLong(holder.quantity.getText().toString()) - 1, 0);
 
-                if (newQuantity == 0) {
-                    return;
-                }
-
                 holder.quantity.setText(String.valueOf(newQuantity));
                 menuItem.setQuantity(newQuantity);
             }

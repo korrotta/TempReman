@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.softwareengineering.restaurant.ItemClasses.StaffOrderItem;
 import com.softwareengineering.restaurant.R;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StaffOrderAdapter extends ArrayAdapter<StaffOrderItem> {
@@ -28,12 +31,13 @@ public class StaffOrderAdapter extends ArrayAdapter<StaffOrderItem> {
         }
 
         TextView foodNameTextView = convertView.findViewById(R.id.foodName);
-        TextView priceTextView = convertView.findViewById(R.id.price);
         TextView quantityTextView = convertView.findViewById(R.id.quantity);
       
         foodNameTextView.setText(item.getFoodName());
-        priceTextView.setText(item.getPrice().toString());
-        quantityTextView.setText(item.getQuantity().toString());
+        String quantityXPrice = item.getQuantity().toString();
+        quantityXPrice += " x ";
+        quantityXPrice += item.getPrice().toString();
+        quantityTextView.setText(quantityXPrice);
 
         return convertView;
     }
