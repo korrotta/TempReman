@@ -14,14 +14,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_staff"></include>
+        <include layout="@layout/toolbar_staff" />
 
         <ListView
             android:id="@+id/staff_customersList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp">
         </ListView>
     </LinearLayout>

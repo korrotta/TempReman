@@ -19,9 +19,9 @@
             <include layout="@layout/toolbar" />
 
             <TextView
-                android:layout_marginTop="40dp"
                 android:layout_width="310dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/roboto"
                 android:text="@string/name"
                 android:textAllCaps="true"
@@ -30,13 +30,13 @@
 
             <EditText
                 android:id="@+id/editStaffsName"
-                android:inputType="textPersonName"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:paddingHorizontal="10dp"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
                 android:layout_width="310dp"
-                android:layout_height="40dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -49,13 +49,13 @@
 
             <EditText
                 android:id="@+id/editStaffsEmail"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="40dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -68,13 +68,13 @@
 
             <EditText
                 android:id="@+id/editStaffsPhone"
-                android:inputType="phone"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="40dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:layout_width="310dp"
@@ -89,24 +89,26 @@
                 android:id="@+id/editStaffsGender"
                 android:layout_width="310dp"
                 android:layout_height="35dp"
-                android:gravity="center"
                 android:layout_marginBottom="5dp"
-                android:weightSum="4"
-                android:orientation="horizontal">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
                 <RadioButton
                     android:id="@+id/editStaffsMale"
-                    android:text="@string/male"
-                    android:textColor="@color/grey"
-                    android:layout_weight="1"
                     android:layout_width="80dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/male"
+                    android:textColor="@color/grey" />
+
                 <RadioButton
                     android:id="@+id/editStaffsFemale"
-                    android:text="@string/female"
-                    android:textColor="@color/grey"
-                    android:layout_weight="1"
                     android:layout_width="80dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/female"
+                    android:textColor="@color/grey" />
             </RadioGroup>
 
             <TextView
@@ -120,23 +122,23 @@
 
             <EditText
                 android:id="@+id/editStaffsRole"
-                android:inputType="text"
-                android:background="@drawable/round_corner_box_bg_design"
-                android:layout_marginBottom="5dp"
-                android:importantForAutofill="no"
-                android:paddingHorizontal="10dp"
                 android:layout_width="310dp"
-                android:layout_height="40dp" />
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_corner_box_bg_design"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:paddingHorizontal="10dp" />
 
             <Button
-                android:layout_marginTop="30dp"
                 android:id="@+id/btn_edit_staff_done"
-                android:text="@string/done"
+                android:layout_width="310dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
                 android:backgroundTint="@color/orange"
                 android:fontFamily="@font/roboto"
-                android:textSize="24sp"
-                android:layout_width="310dp"
-                android:layout_height="50dp" />
+                android:text="@string/done"
+                android:textSize="24sp" />
 
         </LinearLayout>
 

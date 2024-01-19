@@ -43,12 +43,14 @@
             android:textStyle="bold" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/layout_white_bg_design"
             android:gravity="center_vertical">
 
             <ImageView
@@ -74,7 +76,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="5dp"
-                android:layout_toRightOf="@id/quantity"
+                android:layout_toEndOf="@id/quantity"
                 android:background="@drawable/ic_plus" />
 
         </RelativeLayout>
