@@ -45,6 +45,7 @@ import com.softwareengineering.restaurant.databinding.ActivityCustomersTablesBin
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 
@@ -131,7 +132,7 @@ public class CustomersTablesActivity extends AppCompatActivity {
 
                 //Time range here:
                 final_selectedTime[0] = getTimeFromRange(timeString[position]);
-                // TODO: Handle show table here
+                // Handle show table
                 fetchTableList();
             }
 
