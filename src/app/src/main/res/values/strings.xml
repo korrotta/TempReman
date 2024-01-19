@@ -115,4 +115,6 @@
     <string name="order">Order</string>
     <string name="today_s_sale">Today\'s Sale</string>
     <string name="to_previous_day">To Previous Day</string>
+    <string name="confirm">Confirm</string>
+    <string name="popular">Popular</string>
 </resources>

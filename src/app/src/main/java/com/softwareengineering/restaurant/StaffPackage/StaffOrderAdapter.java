@@ -32,7 +32,7 @@ public class StaffOrderAdapter extends ArrayAdapter<StaffOrderItem> {
         TextView priceTextView = convertView.findViewById(R.id.price);
         TextView quantityTextView = convertView.findViewById(R.id.quantity);
 
-        imageView.setImageResource(item.getImageResourceId()); // Thay thế bằng phương thức thích hợp
+        imageView.setImageResource(item.getImageResourceId());
         foodNameTextView.setText(item.getFoodName());
         priceTextView.setText(item.getPrice().toString());
         quantityTextView.setText(item.getQuantity().toString());
