@@ -46,8 +46,11 @@ import com.softwareengineering.restaurant.TablesModel;
 import com.softwareengineering.restaurant.databinding.ActivityCustomersTablesBinding;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class CustomersTablesActivity extends AppCompatActivity {
@@ -287,7 +290,9 @@ public class CustomersTablesActivity extends AppCompatActivity {
         if(final_isBooked[0]){
             customerBookedInfo.setVisibility(View.VISIBLE);
             // Get customer info - name and phone (need to get from the getUserFromFirestore())
-            customerBookedDate.setText(Calendar.getInstance().getTime().toString());
+            Date date = Calendar.getInstance().getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            customerBookedDate.setText(dateFormat.format(date));
             customerBookedTableID.setText(doc.getString("tableid"));
             customerBookedTime.setText(doc.getString("timerange"));
         }

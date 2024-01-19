@@ -132,7 +132,7 @@
             <LinearLayout
                 android:id="@+id/customersBookedInfo"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/layout_bg_design"
                 android:backgroundTint="@color/light_orange_2"
@@ -193,7 +193,7 @@
 
                     <TextView
                         android:id="@+id/customersBookedDate"
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/quicksand_medium"
@@ -203,18 +203,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="55dp"
+                        android:layout_marginStart="30dp"
                         android:fontFamily="@font/quicksand_bold"
                         android:text="Time: "
                         android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/customersBookedTime"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
+                        android:textAlignment="center"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/quicksand_medium"
-                        android:text="19:00"
+                        android:text="19:00 - 21:00"
                         android:textSize="18sp" />
 
                 </LinearLayout>
