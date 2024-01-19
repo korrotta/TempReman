@@ -13,12 +13,14 @@ public class MenuItem {
     private String name;
     private long price;
     private String type;
+    private Long quantity;
 
-    public MenuItem(String imageURL, String name, long price, String type) {
+    public MenuItem(String imageURL, String name, long price, String type, Long quantity) {
         this.imageURL = imageURL;
         this.name = name;
         this.price = price;
         this.type = type;
+        this.quantity = quantity;
     }
 
     public String getImageURL() {
@@ -42,6 +44,14 @@ public class MenuItem {
 
     public String getType() {
         return type;
+    }
+
+    public Long getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 
     // Phương thức để định dạng giá thành chuỗi dạng "20.000"

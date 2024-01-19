@@ -125,9 +125,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-                <Spinner
+                <TextView
                     android:padding="2dp"
-                    android:id="@+id/timeSpinnerBookTable"
+                    android:id="@+id/timeTVBookTable"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
