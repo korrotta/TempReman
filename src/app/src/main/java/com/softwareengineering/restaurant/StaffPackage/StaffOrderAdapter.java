@@ -27,12 +27,10 @@ public class StaffOrderAdapter extends ArrayAdapter<StaffOrderItem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.staff_list_item_order, parent, false);
         }
 
-        ImageView imageView = convertView.findViewById(R.id.image_food);
         TextView foodNameTextView = convertView.findViewById(R.id.foodName);
         TextView priceTextView = convertView.findViewById(R.id.price);
         TextView quantityTextView = convertView.findViewById(R.id.quantity);
-
-        imageView.setImageResource(item.getImageResourceId());
+      
         foodNameTextView.setText(item.getFoodName());
         priceTextView.setText(item.getPrice().toString());
         quantityTextView.setText(item.getQuantity().toString());
