@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,7 +22,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.softwareengineering.restaurant.ItemClasses.OrderItem;
 import com.softwareengineering.restaurant.ItemClasses.StaffOrderItem;
+import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
 import java.lang.reflect.Array;
@@ -36,10 +41,9 @@ public class StaffOrderActivity extends AppCompatActivity {
     private ListView listView;
     private StaffOrderAdapter adapter;
     private List<StaffOrderItem> orderItems;
-
+    private ImageView topMenuImg;
     private TextView name, tableId, date, total;
-    private Button addOrder;
-
+    private Button addOrder, cancelOrder, paymentOrder;
     private final String final_tableID[] = new String[1];
     private final String final_customerId[] = new String[1];
 
@@ -48,8 +52,11 @@ public class StaffOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_order);
 
+        topMenuImg = findViewById(R.id.topMenuImg);
         topMenuName = findViewById(R.id.topMenuName);
         addOrder = findViewById(R.id.staff_order_addButton);
+        cancelOrder = findViewById(R.id.staffsOrderCancelBtn);
+        paymentOrder = findViewById(R.id.staffsOrderPaymentBtn);
         listView = findViewById(R.id.listView);
 
         name = (TextView) findViewById(R.id.staff_order_name);
@@ -57,8 +64,9 @@ public class StaffOrderActivity extends AppCompatActivity {
         tableId = (TextView) findViewById(R.id.staff_order_numberId);
         total = (TextView) findViewById(R.id.staff_order_total);
 
-        topMenuName.setText("Order");
-
+        topMenuName.setText(R.string.order);
+        topMenuImg.setImageResource(R.drawable.back);
+        topMenuImg.setOnClickListener(v -> finish());
 
         getDataFromPreviousIntent();
         realtimeUpdateOrderedList();
@@ -71,6 +79,26 @@ public class StaffOrderActivity extends AppCompatActivity {
         // Kết nối ListView với Adapter
         listView.setAdapter(adapter);
 
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("listFoodSelected")) {
+            List<OrderItem> listFoodSelected = intent.getParcelableArrayListExtra("listFoodSelected");
+            Log.d("Selected List", String.valueOf(listFoodSelected.size()));
+            // Thêm các món đã chọn vào danh sách orderItems
+            for (OrderItem selected : listFoodSelected) {
+                StaffOrderItem staffOrderItem = new StaffOrderItem(
+                        R.drawable.circle_background,
+                        selected.getNameFood(),
+                        selected.getPrice(),
+                        selected.getQuantity());
+
+                Toast.makeText(StaffOrderActivity.this, selected.getNameFood(), Toast.LENGTH_SHORT).show();
+                orderItems.add(staffOrderItem);
+            }
+
+            // Cập nhật giao diện
+            adapter.notifyDataSetChanged();
+        }
+
         addOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +106,21 @@ public class StaffOrderActivity extends AppCompatActivity {
                 intent.putExtra("tableId", final_tableID[0]);
                 startActivity(intent);
 
+            }
+        });
+
+        cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle cancel Order
+                finish();
+            }
+        });
+
+        paymentOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle Payment here
             }
         });
     }
@@ -97,6 +140,7 @@ public class StaffOrderActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void getDataFromPreviousIntent(){
         String data[] = getIntent().getStringArrayExtra("data");
         if (data!= null){
@@ -104,6 +148,7 @@ public class StaffOrderActivity extends AppCompatActivity {
             final_tableID[0] = data[1];
         }
     }
+
     private void realtimeUpdateOrderedList(){
         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -121,7 +166,7 @@ public class StaffOrderActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 orderItems.clear();
                 ArrayList<String> foodNameList = (ArrayList<String>) task.getResult().get("foodName");
-                ArrayList<Long> quantityList = (ArrayList<Long>) task.getResult().get("quantityList");
+                ArrayList<Integer> quantityList = (ArrayList<Integer>) task.getResult().get("quantityList");
                 ArrayList<Long> foodPriceList = (ArrayList<Long>) task.getResult().get("foodPrice");
                 //Empty for empty
                 if (foodNameList == null || quantityList == null || foodPriceList == null) {

@@ -4,9 +4,9 @@ public class StaffOrderItem {
     private int imageResourceId;
     private String foodName;
     private Long price;
-    private Long quantity;
+    private Integer quantity;
 
-    public StaffOrderItem(int imageResourceId, String foodName, Long price, Long quantity) {
+    public StaffOrderItem(int imageResourceId, String foodName, Long price, Integer quantity) {
         this.imageResourceId = imageResourceId;
         this.foodName = foodName;
         this.price = price;
@@ -25,7 +25,7 @@ public class StaffOrderItem {
         return price;
     }
 
-    public Long getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 }
