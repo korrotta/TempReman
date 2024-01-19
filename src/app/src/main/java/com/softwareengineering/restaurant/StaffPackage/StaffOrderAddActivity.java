@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -37,8 +38,10 @@ import com.softwareengineering.restaurant.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +61,16 @@ public class StaffOrderAddActivity extends AppCompatActivity {
     private LinearLayout saladButton, pizzaButton, drinkButton, dessertButton, pastaButton, burgerButton, otherButton;
 
     private StaffsMenuActivity.FILTER_TYPE g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
+
+    private static final ArrayList<HashMap<String,Object>> menuItemHashMap[] = new ArrayList[1];
+
+
+    //adding data handler
+    private static ArrayList<String> nameList = new ArrayList<>();
+    private static ArrayList<Long> quantityList = new ArrayList<>();
+    private static ArrayList<Long> priceList = new ArrayList<>();
+
+    private String tableId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +92,21 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         burgerButton = findViewById(R.id.burgerFilter);
         otherButton = findViewById(R.id.otherFilter);
 
+        //getTableId
+        tableId = getIntent().getStringExtra("tableId");
+
+
         // Tạo Adapter và thiết lập cho GridView
         menuAdapter = new MenuAdapter(this, menuItems);
         staffsOrderAddGV.setAdapter(menuAdapter);
 
+        menuItemHashMap[0] = new ArrayList<>();
         //Synchronize by event listener
-        realtimeUpdateMenu();
+        //first fetch and only fetch for this
+        fetchFoodList();
+
+        //ItemHashMaps now have all data
+
 
         // Initialize Toolbar
         initToolBar();
@@ -105,12 +127,56 @@ public class StaffOrderAddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StaffOrderAddActivity.this, StaffOrderActivity.class);
-                // Lấy danh sách món ăn đã chọn từ Adapter
-                List<OrderItem> listFoodSelected = menuAdapter.getSelectedItems();
+                //fetch data from firestore
+                firestore.collection("table").document(tableId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            nameList = (ArrayList<String>) task.getResult().get("foodName");
+                            priceList = (ArrayList<Long>) task.getResult().get("foodPrice");
+                            quantityList = (ArrayList<Long>) task.getResult().get("quantityList");
 
-                intent.putParcelableArrayListExtra("listFoodSelected", new ArrayList<>(listFoodSelected));
-                startActivity(intent);
+                            if (nameList == null || nameList.isEmpty()){
+                                nameList = new ArrayList<String>();
+                                priceList = new ArrayList<Long>();
+                                quantityList = new ArrayList<Long>();
+                            }
 
+                            //add data
+                            for (HashMap m : menuItemHashMap[0]){
+                                MenuItem item = ((MenuItem)m.get("menuitem"));
+                                //add anyway don't need q>0, we need the food existed or not
+
+                                int pos = nameList.indexOf(item.getName());
+                                //not exists
+                                if (pos == -1) {
+                                    if (item.getQuantity()>0) {
+                                        Log.d("name", item.getName());
+                                        nameList.add(item.getName());
+                                        priceList.add(item.getPrice());
+                                        quantityList.add(item.getQuantity());
+                                    }
+                                }
+                                //exists
+                                else {
+                                    quantityList.set(pos, quantityList.get(pos)+ item.getQuantity());
+                                }
+
+                            }
+                            firestore.collection("table").document(tableId).update("foodName", nameList);
+                            firestore.collection("table").document(tableId).update("foodPrice", priceList);
+                            firestore.collection("table").document(tableId).update("quantityList", quantityList).addOnCompleteListener(
+                                    new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
                 finish();
             }
         });
@@ -145,16 +211,20 @@ public class StaffOrderAddActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        if (doc.getBoolean("state") == null)
+                        if (Boolean.TRUE.equals(doc.getBoolean("state"))) {
                             Log.d("null_Long", doc.getId().toString());
-                        MenuItem menuItem = new MenuItem(
-                                doc.getString("imageURL"),
-                                doc.getString("name"),
-                                doc.getLong("price"),
-                                doc.getString("type"),
-                                0L
-                        );
-                        menuItems.add(menuItem);
+                            MenuItem menuItem = new MenuItem(
+                                    doc.getString("imageURL"),
+                                    doc.getString("name"),
+                                    doc.getLong("price"),
+                                    doc.getString("type"),
+                                    0L);
+                            menuItems.add(menuItem);
+                            menuItemHashMap[0].add(new HashMap<String, Object>() {{
+                                put("menuitem", menuItem);
+                                put("quantity", menuItem.getQuantity());
+                            }});
+                        }
                     }
                     menuItemsHolder.clear();
                     //changed UI
@@ -216,13 +286,14 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.SALAD) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(saladButton);
-                return;
+
             }
-            g1_filterType = StaffsMenuActivity.FILTER_TYPE.SALAD;
-            filterClickedShowing("Salad");
-            changeToggleColor(saladButton);
+            else {
+                g1_filterType = StaffsMenuActivity.FILTER_TYPE.SALAD;
+                filterClickedShowing("Salad");
+                changeToggleColor(saladButton);
+            }
         }
     };
 
@@ -231,13 +302,13 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.DRINK) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(drinkButton);
-                return;
             }
-            g1_filterType = StaffsMenuActivity.FILTER_TYPE.DRINK;
-            filterClickedShowing("Drink");
-            changeToggleColor(drinkButton);
+            else {
+                g1_filterType = StaffsMenuActivity.FILTER_TYPE.DRINK;
+                filterClickedShowing("Drink");
+                changeToggleColor(drinkButton);
+            }
         }
     };
 
@@ -246,7 +317,6 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.DESSERT) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(dessertButton);
                 return;
             }
@@ -261,7 +331,6 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.PASTA) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(pastaButton);
                 return;
             }
@@ -276,7 +345,6 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.BURGER) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(burgerButton);
                 return;
             }
@@ -291,7 +359,6 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.PIZZA) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(pizzaButton);
                 return;
             }
@@ -306,7 +373,6 @@ public class StaffOrderAddActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (g1_filterType == StaffsMenuActivity.FILTER_TYPE.OTHERS) {
                 g1_filterType = StaffsMenuActivity.FILTER_TYPE.FULL;
-                fetchFoodList();
                 deselectFilter(otherButton);
                 return;
             }
@@ -320,10 +386,16 @@ public class StaffOrderAddActivity extends AppCompatActivity {
     private void filterClickedShowing(String filterValue) {
         if (filterValue != "Other") {
             //Known that foodList is fetched successfully
-            ArrayList<MenuItem> menuItemFilter = menuItemsHolder.stream()
-                    .filter(x -> x.getType().equals(filterValue))
+            ArrayList<HashMap<String, Object>> hashMapItemFilter = menuItemHashMap[0].stream()
+                    .filter(x -> ((MenuItem)x.get("menuitem")).getType().equals(filterValue))
                     .collect(Collectors.toCollection(ArrayList::new));
 
+            Log.d("Quantity", "reach");
+
+            ArrayList<MenuItem> menuItemFilter = new ArrayList<MenuItem>();
+            for (HashMap m: hashMapItemFilter) {
+                menuItemFilter.add((MenuItem) m.get("menuitem"));
+            }
             menuAdapter.updateData(menuItemFilter);
             menuAdapter.notifyDataSetChanged();
         } else {
@@ -408,6 +480,10 @@ public class StaffOrderAddActivity extends AppCompatActivity {
     private void deselectFilter(LinearLayout selectedFilter) {
         int deselectedColor = getResources().getColor(R.color.white);
         selectedFilter.setBackgroundTintList(ColorStateList.valueOf(deselectedColor));
+
+        menuItems.clear();
+        menuItems.addAll(menuItemsHolder);
+        menuAdapter.notifyDataSetChanged();
     }
 
 }

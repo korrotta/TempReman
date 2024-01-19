@@ -3,7 +3,6 @@ package com.softwareengineering.restaurant.StaffPackage;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,7 +60,8 @@ public class TableDetailBooked extends AppCompatActivity {
     }
 
 
-    //Method & listener
+    //Method n listener
+
     private void fetchUserRole() {
         FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -94,6 +94,7 @@ public class TableDetailBooked extends AppCompatActivity {
                 FirebaseFirestore.getInstance().collection("table").document(datas[1]).update("state", "inuse");
             }
 
+
             FirebaseFirestore.getInstance().collection("table").document(datas[1]).update("userinuse", datas[0]);
             finish();
         }
@@ -102,42 +103,23 @@ public class TableDetailBooked extends AppCompatActivity {
     View.OnClickListener RemoveBookedClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            showCancelTableDialog();
+
+            CollectionReference tableReference = FirebaseFirestore.getInstance().collection("table");
+
+            if (final_isCustomer[0]){
+
+                removeDataInArrayList(tableReference);
+                removeBookingDocument();
+            }
+            //handle as staff booked - anonymous
+            else {
+                removeDataInArrayList(tableReference);
+            }
+
+            finish();
         }
     };
 
-    private void showCancelTableDialog() {
-        Dialog cancelTableDialog = new Dialog(this);
-        cancelTableDialog.setContentView(R.layout.cancel_table_dialog);
-        cancelTableDialog.setCancelable(true);
-
-        Button yesButton = cancelTableDialog.findViewById(R.id.cancelTableDialogYesBtn);
-        Button noButton = cancelTableDialog.findViewById(R.id.cancelTableDialogNoBtn);
-
-        yesButton.setOnClickListener(v -> {
-            cancelTableDialog.dismiss();
-            handleYesButtonClick();
-        });
-
-        noButton.setOnClickListener(v -> {
-            cancelTableDialog.dismiss();
-        });
-
-        cancelTableDialog.show();
-    }
-
-    private void handleYesButtonClick() {
-        CollectionReference tableReference = FirebaseFirestore.getInstance().collection("table");
-        if (final_isCustomer[0]){
-            removeDataInArrayList(tableReference);
-            removeBookingDocument();
-        }
-        //handle as staff booked - anonymous
-        else {
-            removeDataInArrayList(tableReference);
-        }
-        finish();
-    }
 
     private String rangeToKeyConverter(String timeRange){
         switch (timeRange){

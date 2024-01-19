@@ -1,7 +1,5 @@
 package com.softwareengineering.restaurant.ItemClasses;
 
-import android.graphics.drawable.Drawable;
-
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
