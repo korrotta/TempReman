@@ -2,11 +2,16 @@ package com.softwareengineering.restaurant.StaffPackage;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -142,7 +147,7 @@ public class StaffOrderActivity extends AppCompatActivity {
                         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("quantityList", new ArrayList<String>());
                         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("state", "idle");
                         FirebaseFirestore.getInstance().collection("table").document(final_tableID[0]).update("userinuse", "");
-                        finish();
+                        showSuccessDialog();
                     }
                 });
             }
@@ -164,6 +169,29 @@ public class StaffOrderActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(StaffOrderActivity.this);
+
+        // Create a TextView with custom text color
+        TextView messageTextView = new TextView(StaffOrderActivity.this);
+        messageTextView.setText("You have successfully paid!");
+        messageTextView.setTextColor(Color.parseColor("#6AC259"));
+        messageTextView.setTextSize(24);
+        messageTextView.setGravity(Gravity.CENTER);
+        messageTextView.setPadding(16, 16, 16, 16);
+
+        builder.setMessage(" ")
+                .setView(messageTextView)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .show();
+    }
+
+
     private void setDataForTextView(){
 
         tableId.setText(final_tableID[0]);
