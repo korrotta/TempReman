@@ -3,12 +3,15 @@ package com.softwareengineering.restaurant.ItemClasses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class OrderItem implements Parcelable {
     private String nameFood;
     private Long price;
-    private Long quantity; // Sử dụng int thay vì long cho quantity
+    private Integer quantity;
 
-    public OrderItem(String nameFood, Long price, Long quantity) {
+    public OrderItem(String nameFood, Long price, Integer quantity) {
         this.nameFood = nameFood;
         this.price = price;
         this.quantity = quantity;
@@ -22,15 +25,14 @@ public class OrderItem implements Parcelable {
         return price;
     }
 
-    public Long getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    // Triển khai Parcelable
     protected OrderItem(Parcel in) {
         nameFood = in.readString();
         price = in.readLong();
-        quantity = in.readLong(); // Sử dụng readInt thay vì readLong
+        quantity = in.readInt();
     }
 
     public static final Parcelable.Creator<OrderItem> CREATOR = new Parcelable.Creator<OrderItem>() {
@@ -54,7 +56,7 @@ public class OrderItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nameFood);
         dest.writeLong(price);
-        dest.writeLong(quantity); // Sử dụng writeInt thay vì writeLong
+        dest.writeInt(quantity);
     }
 
     @Override
