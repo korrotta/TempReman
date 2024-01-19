@@ -1,12 +1,5 @@
 package com.softwareengineering.restaurant.StaffPackage;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -22,6 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -69,7 +69,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
 
     private FILTER_TYPE g1_filterType = FILTER_TYPE.FULL;
 
-    public enum FILTER_TYPE{
+    public enum FILTER_TYPE {
         FULL,
         SALAD,
         PASTA,
@@ -79,6 +79,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
         BURGER,
         OTHERS
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,11 +110,9 @@ public class StaffsMenuActivity extends AppCompatActivity {
         burgerButton = findViewById(R.id.burgerFilter);
         otherButton = findViewById(R.id.otherFilter);
 
-
         //always showing by foodListHolder
         foodAdapter = new FoodAdapter(this, foodList);
         gridView.setAdapter(foodAdapter);
-
 
         //Synchronize by event listener
         realtimeUpdateMenu();
@@ -273,9 +272,10 @@ public class StaffsMenuActivity extends AppCompatActivity {
         foodCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot doc: task.getResult()){
-                        if (doc.getBoolean("state") == null) Log.d("null_Long", doc.getId().toString());
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        if (doc.getBoolean("state") == null)
+                            Log.d("null_Long", doc.getId().toString());
                         Food food = new Food(
                                 doc.getString("imageRef"),
                                 doc.getString("imageURL"),
@@ -290,8 +290,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
                     //changed UI
                     foodAdapter.notifyDataSetChanged();
                     foodListHolder.addAll(foodList);
-                }
-                else {
+                } else {
                     Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
                 }
             }
@@ -306,9 +305,10 @@ public class StaffsMenuActivity extends AppCompatActivity {
         foodCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot doc: task.getResult()){
-                        if (doc.getBoolean("state") == null) Log.d("null_Long", doc.getId().toString());
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        if (doc.getBoolean("state") == null)
+                            Log.d("null_Long", doc.getId().toString());
                         Food food = new Food(
                                 doc.getString("imageRef"),
                                 doc.getString("imageURL"),
@@ -327,8 +327,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
                     //changed UI
                     foodAdapter.notifyDataSetChanged();
                     foodListHolder.addAll(foodList);
-                }
-                else {
+                } else {
                     Log.e("CustomersMenuActivity", "Error getting documents: ", task.getException());
                 }
             }
@@ -344,17 +343,17 @@ public class StaffsMenuActivity extends AppCompatActivity {
         account.setBackgroundColor(selectedItem == account ? ContextCompat.getColor(this, R.color.light_orange_3) : ContextCompat.getColor(this, R.color.light_orange_2));
     }
 
-    public static void openDrawer (DrawerLayout drawerLayout) {
+    public static void openDrawer(DrawerLayout drawerLayout) {
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
-    public static void closeDrawer (DrawerLayout drawerLayout) {
+    public static void closeDrawer(DrawerLayout drawerLayout) {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
-    public static void redirectActivity (Activity activity, Class secondActivity) {
+    public static void redirectActivity(Activity activity, Class secondActivity) {
         Intent intent = new Intent(activity, secondActivity);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
@@ -370,7 +369,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener saladClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.SALAD){
+            if (g1_filterType == FILTER_TYPE.SALAD) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(saladButton);
@@ -385,7 +384,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener drinkClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.DRINK){
+            if (g1_filterType == FILTER_TYPE.DRINK) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(drinkButton);
@@ -400,7 +399,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener dessertClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.DESSERT){
+            if (g1_filterType == FILTER_TYPE.DESSERT) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(dessertButton);
@@ -415,7 +414,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener pastaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.PASTA){
+            if (g1_filterType == FILTER_TYPE.PASTA) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(pastaButton);
@@ -430,7 +429,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener burgerClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.BURGER){
+            if (g1_filterType == FILTER_TYPE.BURGER) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(burgerButton);
@@ -445,7 +444,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener pizzaClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.PIZZA){
+            if (g1_filterType == FILTER_TYPE.PIZZA) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(pizzaButton);
@@ -460,7 +459,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
     View.OnClickListener otherClickEvent = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (g1_filterType == FILTER_TYPE.OTHERS){
+            if (g1_filterType == FILTER_TYPE.OTHERS) {
                 g1_filterType = FILTER_TYPE.FULL;
                 fetchFoodList();
                 deselectFilter(otherButton);
@@ -473,8 +472,9 @@ public class StaffsMenuActivity extends AppCompatActivity {
     };
 
     private final String TAG = "UserChecker";
+
     //Filter handler:
-    private void filterClickedShowing(String filterValue){
+    private void filterClickedShowing(String filterValue) {
         if (filterValue != "Other") {
             //Known that foodList is fetched successfully
             ArrayList<Food> foodFilter = foodListHolder.stream()
@@ -483,12 +483,11 @@ public class StaffsMenuActivity extends AppCompatActivity {
 
             foodAdapter.updateData(foodFilter);
             foodAdapter.notifyDataSetChanged();
-        }
-        else {
+        } else {
             String[] basicType = {"Salad", "Pasta", "Drink", "Dessert", "Pizza", "Burger"};
 
             ArrayList<Food> foodFilter = foodListHolder.stream()
-                    .filter(x-> !Arrays.asList(basicType).contains(x.getType()))
+                    .filter(x -> !Arrays.asList(basicType).contains(x.getType()))
                     .collect(Collectors.toCollection(ArrayList::new));
 
             foodAdapter.updateData(foodFilter);
@@ -563,7 +562,7 @@ public class StaffsMenuActivity extends AppCompatActivity {
         otherButton.setBackgroundTintList(ColorStateList.valueOf(selectedFilter == otherButton ? selectedColor : deselectedColor));
     }
 
-    private void deselectFilter(LinearLayout selectedFilter){
+    private void deselectFilter(LinearLayout selectedFilter) {
         int deselectedColor = getResources().getColor(R.color.white);
         selectedFilter.setBackgroundTintList(ColorStateList.valueOf(deselectedColor));
     }

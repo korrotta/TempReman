@@ -36,7 +36,7 @@ public class CustomersAccountActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private ImageView topMenuImg, userAvatar;
-    private TextView userNameView, userEmail;
+    private TextView userNameView, userEmail, topMenuName;
     private EditText userNameET, phoneET, genderET;
 
     private RelativeLayout menu, tables, review, account, logout;
@@ -49,6 +49,7 @@ public class CustomersAccountActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         drawerLayout = findViewById(R.id.customersDrawerLayout);
         topMenuImg = findViewById(R.id.topMenuImg);
+        topMenuName = findViewById(R.id.topMenuName);
         menu = findViewById(R.id.customersMenuDrawer);
         tables = findViewById(R.id.customersTablesDrawer);
         review = findViewById(R.id.customersReviewDrawer);
@@ -86,8 +87,13 @@ public class CustomersAccountActivity extends AppCompatActivity {
             }
         });
 
-        setItemBackgroundColors(menu);
 
+
+        initToolBar();
+        initMenuBar();
+    }
+
+    private void initToolBar() {
         topMenuImg.setImageResource(R.drawable.topmenu);
 
         topMenuImg.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +102,12 @@ public class CustomersAccountActivity extends AppCompatActivity {
                 openDrawer(drawerLayout);
             }
         });
+
+        topMenuName.setText(R.string.account);
+    }
+
+    private void initMenuBar() {
+        setItemBackgroundColors(account);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override

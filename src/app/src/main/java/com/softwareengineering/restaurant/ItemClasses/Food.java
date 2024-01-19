@@ -1,7 +1,5 @@
 package com.softwareengineering.restaurant.ItemClasses;
 
-import com.google.android.gms.auth.api.signin.internal.Storage;
-import com.google.firebase.Firebase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -15,12 +13,6 @@ public class Food {
 
     private String description;
     private String ingredient;
-
-
-    // Constructor mặc định
-//    public Food() {
-//        // Cần có constructor mặc định rỗng cho Firestore
-//    }
 
     public Food(String imageReference, String imageUrl, String name, long price, boolean isOnSale, String type){
         this.imageReference = imageReference;

@@ -17,23 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <include layout="@layout/toolbar_staff" />
 
             <FrameLayout
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="210dp"
+                android:layout_height="150dp"
                 android:background="@color/orange"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <ImageView
-                    android:id="@+id/btn_back"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_back" />
-
-
-            </FrameLayout>
+                android:orientation="vertical" />
 
             <RelativeLayout
                 android:layout_width="match_parent" android:gravity="center"
@@ -52,7 +43,7 @@
                     android:layout_height="24dp"
                     android:background="@drawable/edit_image"
                     android:layout_alignEnd="@id/image_user"
-                    android:layout_alignBottom="@id/image_user"
+                    android:layout_alignTop="@id/image_user"
                     android:layout_marginEnd="5dp"
                     android:layout_marginBottom="25dp"/>
             </RelativeLayout>

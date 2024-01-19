@@ -4,20 +4,38 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.telephony.ims.ImsManager;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.softwareengineering.restaurant.R;
 
+import org.w3c.dom.Text;
+
 public class CustomersAccountEditActivity extends AppCompatActivity {
-    ImageView btn_back;
+    private ImageView topMenuImg;
+    private TextView topMenuName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customers_account_edit);
+        topMenuImg = findViewById(R.id.topMenuImg);
+        topMenuName = findViewById(R.id.topMenuName);
 
-        btn_back = findViewById(R.id.btn_back);
+        initToolBar();
+    }
 
-        btn_back.setOnClickListener(view -> onBackPressed());
+    private void initToolBar() {
+        topMenuImg.setImageResource(R.drawable.back);
+
+        topMenuImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        topMenuName.setText("");
     }
 }

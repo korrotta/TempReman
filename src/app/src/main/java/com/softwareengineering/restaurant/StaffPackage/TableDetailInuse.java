@@ -82,30 +82,10 @@ public class TableDetailInuse extends AppCompatActivity {
         binding.btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCancelTableDialog();
+                finish();
             }
         });
 
-    }
-
-    private void showCancelTableDialog() {
-        Dialog cancelTableDialog = new Dialog(this);
-        cancelTableDialog.setContentView(R.layout.cancel_table_dialog);
-        cancelTableDialog.setCancelable(true);
-
-        Button yesButton = cancelTableDialog.findViewById(R.id.cancelTableDialogYesBtn);
-        Button noButton = cancelTableDialog.findViewById(R.id.cancelTableDialogNoBtn);
-
-        yesButton.setOnClickListener(v -> {
-            cancelTableDialog.dismiss();
-            handleYesButtonClick();
-        });
-
-        noButton.setOnClickListener(v -> {
-            cancelTableDialog.dismiss();
-        });
-
-        cancelTableDialog.show();
     }
 
     private void handleYesButtonClick() {
