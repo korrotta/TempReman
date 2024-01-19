@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.softwareengineering.restaurant.LoginActivity;
 import com.softwareengineering.restaurant.R;
 
 import java.time.LocalDateTime;
