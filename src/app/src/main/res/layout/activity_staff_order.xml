@@ -206,7 +206,7 @@
                     <ListView
                         android:id="@+id/listView"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="120dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp" />
 
@@ -291,14 +291,14 @@
         </ScrollView>
     </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/light_orange_2">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="200dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:background="@color/light_orange_2">-->
 
-            <include layout="@layout/staffs_nav_drawer" />
+<!--            <include layout="@layout/staffs_nav_drawer" />-->
 
-        </RelativeLayout>
+<!--        </RelativeLayout>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>
