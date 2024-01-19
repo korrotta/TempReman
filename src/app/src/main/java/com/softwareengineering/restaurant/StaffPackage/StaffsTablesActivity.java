@@ -191,7 +191,10 @@ public class StaffsTablesActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if(task.isSuccessful()){
                                 Intent i = new Intent(StaffsTablesActivity.this, TableDetailInuse.class);
-                                i.putExtra("id", t.getId());
+                                String[] data = new String[2];
+                                data[0] = "id";
+                                data[1] = t.getId();
+                                i.putExtra("id", data);
                                 startActivity(i);
                             }
                         }
