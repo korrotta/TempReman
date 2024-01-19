@@ -99,6 +99,12 @@ public class BookTableActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
+            // Check phone number field
+            if (phoneET.getText().toString().isEmpty()) {
+                Toast.makeText(BookTableActivity.this, "Phone number must not be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             //Booking time handle
             // Fake time
             Calendar calendar = Calendar.getInstance();
