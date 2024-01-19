@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -106,6 +107,8 @@ public class AddReviewActivity extends AppCompatActivity {
                 put("datetime", Calendar.getInstance().getTime());
                 put("name", g_reviewerName);
             }});
+            // Add Toast
+            showToast("Submitted review");
 
             Log.d(TAG, "onClick: "+ content);
             finish();
@@ -128,5 +131,8 @@ public class AddReviewActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+    private void showToast(String message) {
+        Toast.makeText(AddReviewActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 }
