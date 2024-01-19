@@ -17,3 +17,12 @@ user list:
 
  "annguyenhoai3112@gmail.com"
  "customer"
+
+ "tpminthu@gmail.com"
+  "customer"
+
+  "asdfghjkl91213@gmail.com"
+  "customer"
+
+  "21@gmail.com"
+  "1314"
