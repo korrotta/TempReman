@@ -75,7 +75,7 @@ public class AddFoodActivity extends AppCompatActivity {
         foodType.add("Dessert");
         foodType.add("Others");
 
-        ArrayAdapter<String> foodTypesAdapter = new ArrayAdapter<>(this, R.layout.custom_spinner_item, foodType);
+        ArrayAdapter<String> foodTypesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, foodType);
         foodTypesAdapter.setDropDownViewResource(android.R.layout.select_dialog_item);
 
         // bind foodTypeAdapter into spinner
@@ -93,14 +93,6 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         });
 
-        // Set Done Button Click Listener
-        doneBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         addImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +102,7 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         });
 
+        // Handle done Button
         doneBtn.setOnClickListener(doneClickEvent);
     }
 
