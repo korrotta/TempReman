@@ -25,4 +25,7 @@ user list:
   "customer"
 
   "21@gmail.com"
-  "1314"
+  "customer"
+
+  "bridgetw2808@gmail.com"
+  "admin"
